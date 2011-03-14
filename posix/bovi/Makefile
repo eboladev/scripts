@@ -364,28 +364,29 @@ preinstall:
 /usr/local/bin/mountmaxtor: mountmaxtor
 	cp mountmaxtor /usr/local/bin
 	chmod a+rx /usr/local/bin/mountmaxtor
-	
+
 /etc/resolv.conf.tdc: resolv.conf.tdc
 	cp -f resolv.conf.tdc /etc
-	
+
 /var/www/mediawiki/LocalSettings.php: LocalSettings.php
-	cp -f LocalSettings.php /var/www/mediawiki
-	chown www-data:www-data /var/www/mediawiki/LocalSettings.php
-	chmod a-w,og-r /var/www/mediawiki/LocalSettings.php
-	
+	sed s/secnok/`cat /etc/secnok`/g $< | \
+	sed s/sechom/`cat /etc/sechom`/g > $@
+	chown www-data:www-data $@
+	chmod a-w,og-r $@
+
 ~polster/Documents/vmware/w2kpro.vmx: w2kpro.vmx
 	su polster -c "mkdir -p ~/Documents/vmware; cp -f w2kpro.vmx ~/Documents/vmware"
-	
+
 /etc/php.ini: php.ini
 	cp -f php.ini /etc
 	-a2enmod ssl
 	-/etc/init.d/apache2 restart
-	
+
 /var/www/html/restore-umask.php: restore-umask.php
 	mkdir -p /var/www/html
 	cp -f restore-umask.php /var/www/html
 	chown www-data:www-data /var/www/html/restore-umask.php
-	
+
 /etc/awstats/awstats.localhost.localdomain.conf: awstats.localhost.localdomain.conf
 	mkdir -p /etc/awstats
 	cp -f awstats.localhost.localdomain.conf /etc/awstats

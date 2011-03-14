@@ -101,9 +101,10 @@ preinstall:
 	cp -f $< $@
 	chmod og-rwx $@
 
-/home/polster/.hgrc: dot-hgrc ../../secnok
+/home/polster/.hgrc: dot-hgrc /etc/secnok /etc/sechom
 	rm -f $@
-	sed s/secnok/`cat ../../secnok` $< > $@
+	sed s/secnok/`cat /etc/secnok` $< |
+	sed s/sechom/`cat /etc/sechom` > $@
 	chown -R polster:polster $@
 	chmod u+r,og-rw $@
 
@@ -406,10 +407,11 @@ preinstall:
 	chown polster:polster $@
 	chmod og-rw $@
 
-/home/polster/etc/creds.polster: creds.polster ../../secnok
+/home/polster/etc/creds.polster: creds.polster /etc/secnok /etc/sechom
 	mkdir -p /home/polster/etc
 	rm -f $@
-	sed s/secnok/`cat ../../secnok`/g $< > $@
+	sed s/secnok/`cat /etc/secnok`/g $< |
+	sed s/sechom/`cat /etc/sechom`/g > $@
 	chown polster:polster $@
 	chmod og-rw $@
 
