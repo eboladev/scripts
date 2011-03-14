@@ -1,0 +1,81 @@
+*filter
+:ufw-user-input - [0:0]
+:ufw-user-output - [0:0]
+:ufw-user-forward - [0:0]
+### RULES ###
+
+### tuple ### allow tcp 22 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 22 -j ACCEPT
+
+### tuple ### allow udp 123 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p udp --dport 123 -j ACCEPT
+
+### tuple ### allow tcp 123 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 123 -j ACCEPT
+
+### tuple ### allow tcp 137 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 137 -j ACCEPT
+
+### tuple ### allow tcp 138 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 138 -j ACCEPT
+
+### tuple ### allow tcp 139 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 139 -j ACCEPT
+
+### tuple ### allow tcp 8008 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 8008 -j ACCEPT
+
+### tuple ### allow tcp 443 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 443 -j ACCEPT
+
+### tuple ### allow tcp 49152 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 49152 -j ACCEPT
+
+### tuple ### allow any any 0.0.0.0/0 any 192.168.11.1
+-A ufw-user-input -s 192.168.11.1 -j ACCEPT
+
+### tuple ### allow tcp 3689 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 3689 -j ACCEPT
+
+### tuple ### allow udp 3689 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p udp --dport 3689 -j ACCEPT
+
+### tuple ### allow tcp 5901 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 5901 -j ACCEPT
+
+### tuple ### allow tcp 32771 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 32771 -j ACCEPT
+
+### tuple ### allow udp 32771 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p udp --dport 32771 -j ACCEPT
+
+### tuple ### allow tcp 111 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 111 -j ACCEPT
+
+### tuple ### allow udp 111 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p udp --dport 111 -j ACCEPT
+
+### tuple ### allow udp 514 0.0.0.0/0 any 192.168.11.0/24
+-A ufw-user-input -p udp --dport 514 -s 192.168.11.0/24 -j ACCEPT
+
+### tuple ### allow any 2049 0.0.0.0/0 any 192.168.11.0/24
+-A ufw-user-input -p tcp --dport 2049 -s 192.168.11.0/24 -j ACCEPT
+-A ufw-user-input -p udp --dport 2049 -s 192.168.11.0/24 -j ACCEPT
+
+### tuple ### allow any 4000 0.0.0.0/0 any 192.168.11.0/24
+-A ufw-user-input -p tcp --dport 4000 -s 192.168.11.0/24 -j ACCEPT
+-A ufw-user-input -p udp --dport 4000 -s 192.168.11.0/24 -j ACCEPT
+
+### tuple ### allow any 4001 0.0.0.0/0 any 192.168.11.0/24
+-A ufw-user-input -p tcp --dport 4001 -s 192.168.11.0/24 -j ACCEPT
+-A ufw-user-input -p udp --dport 4001 -s 192.168.11.0/24 -j ACCEPT
+
+### tuple ### allow any 4002 0.0.0.0/0 any 192.168.11.0/24
+-A ufw-user-input -p tcp --dport 4002 -s 192.168.11.0/24 -j ACCEPT
+-A ufw-user-input -p udp --dport 4002 -s 192.168.11.0/24 -j ACCEPT
+
+### END RULES ###
+-A ufw-user-input -j RETURN
+-A ufw-user-output -j RETURN
+-A ufw-user-forward -j RETURN
+COMMIT

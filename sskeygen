@@ -1,0 +1,23 @@
+#!/bin/sh
+# -*- Mode: Tcl -*-
+#
+# Name		sskeygen
+# Description	Log in to the SS_CONFIG server
+# Version	$Id: sskeygen,v 1.1 1997/10/01 14:41:49 akos Exp $
+#
+# \
+[ $TERM = "xterm-color" ] && TERM=xterm; \
+exec expect -f $0
+
+spawn rlogin hpfesmax.cup.hp.com -l sskeygen
+expect {
+    "Password:"	{send "fes916\r"}
+}
+expect {
+    "any key to continue. " {send " "}
+}
+interact
+
+#
+# End		sskeygen
+#

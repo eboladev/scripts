@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Play streaming MPEG audio
+
+# set -x
+
+if [ $# -ne 1 ]; then
+  echo "playm3u: Usage: playm3u m3u_file" >&2
+  exit 1
+fi
+
+(cat "$1"; echo "") | \
+while read line; do
+  [ "$line" != "" ] && lynx -source "$line" | mpg123 -y -
+done
+
+#
+# End           playm3u
+#

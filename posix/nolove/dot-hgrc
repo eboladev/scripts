@@ -1,0 +1,14 @@
+[ui]
+username = Akos Polster <akos.polster@nokia.com>
+verbose = True
+
+[auth]
+codenokia.prefix = code.nokia.com/hg
+codenokia.schemes = http https
+codenokia.username = polster
+codenokia.password = secnok
+
+pipacs.prefix = pipacs.dyndns.org/hg
+pipacs.schemes = https
+pipacs.username = polster
+pipacs.password = sechom

@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# Name		tolatin2
+# Description	Convert PostScript Latin 1 to Latin 2, then print
+# Version	$Id$
+#
+
+printer=`basename $0`
+/usr/local/bin/ogonkify -ATH -CTH -N -AX -SO | exec lpr -P"$printer" -U$5
+
+#
+# End		tolatin2
+#

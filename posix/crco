@@ -1,0 +1,24 @@
+#!/bin/ksh
+#
+#	crco -- Check out for Crisp
+#	$Header: /home/akos/scripts/RCS/crco,v 1.1 1994/11/07 00:22:29 akos Exp $
+#
+
+echo "-----------------crco $*--------------------"
+set -x
+				     
+[ $# != 1 ] && exit 1
+
+Base=`basename $1`
+Dir=`dirname $1`
+
+[ ! -f $Dir/RCS/${Base},v ] && exit 0
+
+cd $Dir
+co -l -q $Base >/dev/null 2>&1
+chmod u+w $Base >/dev/null 2>&1
+read line
+
+#
+#	end: crco
+#

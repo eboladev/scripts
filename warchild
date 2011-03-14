@@ -1,0 +1,33 @@
+#!/bin/sh
+# $Id$
+
+set -x
+
+WARCHILD=00:0A:D9:13:BD:92
+LOCAL_IP=192.168.2.1
+REMOTE_IP=192.168.2.2
+DNS_IP=194.239.134.83
+CHAT="/usr/sbin/chat -t 90 -v \"\" \".\" \"Are you there?~\" \"~mRouter - I'm here~\""
+
+while true; do
+	# sleep 15
+	[ -f /var/lock/warchild.lock ] && continue
+	# hcitool scan | grep -q $WARCHILD || continue
+	for i in 0 1 2 3 4; do
+		[ ! -c /dev/rfcomm$i ] && mknod -m 666 /dev/rfcomm$i c 216 $i
+	done
+	hciconfig hci0 piscan noauth up
+	rfcomm release all
+	killall dund >/dev/null 2>&1
+	sleep 1
+	sdptool add --channel=2 SP
+	dund --listen --channel 2
+	rfcomm bind /dev/rfcomm1 $WARCHILD 1
+	/usr/sbin/pppd connect "$CHAT" \
+		noauth user ppp crtscts lock local proxyarp passive debug \
+		nodetach ipcp-accept-local ipcp-accept-remote \
+		115200 /dev/rfcomm1 $LOCAL_IP:$REMOTE_IP
+
+	exit 0
+
+done

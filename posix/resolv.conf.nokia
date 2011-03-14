@@ -1,0 +1,4 @@
+nameserver 172.27.174.120
+nameserver 147.243.4.70
+nameserver 147.243.138.71
+search europe.nokia.com

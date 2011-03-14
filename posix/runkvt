@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# Name		runkvt
+# Description	Run kvt with small or normal fonts
+# Version	$Id: runkvt,v 1.13 1999/11/17 23:08:37 polster Exp $
+#
+
+# set -x
+
+dim=`xdpyinfo | grep dimensions | awk '{print $2}'`
+case "$dim" in
+  640x*|800x*)		font="-*-clean-medium-r-*-*-*-80-*-*-*-*-*-*";;
+  1024x*)		font="-*-clean-medium-r-*-*-*-120-*-*-*-*-*-*";;
+  1152x*|1280x*)	font="-*-clean-medium-r-*-*-*-140-*-*-*-*-*-*";;
+  *)			font="-*-clean-medium-r-*-*-*-120-*-*-*-*-*-*";;
+esac
+
+if [ -x /usr/bin/X11/xiterm ]; then
+  term="/usr/bin/X11/xiterm +sb"
+  fontFlag=-fn
+elif [ -x /opt/kde/bin/kvt ]; then
+  term="/opt/kde/bin/kvt -8 -vt_size normal"
+  fontFlag=-vt_font
+else
+  term=xterm
+  fontFlag=-fn
+fi
+
+exec $term $fontFlag $font ${1+"$@"}
+
+#
+# End		runkvt
+#

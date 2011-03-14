@@ -1,0 +1,123 @@
+#!/bin/bash
+
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin
+set +u
+
+# Do nothing on loopback interface changes
+case "$IFACE" in
+    lo*) exit 0;;
+esac
+
+# Do nothing if /var mounted read-only
+log=/var/log/nolove-ifup.log
+touch $log >/dev/null 2>&1 || exit 0
+
+exec >>$log 2>&1
+set -x
+echo "***"
+date
+env
+echo "***"
+
+# Prefer Ethernet over WLAN
+if [ "$IFACE" = "wlan0" ]; then
+    ifconfig eth0 | grep -q "inet addr" && exit 0
+fi
+
+# User receiving the new configuration
+targetUser=polster
+
+# Run gconftool-2 as user $targetUser
+gconf()
+{
+    sudo -E -u $targetUser gconftool-2 "$@"
+}
+
+# Find my location
+getLocation()
+{
+    location="world"
+    case "$DHCP4_IP_ADDRESS" in
+    172.*) location="nokia";;
+    esac
+    case "$INTERNAL_IP4_DNS" in
+    172.*) location="nokia"
+    esac
+    if [ "$location" = "wold" ]; then
+        ifconfig tun0 | grep -q "inet addr" && location="nokia"
+    fi
+    echo $location
+}
+
+# Initialise DBUS connection string in order to reach gconfd
+XENV=`xargs -n 1 -0 echo </proc/$(pidof gnome-session)/environ`
+eval export `echo "$XENV" | fgrep DBUS_SESSION_BUS_ADDRESS=`
+
+# Make sure the target user has a subversion and mercurial directories
+mkdir -p /etc/subversion
+mkdir -p /etc/mercurial/hgrc.d
+
+if [ `getLocation` = "nokia" ]; then
+
+    # Set up the proxy server
+    proxyHost=172.16.44.133
+    proxyPort=8080
+
+    # Set the GNOME proxy
+    gconf --type string --set /system/proxy/mode "manual"
+    gconf --type bool --set /system/http_proxy/use_http_proxy "true"
+    gconf --type string --set /system/http_proxy/host "$proxyHost"
+    gconf --type int --set /system/http_proxy/port "$proxyPort"
+    gconf --type bool --set /system/http_proxy/use_same_proxy "true"   
+    gconf --type bool --set /system/http_proxy/use_authentication "false"
+
+    # Fix host name
+    # FIXME: ... but doing so prevents new X connections
+    # hostname `nslookup "$DHCP4_IP_ADDRESS" | awk '/name =/ {print $NF}'` \
+    #     >/dev/null 2>&1 &
+
+    # Use the Nokia proxy for SVN
+    echo '[global]' > /etc/subversion/servers
+    echo "http-proxy-host = $proxyHost" >> /etc/subversion/servers
+    echo "http-proxy-port = $proxyPort" >> /etc/subversion/servers
+
+    # Use proxy for Mercurial
+    echo '[http_proxy]' > /etc/mercurial/hgrc.d/proxy.rc
+    echo "host = $proxyHost:$proxyPort" >> /etc/mercurial/hgrc.d/proxy.rc
+
+    # Set proxy environment variables for shells
+    echo "http_proxy=http://$proxyHost:$proxyPort/" >/etc/profile.d/proxy.sh
+    echo 'HTTP_PROXY=$http_proxy
+https_proxy=$http_proxy
+HTTPS_PROXY=$http_proxy
+export http_proxy HTTP_PROXY https_proxy HTTPS_PROXY' >>/etc/profile.d/proxy.sh
+
+else
+
+    # Disable GNOME proxy
+    gconf --type string --set /system/proxy/mode "none"
+    gconf --type bool --set /system/http_proxy/use_http_proxy "false"
+    gconf --type string --set /system/http_proxy/host ""
+    gconf --type bool --set /system/http_proxy/use_authentication "false"
+
+    # No proxy for SVN
+    rm -f /etc/subversion/servers
+    > /etc/subversion/servers
+
+    # No proxy for Mercurial
+    rm -f /etc/mercurial/hgrc.d/proxy.rc
+    > /etc/mercurial/hgrc.d/proxy.rc
+
+    # Unset proxy environment variables for shells
+    echo 'unset http_proxy HTTP_PROXY https_proxy HTTPS_PROXY' \
+        >/etc/profile.d/proxy.sh
+
+fi
+
+# Fix file permissions and ownerships
+chmod a+rx /etc/profile.d/proxy.sh /etc/subversion
+chmod a+r /etc/subversion/servers
+
+# Mount network drives
+# modprobe fuse
+[ -x /usr/local/bin/mountmyall ] && /usr/local/bin/mountmyall

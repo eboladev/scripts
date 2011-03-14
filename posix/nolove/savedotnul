@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# $Id: savedotnul,v 1.4 2004/10/21 08:34:47 polster Exp $
+# Save modified files and their backups into a directory
+
+if [ $# -ne 1 ]; then
+  echo "savedotnull: Usage: savedotnull target_directory"
+  exit 1
+fi
+
+mkdir -p "$1" || exit 1
+
+find . -type f -a \( -name '*~' -o -name '*.0' \) | \
+while read backup; do
+  original=${backup%.0}
+  original=${original%\~}
+  if [ ! -f ${original} ]; then
+    echo "Skipping $original" >&2
+    continue
+  fi
+  echo ${original}
+  dir=`dirname ${original}`
+  mkdir -p "$1"/"$dir" || continue
+  cp -f ${original} "$1"/"$dir"
+  [ -f ${original}.0 ] && cp -f ${original}.0 "$1"/"$dir"
+  [ -f ${original}~ ]  && cp -f ${original}~  "$1"/"$dir"
+done

@@ -1,0 +1,123 @@
+#!/bin/sh
+#
+#	soudinstall		
+#
+#
+# Create the devices
+#
+#	Mixer devices
+#
+if [ -e /dev/mixer ]; then 
+	rm -f /dev/mixer 
+fi
+ 
+mknod -m 666 /dev/mixer c 14 0
+if [ -e /dev/mixer1 ]; then 
+	rm -f /dev/mixer1 
+fi
+mknod -m 666 /dev/mixer1 c 14 16
+
+
+#	Sequencer	(14, 1)
+#
+if [ -e /dev/sequencer ]; then
+	rm -f /dev/sequencer
+fi
+mknod -m 666 /dev/sequencer c 14 1
+
+if [ -e /dev/patmgr0 ]; then
+	rm -f /dev/patmgr0
+fi
+mknod -m 666 /dev/patmgr0 c 14 17
+if [ -e /dev/patmgr1 ]; then
+	rm -f /dev/patmgr1
+fi
+mknod -m 666 /dev/patmgr1 c 14 33
+
+	#	music	(14, 8)
+	#
+	if [ -e /dev/music ]; then
+		rm -f /dev/music
+	fi
+
+	mknod -m 666 /dev/music c 14 8
+	if [ -e /dev/sequencer2 ]; then
+		rm -f /dev/sequencer2
+	fi
+	ln -s /dev/music /dev/sequencer2
+
+#	Midi devices
+#
+if [ -e /dev/midi ]; then
+	rm -f /dev/midi		# Old name. Don't use it
+fi
+	if [ -e /dev/midi00 ]; then
+		rm -f /dev/midi00
+	fi
+	mknod -m 666 /dev/midi00 c 14 2
+	
+	if [ -e /dev/midi01 ]; then
+		rm -f /dev/midi01
+	fi
+	mknod -m 666 /dev/midi01 c 14 18
+	
+	if [ -e /dev/midi02 ]; then
+		rm -f /dev/midi02
+	fi
+	mknod -m 666 /dev/midi02 c 14 34
+	
+	if [ -e /dev/midi03 ]; then
+		rm -f /dev/midi03
+	fi
+	mknod -m 666 /dev/midi03 c 14 50
+#
+#	DSP		(14, 3)
+#
+if [ -e /dev/dsp ]; then
+	rm -f /dev/dsp
+fi
+if [ -e /dev/dsp0 ]; then
+	rm -f /dev/dsp0
+fi
+mknod -m 666 /dev/dsp0 c 14 3
+ln -s /dev/dsp0 /dev/dsp
+
+#
+#	SPARC compatible /dev/audio	(14, 4)	
+#
+if [ -e /dev/audio ]; then
+	rm -f /dev/audio
+fi
+if [ -e /dev/audio0 ]; then
+	rm -f /dev/audio0
+fi
+mknod -m 666 /dev/audio0 c 14 4
+ln -s /dev/audio0 /dev/audio
+
+#
+#	DSP1		(14, 19) /dev/dsp for the second soundcard.
+#				Also the SB emulation part of the
+#				PAS16 card.
+#
+if [ -e /dev/dsp1 ]; then
+	rm -f /dev/dsp1
+fi
+mknod -m 666 /dev/dsp1 c 14 19
+#
+#	SPARC audio1	(14, 20) 
+#				/dev/audio for the second soundcard.
+#				Also the SB emulation part of the
+#				PAS16 card.
+#
+if [ -e /dev/audio1 ]; then
+	rm -f /dev/audio1
+fi
+mknod -m 666 /dev/audio1 c 14 20
+#
+#	/dev/sndstat	(14,6)	For debugging purposes
+#
+if [ -e /dev/sndstat ]; then
+	rm -f /dev/sndstat
+fi
+mknod -m 666 /dev/sndstat c 14 6
+exit 0

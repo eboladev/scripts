@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MagicDraw
+GenericName=UML Modeller
+Exec=/opt/md-15.5/bin/mduml
+Icon=im-jabber
+Type=Application
+Categories=Development;
+Comment=UML Modeller
+Terminal=false

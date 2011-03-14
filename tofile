@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# Name		tofile
+# Description	File documents
+# Version	$Id$
+#
+
+file=${TMPDIR:-/tmp}/p$$.prn
+exec cat > $file
+
+#
+# End		tofile
+#

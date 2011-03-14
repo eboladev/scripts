@@ -1,0 +1,80 @@
+#!/bin/sh
+# -*- Mode: Tcl -*-
+#
+# Name		tmore
+# Description	Display a file
+# Version	$Id: tmore,v 1.17 1998/02/18 14:37:33 akos Exp $
+#
+# \
+exec wish $0 "$@"
+
+global argc argv tixOption
+
+set title ""
+set file "(stdin)"
+set fh stdin
+
+# Process command line
+for {set i 0} {$i < $argc} {incr i} {
+    switch -glob -- [lindex $argv $i] {
+	"-t" {
+	    incr i
+	    set title [lindex $argv $i]
+	}
+	default {
+	    set file [lindex $argv $i]
+	    if [catch {set fh [open $file]} err] {
+		puts stderr "tmore: Error: $err"
+		exit 1
+	    }
+	    break
+	}
+    }
+}
+
+# Load the packages I need
+package require tcl++
+package require tk++
+package require widgets++
+
+# Set title text
+if ![string compare $title ""] {
+    set title $file
+}
+	
+# Decorate the toplevel
+wm maxsize . [winfo screenwidth .] [winfo screenheight .]
+wm title . "tmore: $title"
+wm iconname . "tmore: $title"
+
+# Create widgets
+
+global tk_strictMotif
+set tk_strictMotif 1
+
+set fixedFont "fixed"
+catch {set fixedFont [option get . userfont UserFont]}
+
+frame .t -relief raised -bd 1
+pack .t -fill both -expand yes -side top
+iwidgets::scrolledtext .t.st -wrap none -vscrollmode static \
+    -hscrollmode static -width 0 -height 0 -visibleitems 80x25 \
+    -textfont $fixedFont
+foreach comp {horizsb vertsb} {
+    .t.st component $comp configure -borderwidth 1
+}
+pack .t.st -side left -padx 5 -pady 5 -fill both -expand yes
+
+frame .b -relief raised -bd 1
+pack .b -fill x -expand no -side bottom
+button .b.but -text "OK" -command "exit 0" -width 4 -bd 1
+pack .b.but -side top -padx 5 -pady 5
+
+catch {.t.st insert end [read -nonewline $fh]}
+catch {close $fh}
+.t.st component text configure -state disabled
+focus [.t.st component vertsb]
+
+#
+# End		tmore
+#

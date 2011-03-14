@@ -1,0 +1,22 @@
+#!/bin/bash
+
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin
+set +u
+
+[ "$IFACE" = "lo0" ] && exit 0
+
+set -x
+exec >>/var/log/nolove-ifdown.log 2>&1
+echo "***"
+date
+env
+echo "***"
+
+# Do nothing if wlan0 vent down but eth0 is still up
+if [ "$IFACE" = "wlan0" ]; then
+    ifconfig eth0 | grep -q "inet addr" && exit 0
+fi
+
+for fsType in smbfs cifs fuse.sshfs davs; do
+    nohup umount -a -t $fsType >/dev/null 2>&1 &
+done

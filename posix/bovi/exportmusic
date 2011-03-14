@@ -1,0 +1,105 @@
+#!/bin/bash
+
+# Export music directories marked with "export" to MP3
+
+src=/mnt/maxtor/polster/music
+dst=/media/basix/music-mp3
+lock=/var/lock/exportmusic
+
+[ "$1" == "-v" ] && set -x
+
+lockfile -r 0 "$lock" || exit 1
+trap "rm -f $lock; exit" INT TERM EXIT
+
+for artistDir in $src/*; do
+    artist=${artistDir##*/}
+    if [ "$artist" == "random" ]; then
+        continue
+    fi
+    if [ ! -d "$artistDir" ]; then
+        continue
+    fi
+
+    for albumDir in "$artistDir"/*; do
+        if [ ! -d "$albumDir" ]; then
+            continue
+        fi
+        if [ ! -f "$albumDir"/export ]; then
+            continue
+        fi
+
+        album=`basename "$albumDir"`
+        dstDir="$dst"/"$artist"/"$album"
+        mkdir -p "$dstDir"
+
+        # Convert flacs to mp3s
+        ls "$albumDir"/*.flac 2>/dev/null | \
+        while read flacFile; do
+            if [ ! -f "$flacFile" ]; then
+                continue
+            fi
+            track=`basename "$flacFile"`
+            track=${track%%.flac}
+            mp3File="$track".mp3
+            if [ -f "$dstDir"/"$mp3File" ]; then
+                continue
+            fi
+            echo "$flacFile -> $dstDir/$mp3File"
+            flac --totally-silent -c -d "$flacFile" | \
+            lame --preset extreme -S --tt "$track" --ta "$artist" \
+                --tl "$album" - "$dstDir"/"$mp3File" >/dev/null 2>&1
+        done
+
+        # Convert wavs to mp3s
+        ls "$albumDir"/*.wav 2>/dev/null | \
+        while read wavFile; do
+            if [ ! -f "$wavFile" ]; then
+                continue
+            fi
+            track=`basename "$wavFile"`
+            track=${track%%.wav}
+            mp3File="$track".mp3
+            if [ -f "$dstDir"/"$mp3File" ]; then
+                continue
+            fi
+            echo "$wavFile -> $dstDir/$mp3File"
+            trackNo=`echo "$track"|awk '{print int("1" $1)-100}' 2>/dev/null`
+            lame --preset extreme -S --tt "$track" --ta "$artist" \
+                --tn "$trackNo" --tl "$album" \
+                "$wavFile" "$dstDir"/"$mp3File" >/dev/null 2>&1
+        done
+
+        # Convert oggs to mp3s
+        ls "$albumDir"/*.ogg 2>/dev/null | \
+        while read srcFile; do
+            if [ ! -f "$srcFile" ]; then
+                continue
+            fi
+            mp3File=`basename "$srcFile"`
+            mp3File=${mp3File%%.ogg}.mp3
+            if [ -f "$dstDir"/"$mp3File" ]; then
+                continue
+            fi
+            echo "$srcFile -> $dstDir/$mp3File"
+            cp -f "$srcFile" "$dstDir"
+            ogg2mp3 -v 0 -q 2 -d "$dstDir"/*.ogg
+        done
+
+        # Copy mp3s
+        ls "$albumDir"/*.mp3 2>/dev/null | \
+        while read srcFile; do
+            if [ ! -f "$srcFile" ]; then
+                continue
+            fi
+            mp3File=`basename "$srcFile"`
+            if [ -f "$dstDir"/"$mp3File" ]; then
+                continue
+            fi
+            echo "$srcFile -> $dstDir/$mp3File"
+            cp -f "$srcFile" "$dstDir"
+        done
+    done
+done
+
+# chown -R polster "$dst"/
+chmod -R ug+rwx,o+rx "$dst"/

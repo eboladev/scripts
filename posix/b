@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# Name		b -- Check out, edit, check in
+# Version	$Id: b,v 1.25 1996/09/08 12:23:38 akos Exp $
+#
+
+# set -x
+
+printf "b: Checking out files\n"
+for i in $* 
+do
+	[ -f RCS/$i,v ] && (co -l $i >/dev/null || exit 1; chmod +w $i || exit 1)
+done
+
+/usr/local/bin/mycr $*
+
+printf "b: Checking in files... "
+for i in $*
+do 
+	[ -f RCS/$i,v ] && ci -f -u -q -mAuto $i >/dev/null
+done
+
+printf "Done\n"
+
+#
+# End		b
+#

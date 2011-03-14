@@ -1,0 +1,87 @@
+#!/usr/local/bin/wish
+# -*- Mode: Tcl -*-
+#
+# Name		xlogoff
+# Description	Log off/shut down machine
+# Version	$Id: xlogoff,v 1.19 1997/09/12 14:26:10 akos Exp $
+#
+
+# Variables
+
+global env argc argv argv0
+
+set action "logoff"
+set cmd(logoff) "/bin/kill -HUP [lindex $argv 0]"
+set cmd(shutdown) "sys /sbin/shutdown -h now"
+set cmd(reboot) "sys /sbin/shutdown -r now"
+set cmd(single) "sys init s"
+
+# Source in config file
+foreach dir {"/etc" "/usr/local/etc"} {
+    if ![catch {source "$dir/xlogoff"}] {
+	break
+    }
+}
+catch {source "~/.xlogoff"}
+
+# Create main window
+wm title . "Log Off"
+wm resizable . 0 0
+wm overrideredirect . 1
+
+# Install hotkeys
+bind . <Key-Return> "logoff"
+bind . <Key-Escape> "exit 0"
+
+. configure -cursor left_ptr -bd 2 -relief sunken
+
+# Top and bottom frames
+pack [frame .top -relief raised -bd 1] -side top -fill both -expand y
+pack [frame .bot -relief raised -bd 1] -side bottom -fill both -expand y
+
+# Radiobuttons
+radiobutton .top.logoff -variable action -value "logoff" -text "Log Out" \
+    -width 24 -anchor w
+radiobutton .top.single -variable action -value "single" \
+    -text "Go To Single User Mode" -width 24 -anchor w
+radiobutton .top.shutdown -variable action -value "shutdown" \
+    -text "Shut Down Machine" -width 24 -anchor w
+radiobutton .top.reboot -variable action -value "reboot" \
+    -text "Reboot Machine" -width 24 -anchor w
+pack .top.logoff .top.single .top.shutdown .top.reboot -side top -pady 2m \
+    -padx 5m
+
+# OK and Cancel button
+button .bot.ok -text "OK" -width 6 -command logoff -anchor c
+button .bot.cancel -text "Cancel" -width 6 -command "exit 0" -anchor c
+pack .bot.cancel .bot.ok -side right -padx 2m -pady 2m
+
+# Show dialog box in the middle of the screen; grab all events
+wm withdraw .
+update idletasks
+set x [expr [winfo screenwidth .] / 2 - [winfo reqwidth .] / 2 \
+	   - [winfo vrootx .]]
+set y [expr [winfo screenheight .] / 2 - [winfo reqheight .] / 2 \
+	   - [winfo vrooty .]]
+wm geom . +$x+$y
+wm deiconify .
+
+# Grab all events
+grab -global .
+
+############################################################################
+# Name		logoff
+
+proc logoff {} {
+
+    global action cmd
+    
+    if [catch {exec sh -c $cmd($action)} err] {
+	tk_dialog .err "Error Logging Off" $err error 0 "OK"
+    }
+    exit 1
+}
+
+#
+# End		xlogoff
+#

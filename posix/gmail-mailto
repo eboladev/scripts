@@ -1,0 +1,12 @@
+#!/bin/bash
+
+prog='BEGIN {RS="%26";ORS=""}
+/^subject=/ {gsub("&","%26");gsub("^subject=","\&su=");print}
+/^body=/ {gsub("&","%26");gsub("^body=","\&body=");print}'
+
+set +u
+arg=`echo $1 | sed 's/mailto://'`
+to=`echo $arg\? | cut -d\? -f1`
+moreArgs=`echo $arg\? | cut -d\? -f2- | sed 's/\?$//' | awk "$prog"`
+
+gnome-open "https://mail.google.com/mail?view=cm&tf=0&to=$to$moreArgs"

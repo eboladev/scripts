@@ -1,0 +1,290 @@
+#!/bin/sh
+# -*- Mode: Tcl -*-
+#
+# Name		viewmime
+# Description	View documents based on mime.types and mailcap
+# Version	$Id: viewmime,v 1.14 2001/03/12 12:02:29 polster Exp $
+#
+#\
+exec tclsh $0 ${1+"$@"}
+
+##############################################################################
+# Name		mime.readMailcap
+# Description	Process mailcap file
+# Returns	-
+# Side Effects	Sets vm(mime.action.*) and vm(mime.types)
+
+proc mime.readMailcap {file} {
+
+    global vm
+
+    puts "viewmime: Processing mailcap file $file"
+
+    if [catch {set fh [open $file]} err] {
+	puts stderr "viewmime: Error: Cannot open $file: $err"
+	return
+    }
+    if [catch {set lines [split [read $fh] "\n"]} err] {
+	puts stderr "viewmime: Error: Cannot read $file: $err"
+	catch {close $fh}
+	return
+    }
+    catch {close $fh}
+
+    foreach line $lines {
+	if [regexp -- "^\#" $line] {
+	    continue
+	}
+	if ![string compare $line ""] {
+	    continue
+	}
+	set words [split $line "\;"]
+	set size [llength $words]
+	if {$size < 2} {
+	    continue
+	}
+	set type [string trim [lindex $words 0]]
+	lappend vm(mime.types) $type
+	for {set i 1} {$i < $size} {incr i} {
+	    set action [string trim [lindex $words $i]]
+	    switch -regexp -- $action {
+		"^\[a-zA-Z0-9_-\]+=" {
+		}
+		default {
+		    set vm(mime.action.$type) [string trim $action "\""]
+		}
+	    }
+	}
+    }
+}
+
+##############################################################################
+# Name		mime.readMimeTypes
+# Description	Process mime.types file
+# Returns	-
+# Side Effects	Sets vm(mime.exts), vm(mime.ext.*)
+
+proc mime.readMimeTypes {file} {
+
+    global vm
+
+    puts "viewmime: Processing mime.types file $file"
+
+    if [catch {set fh [open $file]} err] {
+	puts stderr "viewmime: Error: Cannot open $file: $err"
+	return
+    }
+    if [catch {set lines [split [read $fh] "\n"]} err] {
+	puts stderr "viewmime: Error: Cannot read $file: $err"
+	catch {close $fh}
+	return
+    }
+    catch {close $fh}
+
+    foreach line $lines {
+	if {[regexp -- "^\#" $line] || ![string compare $line ""]} {
+	    continue
+	}
+	regsub -all -- "\[ \t\]+" $line " " line
+	set words [split $line]
+	if {[set size [llength $words]] < 2} {
+	    continue
+	}
+	set type [lindex $words 0]
+	for {set i 1} {$i < $size} {incr i} {
+	    set ext [lindex $words $i]
+	    if [string compare "" $ext] {
+		lappend vm(mime.exts) $ext
+		set vm(mime.ext.$ext) $type
+	    }
+	}
+    }
+}
+
+##############################################################################
+# Name		mime.fixActions
+# Description	Overwrite specific types with general types if no action
+#		defined for the specific type
+# Returns	-
+# Side Effects	Sets vm(mime.type.*)
+
+proc mime.fixActions {} {
+
+    global vm
+
+    if ![info exists vm(mime.exts)] {
+	return
+    }
+
+    puts "viewmime: Processing actions"
+
+    foreach ext $vm(mime.exts) {
+	set type $vm(mime.ext.$ext)
+	if [info exists vm(mime.action.$type)] {continue}
+	foreach type $vm(mime.types) {
+	    if [string match $type $vm(mime.ext.$ext)] {
+		set vm(mime.ext.$ext) $type
+		break
+	    }
+	}
+    }
+}
+
+##############################################################################
+# Name		type.init
+# Description	Init type manipulations
+# Returns	-
+
+proc type.init {} {
+
+    global vm
+
+    # Find out the global mailcap file
+    set globalMailcap ""
+    foreach dir $vm(mimePath) {
+	if [file readable "$dir/mailcap"] {
+	    set globalMailcap "$dir/mailcap"
+	    break
+	}
+    }
+
+    # Find out the global mime.types file
+    set globalMimeTypes ""
+    foreach dir $vm(mimePath) {
+	if [file readable "$dir/mime.types"] {
+	    set globalMimeTypes "$dir/mime.types"
+	    break
+	}
+    }
+
+    # Just source in the type info file if it is up-to-date
+    if [file readable "~/.viewmime/typeinfo"] {
+	set mtime [file mtime "~/.viewmime/typeinfo"]
+	if {(![file readable $globalMailcap] ||
+	     ($mtime > [file mtime $globalMailcap])) &&
+	    (![file readable "~/.mailcap"] ||
+	     ($mtime > [file mtime "~/.mailcap"])) &&
+	    (![file readable $globalMimeTypes] ||
+	     ($mtime > [file mtime $globalMimeTypes])) &&
+	    (![file readable "~/.mime.types"] ||
+	     ($mtime > [file mtime "~/.mime.types"])) &&
+	    (![file readable "~/.viewmime/local"] ||
+	     ($mtime > [file mtime "~/.viewmime/local"]))} {
+	    puts stderr "viewmime: Loading cached type info"
+	    if [catch {source "~/.viewmime/typeinfo"} err] {
+		puts stderr "viewmime: Error: While reading typeinfo: $err"
+	    } else {
+		return
+	    }
+	}
+     }
+    
+    # Process global mailcap file
+    if [file readable $globalMailcap] {
+	mime.readMailcap $globalMailcap
+    }
+    
+    # Process personal mailcap file
+    if [file readable "~/.mailcap"] {
+	mime.readMailcap "~/.mailcap"
+    }
+
+    # Process global mime.types file
+    if [file readable $globalMimeTypes] {
+	mime.readMimeTypes $globalMimeTypes
+    }
+
+    # Process personal mime.types file
+    if [file readable "~/.mime.types"] {
+	mime.readMimeTypes "~/.mime.types"
+    }
+
+    # Fix action definitions
+    mime.fixActions
+
+    # Save type info to ~/.viewmime/typeinfo
+    type.save
+}
+
+##############################################################################
+# Name		type.save
+# Description	Save type info into ~/.viewmime/typeinfo
+# Returns	-
+
+proc type.save {} {
+
+    global vm
+
+    puts stderr "viewmime: Saving type info"
+    if [catch {file mkdir "~/.viewmime"} err] {
+	puts stderr \
+	    "viewmime: Error: Cannot create vm directory ~/.viewmime: $err"
+	return
+    }
+    if [catch {set f [open "~/.viewmime/typeinfo" "w"]} err] {
+	puts stderr "viewmime: Error: Cannot create ~/.viewmime/typeinfo: $err"
+	return
+    }
+    foreach name [array names vm "mime.*"] {
+	if [catch {puts $f "set vm($name) [list $vm($name)]"} err] {
+	    puts stderr \
+		"viewmime: Error: Cannot write to ~/.viewmime/typeinfo: $err"
+	    catch {close $f}
+	    return
+	}
+    }
+    foreach name [array names vm "file.*"] {
+	if [catch {puts $f "set vm($name) [list $vm($name)]"} err] {
+	    puts stderr \
+		"viewmime: Error: Cannot write to ~/.viewmime/typeinfo: $err"
+	    catch {close $f}
+	    return
+	}
+    }
+    if [catch {close $f} err] {
+	puts stderr "viewmime: Error: Cannot close ~/.viewmime/typeinfo: $err"
+	return
+    }
+    puts "viewmime: Saved type info"
+}
+
+###############################################################################
+# Main
+
+global argc argv env vm
+set vm(mimePath) {
+    "/etc"
+    "/usr/etc"
+    "/usr/lib"
+    "/usr/local/etc"
+    "/usr/local/lib"
+}
+
+if {$argc != 1} {
+    puts stderr "viewmime: Error: Usage: viewmime file"
+    exit 1
+}
+set file [lindex $argv 0]
+set extension [string trimleft [file extension $file] "."]
+if ![string compare $extension ""] {
+    exit 2
+}
+puts "viewmime: $extension"
+
+type.init
+
+if [info exists vm(mime.ext.$extension)] {
+    set type $vm(mime.ext.$extension)
+    puts "viewmime: $type"
+    if [info exists vm(mime.action.$type)] {
+	set action [format $vm(mime.action.$type) \"$file\"]
+	puts "viewmime: $action"
+	if [catch {exec sh -c $action} err] {
+	    puts stderr "viewmime: Error: $err"
+	}
+    }
+}
+
+#
+# End		viewmime
+#

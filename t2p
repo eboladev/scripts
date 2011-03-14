@@ -1,0 +1,25 @@
+#!/usr/bin/tclsh
+# -*- Mode: Tcl -*-
+#
+# Name		t2p
+# Description	Convert tclIndex to pkgIndex
+# Version	$Id: t2p,v 1.1 1997/05/08 13:38:57 akos Exp $
+#
+
+catch {unset auto_index}
+set dir .
+source tclIndex
+
+foreach prc [array names auto_index] {
+    set file $auto_index($prc)
+    lappend files($file) $prc
+}
+
+foreach file [lsort [array names files]] {
+    regsub "source ./" $file "" fileName
+    puts "{$fileName source [list $files($file)]}"
+}
+
+#
+# End		t2p
+#

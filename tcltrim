@@ -1,0 +1,35 @@
+#!/usr/bin/tclsh
+#
+#	tcltrim -- Trim .tcl files into .tcl.t files, build tclIndex
+#
+
+global argv
+
+foreach source [glob -nocomplain *.tcl] {
+    set target $source.t
+
+    set src [open $source RDONLY]
+    set tgt [open $target {RDWR CREAT TRUNC}]
+
+    while {[eof $src] == 0} {
+	set line [string trim [gets $src]]
+
+	if {$line == ""} {
+	    continue
+	}
+	if {[string index $line 0] == "#"} {
+	    continue
+	}
+	puts $tgt $line
+    }
+
+    close $src
+    close $tgt
+}
+
+
+auto_mkindex . *.tcl.t
+
+#
+#	end: tcltrim
+#

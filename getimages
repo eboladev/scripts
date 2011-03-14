@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+# Name		getimages
+# Description	Get images from a DC210 camera using sane's scanimage
+# Version	$Id: getimages,v 1.1 1998/12/14 23:43:39 akos Exp $
+#
+
+dev=dc210:0
+thumbs=no
+
+i=0
+while [ $# -gt 0 ]; do
+  case $0 in
+    --thumbs)
+      thumbs=yes
+      ;;
+    --device=*)
+      dev=${0##--device=}
+      ;;
+    *)
+      echo "getimages: Usage: getimages [ --thumbs ] [ --device=dev ]" >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+i=1
+while true; do
+  out=image-`printf '%.3d' $i`.tif
+  echo "Reading image $i to $out"
+  scanimage --device $dev --camera-init --image $i --thumbs=$thumbs | \
+    pnmtotiff -lzw > $out 2>/dev/null || \
+  {
+    sleep 2
+    scanimage --device $dev --camera-init --image $i --thumbs=$thumbs | \
+      pnmtotiff -lzw > $out 2>/dev/null || \
+    {
+      rm -f $out
+      exit 0
+    }
+  }
+  i=`expr $i + 1`
+done
+
+#
+# End		getimages
+#

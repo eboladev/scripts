@@ -1,0 +1,3 @@
+# Bash completion rules for "sys" - same as "sudo".
+
+complete -F _root_command $filenames sys fakeroot really

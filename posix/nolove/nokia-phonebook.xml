@@ -1,0 +1,12 @@
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Nokia Phonebook</ShortName>
+<Description>Nokia Phonebook</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/x-icon;base64,AAABAAEAEBAQAAEAGAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAwMDAAICAgAAAAP8AAP8AAAD//wD/AAAA/wD/AP//AAD///8AAAAAAAAAAAAAAAAAAAAAAAAJkAAAAAAAAJmZAAAAAAAAmZkAAAAAAAAJkAAAAAAACQAAAAAAAACZkAAAAAAAAAkAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAmQAAAAAAAAAAAAAACQAAAAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAD//////////+f////D////w////+f///+/////H////7///////v///////5//////3///+///////////////</Image>
+<Url type="text/html" method="GET" template="http://ph.nokia.com/">
+  <Param name="sval" value="{searchTerms}"/>
+  <Param name="s" value="www2.connecting.nokia.com"/>
+  <Param name="sort" value="Name"/>
+</Url>
+<SearchForm>http://www.connecting.nokia.com/nokia/phoneb.nsf/frmSearch</SearchForm>
+</SearchPlugin>
