@@ -43,9 +43,10 @@ preinstall:
 	chown polster:staff $@
 	chmod og-rwx $@
 
-/Users/polster/.hgrc: dot-hgrc ../../secnok
+/Users/polster/.hgrc: dot-hgrc /etc/secnok
 	rm -f $@
-	sed s/secnok/`cat ../../secnok`/g $< > $@
+	sed s/secnok/`cat /etc/secnok`/g $< | \
+	sed s/sechom/`cat /etc/sechom`/g > $@
 	chown polster:staff $@
 	chmod og-rw $@
 
@@ -53,11 +54,11 @@ preinstall:
 	cp -f $< $@
 	chmod a+rx $@
 
-/Users/polster/Library/Preferences/nsmb.conf: nsmb-conf-polster ../../secnok ../../sechom
+/Users/polster/Library/Preferences/nsmb.conf: nsmb-conf-polster /etc/secnok /etc/sechom
 	mkdir -p /Users/polster/Library/Preferences
 	rm -f $@
-	sed s/secnok/`cat ../../secnok`/g $< > /tmp/nsmb-conf-polster
-	sed s/sechom/`cat ../../sechom`/g /tmp/nsmb-conf-polster > $@
+	sed s/secnok/`cat /etc/secnok`/g $< > /tmp/nsmb-conf-polster
+	sed s/sechom/`cat /etc/sechom`/g /tmp/nsmb-conf-polster > $@
 	rm -f /tmp/nsmb-conf-polster
 	chown polster /Users/polster/Library/Preferences $@
 
@@ -90,8 +91,8 @@ preinstall:
 	cp -f xinitrc /etc/X11/xinit
 	chmod a+rx /etc/X11/xinit/xinitrc
 
-/Users/polster/.nsmbrc: nsmbrc-polster ../../secnok ../../sechom
-	sed s/secnok/`cat ../../secnok`/g $<  | \
-	sed s/sechom/`cat ../../sechom`/g > $@
+/Users/polster/.nsmbrc: nsmbrc-polster /etc/secnok ./etc/sechom
+	sed s/secnok/`cat /etc/secnok`/g $<  | \
+	sed s/sechom/`cat /etc/sechom`/g > $@
 	chown polster $@
 	chmod u+r,og-rwx $@
