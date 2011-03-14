@@ -67,10 +67,10 @@ install: preinstall $(OTHERS)
 	rm -f /usr/local/bin/sys
 	ln -s /usr/bin/sudo /usr/local/bin/sys
 
-/etc/davfs2/secrets: secrets ../secnok ../sechom
+/etc/davfs2/secrets: secrets /etc/secnok /etc/sechom
 	mkdir -p /etc/davfs2
 	rm -f $@
-	sed -e s/secnok/`cat ../secnok`/g -e s/sechom/`cat ../sechom`/g $< > $@
+	sed -e s/secnok/`cat /etc/secnok`/g -e s/sechom/`cat /etc/sechom`/g $< > $@
 	chmod og-rwx $@
 
 /etc/davfs2/davfs2.conf: davfs2.conf
@@ -81,21 +81,21 @@ install: preinstall $(OTHERS)
 	mkdir -p /etc/vpnc
 	cp -f $< $@
 	chmod u+r,og-rw $@
-	
+
 /etc/vpnc/vpnc-nokia-espoo.conf: vpnc-nokia-espoo.conf
 	mkdir -p /etc/vpnc
 	cp -f $< $@
 	chmod u+r,og-rw $@
-	
+
 /etc/vpnc/vpnc-nokia-dallas.conf: vpnc-nokia-dallas.conf
 	mkdir -p /etc/vpnc
 	cp -f $< $@
 	chmod u+r,og-rw $@
-	
+
 /usr/local/bin/nokiadown: nokiadown
 	cp -f nokiadown /usr/local/bin
 	chmod a+rx /usr/local/bin/nokiadown
-	
+
 /usr/local/bin/nokiaup: nokiaup
 	cp -f nokiaup /usr/local/bin
 	chmod a+rx /usr/local/bin/nokiaup
