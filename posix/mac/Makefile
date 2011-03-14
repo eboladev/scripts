@@ -91,7 +91,7 @@ preinstall:
 	cp -f xinitrc /etc/X11/xinit
 	chmod a+rx /etc/X11/xinit/xinitrc
 
-/Users/polster/.nsmbrc: nsmbrc-polster /etc/secnok ./etc/sechom
+/Users/polster/.nsmbrc: nsmbrc-polster /etc/secnok /etc/sechom
 	sed s/secnok/`cat /etc/secnok`/g $<  | \
 	sed s/sechom/`cat /etc/sechom`/g > $@
 	chown polster $@
