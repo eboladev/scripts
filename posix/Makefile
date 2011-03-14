@@ -1,6 +1,4 @@
-#
 # Makefile for common Linux scripts
-#
 
 OTHERS=\
 	/usr/local/bin/runkvt \
@@ -27,7 +25,6 @@ OTHERS=\
 	/etc/davfs2/secrets \
 	/usr/local/bin/sys \
 	/usr/local/bin/gmail-mailto \
-	~polster/bin/sshgate \
 	
 ONHOLD=\
 	crco \
@@ -50,12 +47,6 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
-
-~polster/bin/sshgate: sshgate
-	mkdir -p ~polster/bin
-	cp -f sshgate ~polster/bin
-	chmod u+rx,og-rwx ~polster/bin/sshgate
-	chown -R polster ~polster/bin
 
 /usr/local/bin/gmail-mailto: gmail-mailto
 	cp -f gmail-mailto $@
