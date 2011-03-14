@@ -400,10 +400,10 @@ preinstall:
 /etc/rc.local: rc.local
 	cp -f rc.local /etc/rc.local
 
-/home/polster/etc/creds-home.polster: creds-home.polster ../../sechom
+/home/polster/etc/creds-home.polster: creds-home.polster /etc/sechom
 	mkdir -p /home/polster/etc
 	rm -f $@
-	sed s/sechom/`cat ../../sechom`/g $< > $@
+	sed s/sechom/`cat /etc/sechom`/g $< > $@
 	chown polster:polster $@
 	chmod og-rw $@
 
