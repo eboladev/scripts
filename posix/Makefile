@@ -22,9 +22,7 @@ OTHERS=\
 	/etc/resolv.conf.nokia \
 	/usr/local/bin/nokiaup \
 	/usr/local/bin/nokiadown \
-	/etc/vpnc/vpnc-nokia-aruba.conf \
-	/etc/vpnc/vpnc-nokia-dallas.conf \
-	/etc/vpnc/vpnc-nokia-espoo.conf \
+	/etc/vpnc/vpnc-aruba.conf \
 	/etc/davfs2/davfs2.conf \
 	/etc/davfs2/secrets \
 	/usr/local/bin/sys \
@@ -70,15 +68,18 @@ install: preinstall $(OTHERS)
 /etc/davfs2/secrets: secrets /etc/secnok /etc/sechom
 	mkdir -p /etc/davfs2
 	rm -f $@
-	sed -e s/secnok/`cat /etc/secnok`/g -e s/sechom/`cat /etc/sechom`/g $< > $@
+	sed -e s/secnok/`cat /etc/secnok`/g -e s/sechom/`cat /etc/sechom`/g $< \
+	  > $@
 	chmod og-rwx $@
 
 /etc/davfs2/davfs2.conf: davfs2.conf
 	mkdir -p /etc/davfs2
 	cp -f davfs2.conf $@
 
-/etc/vpnc/vpnc-nokia-aruba.conf: vpnc-nokia-aruba.conf
+/etc/vpnc/vpnc-aruba.conf: vpnc-aruba.conf /etc/secvpncarubagrp /etc/secvpncarubapwd
 	mkdir -p /etc/vpnc
+	sed -e s/secvpncarubagrp/`cat /etc/secvpncarubagrp`/g \
+	  -e s/secvpncarubapwd/`cat /etc/secvpncarubapwd`/g $< > $@
 	cp -f $< $@
 	chmod u+r,og-rw $@
 
