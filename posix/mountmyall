@@ -1,0 +1,145 @@
+#!/bin/bash
+
+# Mount my filesystems
+
+# Do nothing if /var is mounted read-only
+log=/var/log/mountmyall.log
+touch $log >/dev/null 2>&1 || exit 0
+
+if [ "$1" != "-v" ]; then
+    exec >$log 2>&1
+fi
+
+echo "+++"
+date
+
+set -x
+
+PATH=/sbin:/bin:/usr/bin:/usr/sbin:/usr/local/bin:/opt/local/bin
+sshOptions="-ocompression=yes,reconnect,allow_other,follow_symlinks"
+lockFile=mountmyall
+lockDir=/var/lock
+lock=$lockDir/$lockFile
+export osName=`uname -s`
+domain=noe
+export mnt=/media
+
+case "$osName" in
+Darwin) mnt=/Volumes;;
+esac
+
+hsmbMount()
+{
+    # Mount home CIFS share
+    case "$osName" in
+    Darwin)
+        chown $user $mnt/$name
+        su $user -c "mount_smbfs -N //$user@$host$dir $mnt/$name"
+        ;;
+    *)
+        mount -t cifs //$host$dir $mnt/$name \
+          -o user=$user,uid=$user,credentials=/etc/samba/creds-home.$user
+        ;;
+    esac
+}
+
+cifsMount()
+{
+    # Mount CIFS share in user domain $domain
+    case "$osName" in
+    Darwin)
+        chown $user $mnt/$name
+        su $user -c "mount_smbfs -N //$domain\;$user@$host$dir $mnt/$name"
+        ;;
+    *)
+        mount -t cifs //$host$dir $mnt/$name \
+          -o user=$user,credentials=/etc/samba/creds.$user
+        ;;
+    esac
+}
+
+sshMount()
+{
+    case "$osName" in
+    Darwin) 
+        sshfs "$user@$host:$dir" \
+            "$mnt/$name" "$sshOptions,uid=`id -u $user`,volname=$name"
+        ;;
+    *)
+        sshfs $user@$host:$dir $mnt/$name $sshOptions,uid=`id -u $user`
+        ;;
+    esac
+}
+
+davMount()
+{
+    case "$osName" in
+    Darwin)
+        # mount_webdav -a10 $host$dir $mnt/$name
+        false
+        ;;
+    *)
+        yes | mount -t davfs $host$dir $mnt/$name -o uid=$user
+        ;;
+    esac
+}
+
+mkdir -p $lockDir
+lockfile -r 0 "$lock" || exit 0
+trap "rm -f $lock; exit" INT TERM EXIT
+cd /tmp
+
+#   Type User    Host                      Mount point Ping? Source dir/share
+#   ssh  polster pipacs.dyndns.org         pipacs      1     /home/polster \
+#   cifs tvixhd1 soap                      tvixhd1     1     /tvixhd1 \
+#   cifs polster vagrp011.europe.nokia.com groups5     1     /groups5 \
+#   ssh  polster colsw01m.europe.nokia.com nokia       1     /nokia \
+#   cifs polster cosmb001.europe.nokia.com apps        1     /apps \
+#   cifs polster cosmb001.europe.nokia.com groups      1     /groups \
+#   cifs polster common.europe.nokia.com   dsw         1     /groups/dsw \
+set -- \
+    ssh  polster bovi-home                 bovi        1     /home/polster \
+    ssh  polster colsw01m.europe.nokia.com colsw01m    1     /home/polster \
+    dav  polster https://pipacs.dyndns.org pipacs-dav  0     /dav \
+    ssh  polster nolove                    nolove      1     /home/polster \
+    cifs polster common.europe.nokia.com   projects    1     /projects \
+    cifs polster common.europe.nokia.com   groups      1     /groups \
+    ssh  polster 192.168.11.5              mimo        1     / \
+    cifs polster vagrp004.europe.nokia.com groups-5    1     /groups5 \
+    dav  polster https://code.nokia.com    avalanche   0     /dav/Avalanche \
+    hsmb polster 192.168.11.11             pixtor      1     /pixtor \
+    hsmb polster 192.168.11.11             maxtor      1     /maxtor \
+    ssh  polster maczok                    basix       1     /Volumes/basix \
+    hsmb polster maczok                    maczok      1     /polster \
+
+while test $# -ne 0; do
+    fsType=$1
+    user=$2
+    host=$3
+    name=$4
+    pingFirst=$5
+    dir=$6
+    shift 6
+
+    # Skip if mounted already
+    if mount -v | grep -q " on $mnt/$name"; then
+        continue
+    fi
+
+    rmdir $mnt/$name >/dev/null 2>&1
+    pingCmd=true
+    [ $pingFirst -eq 1 ] && pingCmd="ping -c 1 -q -i 1 $host"
+    $pingCmd && \
+    (
+        mkdir -p $mnt/$name
+        case "$fsType" in
+        ssh)  sshMount;;
+        cifs) cifsMount;;
+        dav)  davMount;;
+        hsmb) hsmbMount;;
+        *)    false;;
+        esac
+    )
+done
+
+exit 0

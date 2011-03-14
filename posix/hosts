@@ -1,0 +1,43 @@
+#
+# Name          /etc/hosts
+# Description   Map IP addresses to hostnames
+#
+
+127.0.0.1       localhost.localdomain localhost
+
+# Home network
+
+192.168.11.1    soap.pipacs.com soap
+192.168.11.2    filemon-wlan.pipacs.com filemon-wlan
+192.168.11.3    aliz.pipacs.com aliz zaurus
+192.168.11.4    maemo-vm.pipacs.com maemo-vm
+192.168.11.5    thinka.pipacs.com thinka
+192.168.11.6    lilu.pipacs.com lilu ipaq
+192.168.11.7    filemon.pipacs.com filemon
+192.168.11.8    ffour.pipacs.com ffour
+192.168.11.9    moon.pipacs.com moon
+192.168.11.10   walden.pipacs.com walden
+192.168.11.11   bovi.pipacs.com bovi bovi-home.pipacs.com bovi-home
+192.168.11.12   thinka-wlan.pipacs.com thinka-wlan
+192.168.11.13	marzipan-wlan.pipacs.com marzipan-wlan
+192.168.11.14	marzipan.pipacs.com marzipan marzipan-lan
+192.168.11.15   nolove.pipacs.com nolove
+192.168.11.16   n800.pipacs.com n800
+192.168.11.17	maczok.pipacs.com maczok
+192.168.11.18	nolove-wlan.pipacs.com nolove-wlan
+192.168.11.100  bogar.pipacs.com bogar linksys
+
+192.168.12.20   isztmen.pipacs.com isztmen isztmen-vm
+
+# BME KKA machines
+
+152.66.97.20    mimoza amarillis
+
+# Nokia machines
+
+172.27.162.230  della
+172.27.163.83   nolove-nokia
+
+#
+# End           /etc/hosts
+#

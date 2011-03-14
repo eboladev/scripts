@@ -1,0 +1,5 @@
+[bovi:polster]
+password=sechom
+
+[192.168.11.11:polster]
+password=sechom

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Eclipse
+GenericName=Integrated Development Environment
+Exec=/opt/eclipse/eclipse
+Icon=eclipse
+Type=Application
+Categories=Development;
+Comment=Integrated Development Environment
+Terminal=false

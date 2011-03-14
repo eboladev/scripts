@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Start VNC session as root, then connect to it.
+
+sudo su root -c 'vncserver -kill :3'
+sudo su root -c 'vncserver :3 -localhost'
+vncviewer :3 -FullColour -passwd ~/.vnc/passwd
+sudo su root -c 'vncserver -kill :3'

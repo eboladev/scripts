@@ -1,0 +1,48 @@
+#!/bin/sh
+# Find and mount my removable drives
+
+if [ "$1" != "-v" ]; then
+    log=/var/log/mountmaxtor.log
+    exec >>$log 2>&1
+fi
+
+echo "***"
+date
+echo "***"
+
+set -x
+PATH=/usr/bin:/bin:/sbin:/usr/sbin:/usr/local/bin
+lock=/var/lock/mountmaxtor
+
+lockfile -r 0 "$lock" || exit 1
+trap "rm -f $lock; exit" INT TERM EXIT
+
+missing=0
+disks="maxtor pixtor"
+services="apache2 sbd"
+
+for i in $disks; do
+    [ ! -f /mnt/$i/$i ] && missing=1
+done
+
+if [ $missing -eq 1 ]; then
+    for s in $services; do
+        service "$s" stop
+    done
+    for i in b c d e f g h i j k l m n o p q r s t u v w x y z; do
+        umount /dev/sd${i}1
+    done
+    for d in $disks; do
+        mkdir -p /mnt/$d
+        for i in b c d e f g h i j k l m n o p q r s t u v w x y z; do
+            mount -onoatime,nodiratime /dev/sd${i}1 /mnt/$d
+            if [ -f /mnt/$d/$d ]; then
+                break
+            fi
+            umount /mnt/$d
+        done
+    done
+    for s in $services; do
+        service "$s" start
+    done
+fi

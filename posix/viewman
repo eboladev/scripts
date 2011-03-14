@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# Name		viewman
+# Description	Man page viewer
+# Version	$Id: viewman,v 1.7 2001/04/23 21:28:14 polster Exp $
+#
+
+# set -x
+
+base=`basename "$1"`
+mkdir /tmp/man$$
+gnome-man2html < "$1" > /tmp/man$$/"$base.html"
+gnome-help-browser /tmp/man$$/"$base.html"
+rm -rf /tmp/man$$
+
+#
+# End		viewman
+#

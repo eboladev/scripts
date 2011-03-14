@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ifconfig | mailx -s "ifconfig (nolove)" akos.polster@nokia.com

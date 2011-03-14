@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# Name		runtgif
+# Description	Wrapper around tgif. The current version generates
+#		segmentation violation if no file name specified on
+#		the command line
+# Version	$Id: runtgif,v 1.2 1999/08/13 13:10:39 akos Exp $
+#
+
+if [ $# -gt 0 ]; then
+  exec tgif ${1+"$@"}
+fi
+
+cat << __EOF__ > /tmp/blank$$.obj
+%TGIF 4.1.14
+state(0,37,200.000,0,0,0,4,0,9,1,1,0,0,0,0,1,0,'Helvetica',0,103680,0,0,1,5,0,0,1,1,0,16,0,0,1,1,1,0,1088,1408,1,0,2880,0).
+%
+% @(#)$Header: /home/rco/akos/src/scripts/common/RCS/runtgif,v 1.2 1999/08/13 13:10:39 akos Exp $
+% %W%
+%
+unit("1 pixel/pixel").
+color_info(12,65535,0,[
+	"magenta", 65535, 0, 65535, 65535, 0, 65535, 1,
+	"red", 65535, 0, 0, 65535, 0, 0, 1,
+	"green", 0, 65535, 0, 0, 65535, 0, 1,
+	"blue", 0, 0, 65535, 0, 0, 65535, 1,
+	"yellow", 65535, 65535, 0, 65535, 65535, 0, 1,
+	"pink", 65535, 49931, 53052, 65535, 49344, 52171, 1,
+	"cyan", 0, 65535, 65535, 0, 65535, 65535, 1,
+	"CadetBlue", 22885, 40569, 42649, 24415, 40606, 41120, 1,
+	"white", 65535, 65535, 65535, 65535, 65535, 65535, 1,
+	"black", 0, 0, 0, 0, 0, 0, 1,
+	"DarkSlateGray", 10402, 19764, 18724, 12079, 20303, 20303, 1,
+	"gray90", 59293, 59293, 59293, 58853, 58853, 58853, 1
+]).
+script_frac("0.6").
+fg_bg_colors('black','gray90').
+__EOF__
+
+exec tgif /tmp/blank$$.obj
+
+#
+# End		runtgif
+#

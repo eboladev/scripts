@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# Name		used
+# Description	Show the used memory (total resident memory used by processes)
+# Version	$Id$
+#
+
+ps auxw | (read line; cat) | \
+awk '{sum += $6} END {print "Total resident: " sum}'
+
+#
+# End		used
+#

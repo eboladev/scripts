@@ -1,0 +1,6 @@
+#!/bin/sh
+# Start Sametime with MOZILLA_FIVE_HOME set properly
+
+MOZILLA_FIVE_HOME=`ls -d /usr/lib/mozilla-seamonkey-* | tail -1`
+export MOZILLA_FIVE_HOME
+exec sametime

@@ -1,0 +1,1 @@
+SYSFS{idVendor}=="04b8", SYSFS{idProduct}=="012d", MODE="0664", GROUP="scanner", ENV{libsane_matched}="yes"

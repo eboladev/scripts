@@ -1,0 +1,28 @@
+#!/bin/ksh
+#
+# Name		saveconfig -- Save relevant config files into /tmp/config.tgz
+# Version	$Id: saveconfig,v 1.16 1997/05/23 22:20:58 akos Exp $
+#
+
+Files="etc
+       home/akos/src/scripts
+       home/akos/.[a-mo-zA-Z]*
+       home/akos/src/icons
+       usr/lib/X11/app-defaults
+       usr/lib/X11/fvwm/system.*
+       usr/lib/X11/fvwm/sample_configs
+       usr/lib/X11/xdm
+       usr/lib/X11/xinit
+       usr/lib/X11/XF86Config
+       usr/lib/X11/Xmodmap"
+
+cd /
+tar cvf - $Files | gzip > /tmp/config.tgz
+echo -n "Insert backup disk in A: "
+read ln
+mcopy /tmp/config.tgz a:
+rm -f /tmp/config.tgz
+
+#
+# End		saveconfig
+#

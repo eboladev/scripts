@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Name		rehu
+# Description	Replace Hungarian HTML character notations with real
+#		characters (now allowed if the document language is
+#		ISO Latin 2)
+# Version	$Id: rehu,v 1.1 2000/08/06 20:24:31 polster Exp $
+#
+
+for i in $*; do
+  echo "$i"
+  sed \
+    -e 's/&aacute;/á/g' \
+    -e 's/&eacute;/é/g' \
+    -e 's/&uuml;/ü/g' \
+    -e 's/&oacute;/ó/g' \
+    -e 's/&uacute;/ú/g' \
+    -e 's/&otilde;/õ/g' \
+    -e 's/&iacute;/í/g' \
+    -e 's/&ouml;/ö/g' \
+    -e 's/&ucirc;/û/g' \
+    -e 's/&Aacute;/Á/g' \
+    -e 's/&Eacute;/É/g' \
+    -e 's/&Oacute;/Ó/g' \
+    -e 's/&Uuml;/Ü/g' \
+    -e 's/&Otilde;/Õ/g' \
+    -e 's/&Iacute;/Í/g' \
+    -e 's/&Ouml;/Ö/g' \
+    -e 's/&Ucirc;/Û/g' \
+    "$i" > "$i.re"
+  mv "$i.re" "$i"
+done
+
+#
+# End		rehu
+#

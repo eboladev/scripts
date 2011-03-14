@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# Name		todosname
+# Description	Convert a UNIX file name to DOS 8.3 format
+# Comment	Leaves the original file name intact whenever possible
+# Version	$Id: todosname,v 1.1 1998/12/31 20:42:44 akos Exp $
+#
+
+# set -x
+
+if [ $# != 2 ]; then
+  echo "todosname: Usage: todosname unix_name dos_extension" >&2
+  exit 1
+fi
+
+full=$1
+dosExt=$2
+lower=`echo $full|tr '[A-Z]' '[a-z]'`
+dir=${full%/*}
+dir=${dir:-$PWD}
+base=${full##*/}
+name=${base%.*}
+extension=${base##*.}
+tmpDir=${TMPDIR:-/tmp}
+
+# Check for a valid 8.3 DOS file name
+if [ ${full} != ${lower} -o ${#name} -gt 8 -o ${#extension} -gt 3 ]; then
+  dir=$tmpDir
+  base=d$$.$dosExt
+fi
+
+echo ${dir}/${base}
+
+#
+# End		todosname
+#

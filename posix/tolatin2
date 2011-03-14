@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Name		tolatin2
+# Description	lpd filter to convert ISO Latin 1 PostScript to ISO Latin 2
+# Version	$Id: psfix,v 1.7 1998/06/05 12:57:33 akos Exp $
+#
+
+log=/var/log/tolatin2.log
+exec >>$log 2>&1
+echo $0 $* >&2
+/usr/local/bin/ogonkify -ATH -N -SO -AX | lpr -P`basename $0`
+
+#
+# End		tolatin2
+#

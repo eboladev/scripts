@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# Name		fixdisp
+# Description	Fix $DISPLAY, run command
+# Version	$Id$
+#
+
+set +u
+
+case "$DISPLAY" in
+  :*) DISPLAY=`hostname`"$DISPLAY";;
+esac
+
+cmd=$1
+shift
+exec "$cmd" $@
+
+#
+# End		fixdisp
+#

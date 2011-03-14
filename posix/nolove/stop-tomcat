@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -x
+
+if [ -r /etc/profile.d/lps.sh ]; then 
+    source /etc/profile.d/lps.sh
+fi
+if [ x"$LPS_JAVA_HOME" = "x" ]; then
+    echo "LPS_JAVA_HOME not defined"
+    exit 1
+fi
+if [ x"$LPS_BASE" = "x" ]; then
+    echo "LPS_BASE not defined"
+    exit 1
+fi
+export JAVA_HOME="$LPS_JAVA_HOME"
+exec "$LPS_BASE"/Server/tomcat-5.0.24/bin/shutdown.sh

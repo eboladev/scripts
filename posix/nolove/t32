@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# Start Lauterbach
+#
+
+if [ ! -d /home/t32 ]; then
+	echo "t32: Expecting Lauterbach in /home/t32"
+	exit 1
+fi
+
+cd /home/t32
+
+if [ ! -f fonts/fonts.dir ]; then
+	cd fonts
+	mkfontdir
+	cd ..
+fi
+
+if [ -f nokia/nmp_menu.men ]; then
+	cd nokia
+	awk '
+/D:\\T32/ {
+	gsub("\\\\", "/")
+	gsub("D:", "/home")
+	$0 =  tolower($0)
+}
+{
+	print
+}' nmp_menu.men > nmp_menu.men.fixed
+	mv nmp_menu.men.fixed nmp_menu.men
+	cd ..
+fi
+
+xset fp- /home/t32/fonts >/dev/null 2>&1
+xset fp+ /home/t32/fonts
+bin/t32marm

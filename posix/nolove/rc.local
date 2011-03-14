@@ -1,0 +1,32 @@
+#!/bin/sh
+
+mkdir -p /var/log /var/lock/subsys /var/run
+exec >/var/log/rclocal.log 2>&1
+set -x
+
+# Are we docked?
+docked=0
+rm -f /var/lock/subsys/docked
+if [ `(lspci; lsusb) | wc -l` -ge 38 ]; then
+    docked=1
+    touch /var/lock/subsys/docked
+fi
+
+# Disable swap - too slow with the encrypted laptop disk
+swapoff -a
+
+# Use RedHat's default firewall configuration
+if [ -f /etc/network/iptables.nolove ]; then
+    iptables-restore < /etc/network/iptables.nolove
+fi
+
+# Install the on-demand governor
+modprobe cpufreq-ondemand
+echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+
+# I was here
+mkdir -p /var/lock/subsys
+touch /var/lock/subsys/local
+
+exit 0

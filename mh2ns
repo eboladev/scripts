@@ -1,0 +1,51 @@
+#!/bin/sh
+#
+# Name		mh2ns
+# Description	Convert MH folders to Communicator ones
+# Version	$Id: mh2ns,v 1.1 1997/06/03 08:12:50 akos Exp $
+#
+
+# set -x
+
+if [ $# != 1 ]
+then
+	echo "mh2ns: Usage: mh2ns folder" >&2
+	exit 1
+fi
+
+folder=$1
+base=`basename $folder`
+dir=`dirname $folder`
+tmp=/tmp/msgs$$
+getDate='
+/^$/      {print defaultDate; exit 0}
+/^Date: / {gsub("^Date: ", ""); print; exit 0}'
+
+echo $folder
+today=`date`
+> $tmp
+
+for i in `ls -td ${folder}/[0-9]* 2>/dev/null`
+do
+  [ ! -f $i ] && continue
+  date=`awk "$getDate" defaultDate="$today" $i`
+  echo "$i: $date"
+  echo "From - $date" >> $tmp
+  sed 's/^From />From /' $i >> $tmp
+  rm -f $i
+done
+
+for i in `ls -d ${folder}/* 2>/dev/null`
+do
+  echo $i
+  [ ! -d $i ] && continue
+  $0 $i
+done
+
+
+mv -f $folder ${folder}.sbd
+mv -f $tmp $folder
+
+#
+# End		mh2ns
+#

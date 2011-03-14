@@ -1,0 +1,214 @@
+#!/bin/sh
+# -*- Mode: Tcl -*-
+#
+# Name		buttons
+# Description	Generic player interface
+#
+#\
+exec wish $0 ${1+"$@"}
+
+###############################################################################
+# Name		play.start
+
+proc play.start {} {
+
+    global play
+
+    switch $play(state) {
+	init {
+	    if {[catch {set play(fh) [open "|$play(cmd) $play(file)"]} err]} {
+		puts stderr "buttons: Error: $err"
+		return 
+	    }
+	    fconfigure $play(fh) -blocking false
+	    fileevent $play(fh) readable play.onReadable
+	    .start configure -relief sunken
+	    .pause configure -state normal
+	    update
+	    set play(state) started
+	}
+	started {
+	    .start configure -relief raised
+	    .pause configure -state disabled
+	    update
+	    catch {exec kill [pid $play(fh)]}
+	    catch {close $play(fh)}
+	    set play(state) init
+	}
+    }
+}
+
+###############################################################################
+# Name		play.pause
+
+proc play.pause {} {
+
+    global play
+
+    switch $play(state) {
+	"started" {
+	    exec kill -SIGSTOP [pid $play(fh)]
+	    set play(state) paused
+	    .pause configure -relief sunken
+	    .start configure -state disabled
+	}
+	"paused" {
+	    exec kill -SIGCONT [pid $play(fh)]
+	    set play(state) started
+	    .pause configure -relief raised
+	    .start configure -state normal
+	}
+    }
+}
+
+###############################################################################
+# Name		play.exit
+
+proc play.exit {} {
+
+    global play
+
+    catch {exec kill -SIGCONT [pid $play(fh)]}
+    catch {exec kill [pid $play(fh)]}
+    catch {close $play(fh)}
+    exit 0
+}
+
+###############################################################################
+# Name		play.onReadable
+
+proc play.onReadable {} {
+
+    global play
+
+    if {![eof $play(fh)]} {
+	catch {read $play(fh) 1}
+    } else {
+	fileevent $play(fh) readable ""
+        catch {close $play(fh)}
+        play.start
+    }
+}
+
+###############################################################################
+# Name		play.save
+
+proc play.save {} {
+
+    global play
+
+    set dst [tk_getSaveFile \
+		 -initialfile $play(file) -parent . \
+		 -title "buttons: Save File" \
+		 -filetypes {{"All Files" {"*"}}}]
+    if {[string compare "" $dst]} {
+	set currentDir [pwd]
+	cd $play(homeDir)
+	if {[catch {file copy -force -- $play(file) $dst} err]} {
+	    puts stderr "buttons: Error: $err (pwd: [pwd])"
+	}
+	cd $currentDir
+    }
+}
+
+###############################################################################
+# Main
+
+# Initialize globals
+
+global argc argv env
+
+set play(play) \
+"R0lGODlhFgAWAPIAAAAAAIKCgr6+vv///wAAAAAAAAAAAAAAACH5BAEAAAQAIf4mICBJbXBv
+cnRlZCBmcm9tIFhQTSBpbWFnZTogZm9yd2FyZC54cG0ALAAAAAAWABYAwgAAAIKCgr6+vv//
+/wAAAAAAAAAAAAAAAAP+SERERIQQQgghhBBCCCEEQRAAAAAAAADDABAEQRAEQRAEQRAEQRCB
+AIFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAAAAAAAAAAEAaAAIFAIBAIBAKBQCAQ
+CAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAEBAQE
+BAQEBAQEBAQEAAQEBAQEBAQEBAMDAAQEBAQEBAQEBAQEBAQEBAEAAAEEBAQEBAQEBAQEBAQE
+BAQEBAQEBAQEBAQEBAQEBAQEBAQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIEDs
+gAABAgQIECBAgAABAgQIECBAgAABAgQIEABAgAABAgQIECBAgAABAgQIECBAgAABAgQADABA
+gAABAgQIECBAgAABAgAGDBgwYMCAAQQGDABAgAABAgQIECBAgAAAAgQIECBAgAABAgMAECBA
+gAABAgQIECAQIECAAAECBAAwAEAAAgQIECBAgAABAgQIECBAgAABAgEABCBAgAABAgQIECBA
+gAABAgQIECBAgEAAAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBA
+gAABAgQIECBAgAABAgQIECBAIAEAOw=="
+
+set play(pause) \
+"R0lGODlhFgAWAPEAAAAAAP8AAL6+vgAAACH5BAEAAAMAIf4jICBJbXBvcnRlZCBmcm9tIFhQ
+TSBpbWFnZTogc3RvcC54cG0ALAAAAAAWABYAwQAAAP8AAL6+vgAAAAL+3DYzMzMzxhhjjDHG
+GGOAMARDMARDMARDAAzDMAzDMAwDMARDMAQDMBgMBoPBYDAYDAYDwCAwCAwCA8BgMBgMBoPB
+YAAIDAKDwCAwCAwCgwBgMBgMBoPBYDAYDAaDwWAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAwMAAwEDAQMBAwEDAQMAAwMDAwMDAwMAAQMBAwEDAQMBAwEDAQADAwMDAwMDAw
+ADAQMBAwEDAQMBAwADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDBgwIAB
+AwYMGDBgwIABAwYMGDBgwIABAAAAAAAAAIDpAQMGDBgwYMCAAQMGDBgAYECAAQEGBBgQYACA
+AQMGDBgwYMCAAQAGBBgQYECAAQEGBBgQYACAAQMGDBgwYACAAQEGBBgQYECAAQEGBBgAYMCA
+AQMGDBgAYECAAQEGBBgQYECAAQEGABgwYMCAAQMGABgQYECAAQEGBBgQYECAAQAGDBgwYMCA
+AQMGABgQYECAAQEGBBgAYMCAAQMGDBgwYMCAAQMGAAAAAAAAAAAGDBgwYMCAAQMGDBgwYMCA
+AQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwoAAAOw=="
+
+set play(save) \
+"R0lGODlhFgAWAPIAAAAAAIJ9fb6+vsvLy////wAAAAAAAAAAACH5BAEAAAUAIf4pICBJbXBv
+cnRlZCBmcm9tIFhQTSBpbWFnZTogZmlsZWZsb3BweS54cG0ALAAAAAAWABYAwgAAAIJ9fb6+
+vsvLy////wAAAAAAAAAAAAP+WFVVVaWUUkoppZRSSilFUQAFAQAAQRAEMRRAUBRFURQFUARB
+UQSBQiAwKAAChUKhUCgUAAAAAAAAAAAAAAAAKBQKhUKhUAAUAoFAIBAIBAKBAiBQKBQKhUKh
+UCgUCgUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQAFBAAAAAAABAQE
+AwUAAQUFBQUFBQUABQQEBAQEBAQEBAMFAAEFBQUFBQUFAAUBAQUFBQUFAQEDBQABBQUFBQUF
+BQAAAAAAAAAAAAAAAAAAAQUFBQUFBQUFBQoUKFCgQIECBQoUKFCgQIECBQoUKFCgQIECBQoU
+KFDsoECBAgUKFChQoECBAgUKFABQgAABAgQIECBAgMCAAgACFChQoECBAgUAFCBAgAABAgQI
+ECAwoACAAAUKFChQoEABAAUIECBAgAABAgQIDCgAIECBAgUKFChQAECBAQMGDBgwYMCAAQMK
+AAhQoECBAgUKFABQIECAAAECBAgQIECAAgACFChQoECBAgUAFAgQoECBAAEKBAgwoACAAAUK
+FChQoEABAAUCBChQoECBAgECDCgAIECBAgUKFChQoECAAAECBAgQIECAAAECBAhQoECBAgUK
+FChQoECBAgUKFChQoECBAgUKFChQIAEAOw=="
+
+set play(exit) \
+"R0lGODlhFgAWAPIAAAAAAIKCgr6+vv///wAAAAAAAAAAAAAAACH5BAEAAAQAIf4jICBJbXBv
+cnRlZCBmcm9tIFhQTSBpbWFnZTogZXhpdC54cG0ALAAAAAAWABYAwgAAAIKCgr6+vv///wAA
+AAAAAAAAAAAAAAP+SERERIQQQgghhBBCCCEEQRAEAQwAMAwEAAQBQRAEQRAEAQQBQRAEAoEA
+CBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCIABIAAYAAIEAoFAIBAIBAKBQCAQCAQE
+BAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAEEBAQEAAMAAQQEBAQE
+BAQEBAQEBAQEBAADBAABAQEEBAQEBAQEBAQEBAADAAEBBAQEAAABBAQEBAQEBAQEBAQEBAQE
+BAQEBAQEBAQEBAQEBAQEBAQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIEDsgAAB
+AgQIECBAgAABAgQIECBAgAABAgQIECAAgAABAgQIECBAgAABAgQIEAAAIAABAgAGDBgAIAAB
+AgQIECBAgAABAgQIEAAwYAABAgACBAgQgAABAgQIECBAgAABAgQADCBAAECAAAQIECBAgAAB
+AgQIECBAAMAAAAECEAAwAEAAAgQIECBAgAABAgQIAAAQIAABAgQIEAAAIAABAgQIECBAgAAB
+AgECECBAgAABAgQIBAhAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAAB
+AgQIECBAgAABAgQIECBAIAEAOw=="
+
+set play(cmd)		[lreplace $argv end end]
+set play(file)		[lindex $argv end]
+set play(state)		init
+set play(homeDir)	[pwd]
+
+# Verify command line
+if {![string compare "" $play(cmd)] || ![string compare "" $play(file)]} {
+    puts stderr "buttons: Usage: buttons command file"
+    exit 1
+}
+
+# Build UI
+. configure -bd 1 -relief raised
+button .start -bd 1 -image [image create photo -format gif \
+    -data $play(play)] -command play.start
+pack .start -side left
+button .pause -bd 1 -image [image create photo -format gif \
+    -data $play(pause)] -command play.pause -state disabled
+pack .pause -side left
+button .exit -bd 1 -image [image create photo -format gif \
+    -data $play(exit)] -command play.exit
+pack .exit -side right
+button .save -bd 1 -image [image create photo -format gif \
+    -data $play(save)] -command play.save
+pack .save -side right
+
+# Decorate the main window
+wm title . "buttons: [file tail $play(file)]"
+wm iconname . "buttons: [file tail $play(file)]"
+wm protocol . WM_DELETE_WINDOW play.exit
+wm resizable . 0 0
+update
+
+# Start playing
+play.start
+
+#
+# End		buttons
+#

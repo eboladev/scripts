@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=LightZone
+GenericName=Image Editor
+Exec=/home/polster/bin/LightZone
+Icon=im-jabber
+Type=Application
+Categories=Graphics;
+Comment=Image Editor
+Terminal=false

@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# Name		runminicom
+# Description	Start Minicom in and ansi_xterm window
+# Version	$Id: runminicom,v 1.17 1997/11/23 00:33:51 akos Exp $
+#
+
+set +u
+set -x
+
+if [ -x ${KDEDIR}/bin/kvt ]; then
+  term="$KDEDIR/bin/kvt -vt_fg white -vt_bg black -n minicom -T minicom -vt_font vga -vt_geometry 80x25 -no_menubar -no_scrollbar -8"
+elif [ -x /usr/bin/X11/rxvt ]; then
+  term="/usr/bin/X11/rxvt -fg white -bg black -n minicom -T minicom -sl 0 +sb -font vga -geometry 80x25 -8"
+elif [ -x /usr/bin/X11/xterm-color ]; then
+  term="/usr/bin/X11/xterm-color -fg white -bg black -n minicom -T minicom -sl 0 +sb -font vga -geometry 80x25"
+else
+  echo "runminicom: Error: No color terminal found"
+  exit 1
+fi
+
+exec $term -e minicom -l -c on $*
+
+#
+# End		runminicom
+#

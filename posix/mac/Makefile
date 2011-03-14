@@ -1,0 +1,97 @@
+TARGETS= \
+	/Users/polster/.nsmbrc \
+	/etc/X11/xinit/xinitrc \
+	/usr/local/bin/restartvpn \
+	/etc/profile.d/macports.sh \
+	/Users/polster/bin/enter-proximity-silva.scpt \
+	/usr/local/bin/mkdmg \
+	/etc/nsmb.conf \
+	/Users/polster/Library/Preferences/nsmb.conf \
+	/usr/local/bin/runterm \
+	/Users/polster/.hgrc \
+	/Users/polster/.netrc \
+	/Library/LaunchAgents/locchghook \
+	/Library/LaunchAgents/com.macosxints.locchghook.plist \
+	/etc/smb.conf \
+
+DIRS = maczok marzipan
+
+install: preinstall $(TARGETS)
+	-for d in $(DIRS); do (cd $$d; make install); done
+
+preinstall:
+	@if [ `id -u` != 0 ]; then echo "Run make as superuser"; exit 1; fi
+	@case `uname` in \
+		Darwin)	;; \
+		*)	echo "Run this on a Mac"; exit 1;; \
+	esac
+
+/etc/smb.conf: smb.conf
+	cp -f $< $@
+	chmod a+r $@
+
+/Library/LaunchAgents/com.macosxints.locchghook.plist: com.macosxints.locchghook.plist
+	cp -f $< $@
+	launchctl load $@
+
+/Library/LaunchAgents/locchghook: locchghook
+	cp -f $< $@
+	chmod a+rx $@
+
+/Users/polster/.netrc: netrc-polster
+	cp -f $< $@
+	chown polster:staff $@
+	chmod og-rwx $@
+
+/Users/polster/.hgrc: dot-hgrc ../../secnok
+	rm -f $@
+	sed s/secnok/`cat ../../secnok`/g $< > $@
+	chown polster:staff $@
+	chmod og-rw $@
+
+/usr/local/bin/runterm: runterm
+	cp -f $< $@
+	chmod a+rx $@
+
+/Users/polster/Library/Preferences/nsmb.conf: nsmb-conf-polster ../../secnok ../../sechom
+	mkdir -p /Users/polster/Library/Preferences
+	rm -f $@
+	sed s/secnok/`cat ../../secnok`/g $< > /tmp/nsmb-conf-polster
+	sed s/sechom/`cat ../../sechom`/g /tmp/nsmb-conf-polster > $@
+	rm -f /tmp/nsmb-conf-polster
+	chown polster /Users/polster/Library/Preferences $@
+
+/etc/nsmb.conf: nsmb.conf
+	cp -f nsmb.conf /etc
+	chmod og-r /etc/nsmb.conf
+
+/usr/local/bin/mkdmg: mkdmg
+	mkdir -p /usr/local/bin
+	cp -f mkdmg /usr/local/bin
+	chmod a+rx /usr/local/bin/mkdmg
+
+/Users/polster/bin/enter-proximity-silva.scpt: enter-proximity-silva.scpt
+	mkdir -p /Users/polster/bin
+	cp -f enter-proximity-silva.scpt /Users/polster/bin
+	chmod a+rx /Users/polster/bin/enter-proximity-silva.scpt
+
+/etc/profile.d/macports.sh: macports.sh
+	mkdir -p /etc/profile.d
+	cp -f macports.sh /etc/profile.d
+	chmod a+rx /etc/profile.d/macports.sh
+
+/usr/local/bin/restartvpn: restartvpn
+	-mkdir -p /usr/local/bin
+	cp -f restartvpn /usr/local/bin
+	chmod a+rx /usr/local/bin/restartvpn
+
+/etc/X11/xinit/xinitrc: xinitrc
+	mkdir -p /etc/X11/xinit
+	cp -f xinitrc /etc/X11/xinit
+	chmod a+rx /etc/X11/xinit/xinitrc
+
+/Users/polster/.nsmbrc: nsmbrc-polster ../../secnok ../../sechom
+	sed s/secnok/`cat ../../secnok`/g $<  | \
+	sed s/sechom/`cat ../../sechom`/g > $@
+	chown polster $@
+	chmod u+r,og-rwx $@

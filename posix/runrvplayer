@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# Name		runrvplayer
+# Description	Wrapper for rvplayer
+# Version	$Id: runrvplayer,v 1.1 1999/01/20 20:44:33 akos Exp $
+#
+
+export LD_LIBRARY_PATH=/opt/rvplayer5.0
+exec /opt/rvplayer5.0/rvplayer ${1+"$@"}
+
+#
+# End		runrvplayer
+#
