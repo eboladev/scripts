@@ -1,0 +1,5 @@
+#!/bin/sh
+echo 'vpnc-script-xx started'
+export DHCP4_IP_ADDRESS="$INTERNAL_IP4_ADDRESS"
+nohup sh /etc/network/if-up.d/nolove-ifup >/dev/null 2>&1 &
+echo 'vpnc-script-xx finished'

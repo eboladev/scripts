@@ -1,0 +1,25 @@
+#!/bin/sh
+# Save my stuff onto a network directory
+# set -x
+
+lock=/var/tmp/mybackup-polster.lock
+dstHost=colsw01m.europe.nokia.com
+
+lockfile -r 0 "$lock" || exit 1
+trap "rm -f $lock; exit" INT TERM EXIT
+ping -c 1 -q $dstHost >/dev/null 2>&1 || exit 1
+
+#   src                           dst
+set -- \
+    /home/polster/Documents/nokia /home/polster/backup/Documents \
+    /home/polster/.evolution      /home/polster/backup/dot-evolution-nolove
+
+while test $# -ne 0; do
+    src=$1
+    dst=$2
+    shift 2
+
+    ssh $dstHost mkdir -p $dst || continue
+    rsync -avzqr "$src" $dstHost:$dst
+    ssh $dstHost chmod -R og-rwx $dst
+done

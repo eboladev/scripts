@@ -1,0 +1,19 @@
+#!/bin/ksh
+#
+#	tclsqueeze -- Squeeze Tcl files
+#
+
+for i in $* 
+do
+	tr -s '[:blank:]' < $i | \
+	tr '\t' ' ' | \
+	sed 's/^ //' | \
+	grep -v '^$' | \
+	grep -v '^\#' > $i.s
+done
+
+echo "auto_mkindex . *.tcl.s" | tclsh
+
+#
+#	end: tclsqeeze
+#

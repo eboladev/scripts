@@ -1,0 +1,11 @@
+#!/bin/ksh
+#
+# Name		playsnd -- Play an SND file
+# Version	$Id: playsnd,v 1.2 1996/04/11 17:33:14 akos Exp $
+#
+
+exec /usr/local/bin/play -t .ul -c 2 -r 22050 $@
+
+#
+# End		playsnd
+#

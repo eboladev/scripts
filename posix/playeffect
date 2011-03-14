@@ -1,0 +1,4 @@
+#!/bin/sh
+exec su root -c \
+	"nice --adjustment=-20 /usr/local/bin/play -t .ul -c 2 -r 22050 /usr/local/lib/sounds/${1}.snd" \
+	 >/dev/console 2>&1

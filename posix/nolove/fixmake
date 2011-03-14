@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# $Id: fixmake,v 1.11 2004/10/10 19:14:23 polster Exp $
+#
+# Like make, but convert MSC compiler output to GCC format
+
+exec make ${1+"$@"} | \
+sed -e 's/(/:/' \
+    -e 's/) : error /:error /' \
+    -e 's/) : fatal error /:fatal error /' \
+    -e 's/) : warning /:warning /' \
+    -e 's|\\|/|g' \
+    -e "s|^h:|$HOME|" \
+    -e '/^Please use the registry/d' \
+    -e '/^to set the screen res/d'

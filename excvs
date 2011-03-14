@@ -1,0 +1,69 @@
+#!/bin/sh
+# -*- Mode: Tcl -*-
+#
+# Name		excvs
+# Description	cvs with expect
+# Version	$Id: excvs,v 1.16 2001/04/08 21:20:37 polster Exp $
+#
+# \
+exec expect -- "$0" ${1+"$@"}
+
+global argc argv env
+
+# Verify the environment
+
+if {![info exists env(HOME)]} {
+    puts stderr "excvs: Fatal: \$HOME not set"
+    exit 1
+}
+if {![info exists env(CVSROOT)]} {
+    puts stderr "excvs: Fatal: \$CVSROOT not set"
+    exit 1
+}
+
+# Load the password file
+
+set all ""
+if {[catch {
+    set fh [open $env(HOME)/.excvs]
+    set all [read $fh]
+    close $fh
+} err]} {
+    puts stderr "excvs: Fatal: Cannot read your password: $err"
+    exit 1
+}
+
+# Look for the password for the current CVSROOT
+
+set found 0
+foreach line [split $all "\n"] {
+    set fields [split $line]
+    if {![string compare $env(CVSROOT) [lindex $fields 0]]} {
+        set pwd [lindex $fields 1]
+        set found 1
+        break
+    }
+}
+if {!$found} {
+    puts stderr "excvs: Fatal: No password found for \$CVSROOT"
+    exit 1
+}
+
+set env(TERM) "vt100"
+set send_human {.1 .3 1 .05 2}
+
+eval spawn cvs $argv
+sleep 1
+## expect {
+##     "yes/no)? " {sleep 0.2; exp_send -h "yes\r"}
+##     timeout     exp_continue
+## }
+expect {
+    "password:"	{sleep 0.2; exp_send -h "$pwd\r"}
+    timeout	exp_continue
+}
+catch {interact}
+
+#
+# End		excvs
+#

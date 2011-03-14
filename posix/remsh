@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# Name		remsh
+# Description	Same as rsh
+# Version	$Id: remsh,v 1.1 1998/04/14 11:55:11 akos Exp $
+#
+
+exec /usr/bin/rsh $@
+
+#
+# End		remsh
+#

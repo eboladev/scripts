@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -x
+
+if [ $# != 1 ]; then
+    echo "Usage: listen-bt bluetooth_device_id" >&2
+    exit 1
+fi
+
+sudo sdptool add --channel 4 SP
+sudo rfcomm listen $1 4

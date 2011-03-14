@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# Name		viewword
+# Description	View an MS Word document
+# Version	$Id: viewword,v 1.2 2001/03/24 12:41:41 polster Exp $
+#
+
+which soffice >/dev/null 2>&1 && exec soffice "$1"
+which abiword >/dev/null 2>&1 && exec abiword "$1"
+which wvHtml  >/dev/null 2>&1 && \
+(
+  wvHtml "$1" > /tmp/vw$$.html
+  netscape -remote 'openURL(file:'/tmp/vw$$.html')'
+  sleep 2
+  rm /tmp/vw$$.html
+  exit 0
+)
+
+#
+# End		viewword
+#

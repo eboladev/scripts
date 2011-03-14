@@ -1,0 +1,134 @@
+#!/bin/sh
+#
+# Name		viewamipro
+# Description	Display Ami Pro files
+# Version	$Id: viewamipro,v 1.6 1998/12/20 21:44:27 akos Exp akos $
+#
+
+# set -x
+
+# Try Corel Wordperfect first
+dir=`dirname $1`
+base=`basename $1`
+cd "$dir"
+xwp "`pwd`/$base" 2>/dev/null && exit 0
+cd $oldDir
+
+CCFILE=/tmp/amipro$$
+
+(
+  (
+    sed -e '/\[edoc\]/,/\[Embedded\]/p'  -e 'd'  $1
+    sed -e '/\[data\]/,/\[e\]/p' -e 'd' $1 
+  ) | \
+  tr '' ' ' | tr -d '\015' | \
+  tr -d '\377' | tr -d '\200'-'\240' | tr -d '\1'-'\10' | tr -d '\13' | \
+  tr -d '\14' | tr -d '\16'-'\37' | \
+  sed -e 's/<\/p>//g' | tr '\007' '\263' | \
+  sed -e 's/<\/z>//g' | tr '\007' '\372' | \
+  sed -e 's?<:B<\*/>>??g' | tr '\007' '\375' | \
+  sed -e 's?<:B<\*,>>??g' | tr '\007' '\374' | \
+  sed -e 's?<:B<\*->>??g' | tr '\007' '\373' | \
+  sed -e 's/^>$//' \
+      -e 's/<:[R,P][,,0-9]*>//g' \
+      -e 's/<:f[0-9]*,[",A-Z,a-z,0-9, ]*,[\,,0-9]*>//g' \
+      -e 's/<:f[1-9][0-9]*,,>//g' \
+      -e 's/<:f>//g' \
+      -e 's/<:rh>//g' \
+      -e 's/<:I[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*>/ /g' \
+      -e 's/<+\!>//g' \
+      -e 's/<-\!>//g' \
+      -e 's/<+">//g' \
+      -e 's/<-">//g' \
+      -e 's/<+#>//g' \
+      -e 's/<-#>//g' \
+      -e 's/<+,>//g' \
+      -e 's/<-,>//g' \
+      -e 's/<++>//g' \
+      -e 's/<-+>//g' \
+      -e 's/<+->//g' \
+      -e 's/<-->//g' \
+      -e 's/<+)>//g' \
+      -e 's/<-)>//g' \
+      -e 's/<+&>//g' \
+      -e 's/<-&>//g' \
+      -e 's/<:VE+>//g' \
+      -e 's/<:VE->//g' \
+      -e 's/<:VS+>//g' \
+      -e 's/<:VS->//g' \
+      -e 's/<:v+>//g' \
+      -e 's/<:v->//g' \
+      -e "s/<+\'>//g" \
+      -e "s/<-\'>//g" \
+      -e 's/<+C>//g' \
+      -e 's/<:S+-3>//g' \
+      -e 's/<:S+-1>//g' \
+      -e 's/<+>//g' \
+      -e 's/<:t[0-9][0-9]*>//g' \
+      -e 's/<:p<\* >>//g' \
+      -e '/^@Body Single@/s/$//' \
+      -e 's/@Body Single@//' \
+      -e 's/@Header@//g' \
+      -e 's/@Bullet List@//g' \
+      -e 's/@Body Text 2@//g' \
+      -e 's/@Body Text 3@//g' \
+      -e 's/@Outline 1@//g' \
+      -e 's/@Outline 2@//g' \
+      -e 's/@Outline 3@//g' \
+      -e 's/@Title@//g' \
+      -e 's/@Regarding@//g' \
+      -e 's?@To/From/Date@??g' \
+      -e 's/@Subhead@//g' \
+      -e 's/@Bullet 1@//g' \
+      -e 's/@Number List@//g' \
+      -e 's/<+B>/          /g' \
+      -e 's/<:s><:#[1-9][0-9]*,[1-9][0-9]*>//g' \
+      -e 's/<:#[1-9][0-9]*,[1-9][0-9]*>//g' \
+      -e 's/<+@>//g' \
+      -e 's/<\*\*>//g' \
+      -e 's/<:s>//g' \
+      -e 's/ / /g' \
+      -e 's/ / /g' \
+      -e 's/ / /g' \
+      -e 's/ / /g' \
+      -e 's/\[data\]//' \
+      -e 's/\[edoc\]//' \
+      -e 's/\[Embedded\]//' \
+      -e 's/\[e\]//' \
+      -e 's/<\[>/[/g' \
+      -e 's?</c>?#?g' \
+      -e 's/<;>/>/g' \
+      -e 's/<:#P[0-9a-zA-Z]*,P[0-9a-zA-Z]*>/ /g' \
+      -e 's/<\\a>/á/g' \
+      -e 's/<\\s>/ó/g' \
+      -e 's/<\\m>/í/g' \
+      -e 's/<\\z>/ú/g' \
+      -e 's/<\\i>/é/g' \
+      -e 's/<\\|>/ü/g' \
+      -e 's/<\\v>/ö/g' \
+      -e 's/<\\V>/Ö/g' \
+      -e 's/<\\\\>/Ü/g' \
+      -e 's/<\\A>/Á/g' \
+      -e 's/<\\S>/Ó/g' \
+      -e 's/<\\M>/Í/g' \
+      -e 's/<\\Z>/Ú/g' \
+      -e 's/<\\I>/É/g' \
+      -e 's/<\\{>/û/g' \
+      -e 's/<\\u>/õ/g' \
+      -e 's?<:B<\*4>>??g' \
+   | \
+   tr -d '\012' | (tr '\007' '\012'; echo "") | expand -t 5 | fold -s -80 
+   echo '
+______________________________________________________________________________
+amipro decoding script: Dave Gee HP-FCO run: '
+   date
+   echo 'warning tables etc are discarded. Only plain text is output.'
+) | tmore -t $1
+
+#) | & cat > $CCFILE
+# exec process to keep process count low.
+# exec /usr/vue/bin/vuepad $CCFILE
+
+#
+# End		viewamipro
+#

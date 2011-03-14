@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# Name		runvmware
+# Description	vmware wrapper
+# Version	$Id: runvmware,v 1.10 1999/10/31 20:29:13 polster Exp $
+#
+
+# set -x
+
+hostName=`hostname`
+dispHost=`echo $DISPLAY | awk '{print $1}' FS=:`
+if [ "$dispHost" = "$hostName" ]; then
+  DISPLAY=:`echo $DISPLAY | awk '{print $2}' FS=:`
+fi
+if [ -d ~/.vmware ]; then
+  cd ~/.vmware
+else
+  cd
+fi
+if [ -f ~/.vmware/vmware.cfg ]; then
+  exec vmware -x ~/.vmware/vmware.cfg
+else
+  exec vmware $*
+fi
+
+#
+# End		runvmware
+#

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Load my own keymap
+[ -f /etc/X11/Xmodmap ] && xmodmap /etc/X11/Xmodmap &
+
+# Remove the KDE X resources - VMware wouldn't start otherwise.
+xrdb -q | xrdb -remove
+[ -f /etc/X11/Xresources/local ] && xrdb -cpp cpp /etc/X11/Xresources/local &
+
+# Adjust monitor gamma
+# xgamma -gamma 0.8
+
+# Let pixmaps reside in main memory
+nvidia-settings -a InitialPixmapPlacement=0
+
+case "$DESKTOP_SESSION" in
+    kde*) nohup gnome-settings-daemon >> ~/.xsession-errors 2>&1  & ;;
+esac

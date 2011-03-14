@@ -1,0 +1,56 @@
+#!/bin/sh
+#
+# Name		wakeupmail
+# Description	Send three messages in 30 minutes
+# Version	$Id$
+#
+
+# set -x
+
+if [ $# != 2 ]; then
+  echo "wakeupmail: Usage: wakeupmail range address" >&2
+  exit 1
+fi
+
+range=$1
+destination=$2
+
+random() {
+  seed=$1
+  range=$2
+  seed=`echo "($seed * 9301 + 49397) % 233280" | bc`
+  printf %d `echo "scale=15; $range * ($seed / 233280.0)" | bc` 2>/dev/null
+}
+
+sum=0
+if [ -r /var/adm/syslog/syslog.log ]; then
+  sum=`sum /var/adm/syslog/syslog.log | cut -f1 -d" "`
+fi
+if [ -r /dev/random ]; then
+  sum=`dd if=/dev/random bs=1 count=16 2>/dev/null | sum | cut -f1 -d" "`
+fi
+
+seed=1`date +%m%d%S`
+seed=`expr $seed + $sum`
+minutes1=`random $seed $range`
+seed=`expr $seed + $minutes1`
+minutes2=`random $seed $range`
+
+if [ $minutes1 -gt $minutes2 ]; then
+  hold=$minutes1
+  minutes1=$minutes2
+  minutes2=$hold
+fi
+
+sleep1=$minutes1
+sleep2=`expr $minutes2 - $minutes1`
+
+mailx -s ebrrrreszto $destination < /dev/null >/dev/null 2>&1
+sleep $sleep1
+mailx -s ebrrrreszto $destination < /dev/null >/dev/null 2>&1
+sleep $sleep2
+mailx -s ebrrrreszto $destination < /dev/null >/dev/null 2>&1
+
+#
+# End		wakeupmail
+#

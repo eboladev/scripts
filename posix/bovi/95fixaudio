@@ -1,0 +1,4 @@
+# Ensure PCM out is enabled
+amixer set IEC958,0 on
+amixer set PCM 95%
+echo "I was here" > /tmp/fixaudio.log

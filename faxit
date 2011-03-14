@@ -1,0 +1,417 @@
+#!/bin/sh
+# -*- Mode: Tcl -*-
+#
+# Name		faxit
+# Description	Fax postscript from stdin
+# Version	$Id: faxit,v 1.6 1999/01/04 14:32:03 akos Exp $
+#
+#\
+exec wish "$0" ${1+"$@"}
+
+###############################################################################
+# Name		loadAliases
+# Description	Load fax aliases file
+
+proc loadAliases {file readOnly} {
+
+    global aliases
+    
+    set contents {}
+
+    # Read in the alias file
+    if {[catch {
+	set fh [open $file]
+	set contents [read $fh]
+	close $fh
+    }]} {
+	return
+    }
+
+    # Convert it to records
+    foreach line [split $contents "\n"] {
+	set line [string trim $line]
+	if {[string match $line "\#*"] || ![string length $line]} {
+	    continue
+	}
+	set newFields $readOnly
+	foreach field [split $line "\t"] {
+	    if {[llength $field]} {
+		lappend newFields $field
+	    }
+	}
+	if {[llength $newFields] == 4} {
+	    lappend aliases $newFields
+	}
+    }
+}
+
+###############################################################################
+# Name		saveAliases
+# Description	Save the aliases
+
+proc saveAliases {file} {
+
+    global aliases
+
+    if {[catch {
+	set fh [open $file "w"]
+	foreach rec $aliases {
+	    if {[lindex $rec 0]} {
+		continue
+	    }
+	    puts $fh "[lindex $rec 1]\t[lindex $rec 2]\t[lindex $rec 3]"
+	}
+	close $fh
+    } err]} {
+	errorBox "Cannot save fax numbers:\n$err"
+    }
+}
+
+###############################################################################
+# Name		compareAliases
+# Description	Compare two alias records (for sorting)
+
+proc compareAliases {a1 a2} {
+    return [string compare [lindex $a1 2] [lindex $a2 2]]
+}
+
+###############################################################################
+# Name		getNumber
+# Description	Let the user to select a phone number
+
+proc getNumber {} {
+
+    global aliases
+    global button
+    global isRoot
+
+    frame .top -bd 1 -relief raised
+    frame .bot -bd 1 -relief raised
+
+    frame .top.left -bd 0
+    frame .top.right -bd 0
+
+    # Build the top left frame
+
+    label .top.left.l -text "Send fax to:" -anchor w -bd 0
+    frame .top.left.slb -bd 0
+
+    listbox .top.left.slb.l -bd 1 -relief sunken -selectmode single \
+	-exportselection 0 -yscrollcommand ".top.left.slb.s set"
+    foreach fields $aliases {
+	.top.left.slb.l insert end [lindex $fields 3]
+    }
+    bind .top.left.slb.l <ButtonRelease-1> +onClick
+    bind .top.left.slb.l <Double-ButtonRelease-1> +onDoubleClick
+    scrollbar .top.left.slb.s -bd 1 -command ".top.left.slb.l yview"
+    pack .top.left.slb.l -side left -expand y -fill both -padx 0 -pady 0
+    pack .top.left.slb.s -side left -expand n -fill y -padx 0 -pady 0
+
+    label .top.left.lPhone -text "Phone: " -width 23 -anchor w -bd 0
+    pack .top.left.l      -padx 3 -pady 3 -side top -anchor w 
+    pack .top.left.slb    -padx 3 -pady 0 -side top -anchor w  \
+	-fill both -expand y
+    pack .top.left.lPhone -padx 3 -pady 5 -side top -anchor w
+
+    pack .top.left -side left -padx 0 -pady 0 -expand y -fill both
+
+    # Build the top right frame
+
+    label .top.right.fake -bd 0
+    button .top.right.add -width 6 -bd 1 -text "Add" -command "addNumber"
+    button .top.right.mod -width 6 -bd 1 -text "Modify" -command "modifyNumber"
+    button .top.right.del -width 6 -bd 1 -text "Delete" -command deleteNumber
+    pack .top.right.fake -padx 3 -pady 3
+    pack .top.right.add  -padx 3 -pady 0
+    pack .top.right.mod  -padx 3 -pady 3
+    pack .top.right.del  -padx 3 -pady 0
+
+    pack .top.right -side left -anchor n -padx 0 -pady 0 -expand n
+
+    # Build the bottom frame
+
+    button .bot.ok -text "Send Fax" -width 8 -bd 1 -command "set button 0"
+    button .bot.cancel -text "Cancel" -width 8 -bd 1 -command "set button 1"
+    pack .bot.cancel .bot.ok -side right -anchor c -padx 3 -pady 3
+
+    pack .bot -side bottom -padx 0 -pady 0 -expand n -fill x
+    pack .top -side top -padx 0 -pady 0 -expand y -fill both
+
+    # Set minimum size for the window
+    update
+    wm minsize . [winfo reqwidth .] [winfo reqheight .]
+
+    # Let the user to select the phone number
+
+    while {1} {
+	tkwait variable button
+	if {$button != 0} {
+	    return {}
+	}
+	set sel [.top.left.slb.l curselection]
+	if {![llength $sel]} {
+	    bell
+	    continue
+	}
+	return [lindex [lindex $aliases $sel] 2]
+    }
+}
+
+###############################################################################
+# Name		onClick
+# Description	Display phone number for the selected item
+
+proc onClick {} {
+
+    global aliases
+
+    set sel [.top.left.slb.l curselection]
+    if {![llength $sel]} {
+	return
+    }
+    set rec [lindex $aliases $sel]
+    .top.left.lPhone configure -text "Phone: [lindex $rec 2]"
+    if {[lindex $rec 0]} {
+	.top.right.mod configure -state disabled
+	.top.right.del configure -state disabled
+    } else {
+	.top.right.mod configure -state normal
+	.top.right.del configure -state normal
+    }
+}
+
+###############################################################################
+# Name		onDoubleClick
+# Description	Open the Modify dialog box for the selected item
+
+proc onDoubleClick {} {
+
+    global aliases
+
+    set sel [.top.left.slb.l curselection]
+    if {![llength $sel]} {
+	return
+    }
+    set rec [lindex $aliases $sel]
+    if {[lindex $rec 0]} {
+	return
+    }
+
+    # Modify the selected number
+    modifyNumber
+}
+
+###############################################################################
+# Name		modifyNumber
+
+proc modifyNumber {} {
+
+    global aliases
+
+    # Get current selection
+    set sel [.top.left.slb.l curselection]
+    if {![llength $sel]} {
+	return
+    }
+
+    # Pop up the Modify dialog box
+    set newRec [addOrModifyNumber 1]
+    if {![llength $newRec]} {
+	return
+    }
+
+    # Refresh the alias list
+    set aliases [lreplace $aliases $sel $sel $newRec]
+
+    # Refresh the listbox
+    .top.left.slb.l delete $sel
+    .top.left.slb.l insert $sel [lindex $newRec 3]
+    .top.left.slb.l selection clear 0 end
+    .top.left.slb.l selection set $sel
+}
+
+###############################################################################
+# Name		addNumber
+
+proc addNumber {} {
+
+    global aliases
+
+    # Pop up the Modify dialog box
+    set newRec [addOrModifyNumber 0]
+    if {![llength $newRec]} {
+	return
+    }
+
+    # Append the new record to the phone list
+    lappend aliases $newRec
+    .top.left.slb.l insert end [lindex $newRec 3]
+}
+
+###############################################################################
+# Name		deleteNumber
+# Description	Delete a phone number from the list
+
+proc deleteNumber {} {
+
+    global aliases
+
+    # Get current selection
+    set sel [.top.left.slb.l curselection]
+    if {![llength $sel]} {
+	return
+    }
+
+    # And remove it
+    set aliases [lreplace $aliases $sel $sel]
+    .top.left.slb.l selection clear 0 end
+    .top.left.slb.l delete $sel
+    if {[catch {.top.left.slb.l selection set $sel}]} {
+	catch {.top.left.slb.l selection set [expr {$sel - 1}]}
+    }
+}
+
+###############################################################################
+# Name		addOrModifyNumber
+
+proc addOrModifyNumber {old} {
+
+    global aliases
+    global name 
+    global number 
+    global description
+    global modButton
+
+    set index [.top.left.slb.l curselection]
+
+    if {$old} {
+	if {![llength $index]} {
+	    bell
+	    return
+	}
+	set rec [lindex $aliases $index]
+	set name [lindex $rec 1]
+	set number [lindex $rec 2]
+	set description [lindex $rec 3]
+    } else {
+	set name ""
+	set number ""
+	set description ""
+    }
+
+    ttt::dialog::create .mod "faxit: Modify Fax Number"
+
+    frame .mod.top -bd 1 -relief raised
+    frame .mod.bot -bd 1 -relief raised
+
+    label .mod.top.lName   -width 11 -bd 0 -anchor w -text "Name:"
+    entry .mod.top.eName   -width 11 -bd 1 -relief sunken -textvariable name
+    label .mod.top.lNumber -width 13 -bd 0 -anchor w -text "Fax Number:"
+    entry .mod.top.eNumber -width 13 -bd 1 -relief sunken -textvariable number
+    label .mod.top.lDesc   -width 11 -bd 0 -anchor w -text "Description:"
+    entry .mod.top.eDesc   -width 23 -bd 1 -relief sunken \
+	-textvariable description
+
+    grid .mod.top.lName   .mod.top.eName   -sticky ew 
+    grid .mod.top.lNumber .mod.top.eNumber -sticky ew
+    grid .mod.top.lDesc   .mod.top.eDesc   -sticky ew
+    ## grid columnconfig .mod.top 1 -weight 1
+
+    button .mod.bot.ok     -text "OK"     -width 6 -bd 1 \
+	-command "::ttt::dialog::setButton .mod 0"
+    button .mod.bot.cancel -text "Cancel" -width 6 -bd 1 \
+	-command "::ttt::dialog::setButton .mod 1"
+    pack .mod.bot.cancel .mod.bot.ok -side right -anchor c -padx 3 -pady 3
+
+    pack .mod.top .mod.bot -padx 0 -pady 0 -fill both
+
+    ttt::dialog::show .mod
+    focus .mod.top.eName
+
+    while {1} {
+	ttt::dialog::waitButton .mod
+	if {[ttt::dialog::getButton .mod] != 0} {
+	    set ret {}
+	    break
+	}
+	if {![llength $name]} {
+	    bell
+	    focus .mod.top.eName
+	    continue
+	}
+	if {![llength $number]} {
+	    bell
+	    focus .mod.top.eNumber
+	    continue
+	}
+	if {![llength $description]} {
+	    bell
+	    focus .mod.top.eDesc
+	    continue
+	}
+	set ret [list 0 [string trim $name] [string trim $number] \
+		     [string trim $description]]
+	break
+    }
+
+    ttt::dialog::destroy .mod
+    return $ret
+}
+
+###############################################################################
+# Name		errorBox
+# Description	Display error message
+
+proc errorBox {msg} {
+    tk_messageBox -type ok -title "faxit Error" -icon error \
+	-message $msg -parent .
+}
+
+###############################################################################
+# Main
+
+# Packages
+package require TTT
+
+# Globals
+global argc argv env
+set globalAliases "/etc/mgetty+sendfax/faxaliases"
+set localAliases "~/.faxnrs"
+set aliases {}
+
+# Load and sort the fax numbers
+loadAliases $globalAliases 1
+loadAliases $localAliases  0
+set aliases [lsort -command compareAliases $aliases]
+
+# Get phone number from the user
+set number [getNumber]
+
+# Save local fax numbers
+saveAliases $localAliases
+
+# Exit if no fax number
+if {![llength $number]} {
+    exit 0
+}
+
+# Queue fax
+wm withdraw .
+update
+set tmpDir "/tmp"
+catch {set tmpDir $env(TMPDIR)}
+set tmpFile [file join $tmpDir "f[pid].ps"]
+if {[catch {
+    exec -- ogonkify -ATH -CTH -N > $tmpFile
+    exec -- faxspool $number $tmpFile
+    file delete -force -- $tmpFile
+} err]} {
+    errorBox "Cannot fax document:\n$err"
+    exit 1
+} else {
+    exit 0
+}
+
+#
+# End		faxit
+#

@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# Name		viewpov -- View a povray image
+# Version	$Id: viewpov,v 1.1 1997/05/25 13:19:28 akos Exp akos $
+#
+
+tmpFile=/tmp/viewpov$$.gif
+
+povray +d -i$1 -o$tmpFile +d -w150 -h150 +v +B30
+[ -f $tmpFile ] && xv $tmpFile
+rm -f $tmpFile
+
+#
+# End		viewpow
+#

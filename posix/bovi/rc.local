@@ -1,0 +1,33 @@
+#!/bin/sh
+# Initializations _after_ all other init scripts
+
+start() {
+    # A friendly welcome
+    echo "Welcome!" > /etc/issue
+
+    # Mount external hard drives
+    /usr/local/bin/mountmaxtor
+
+    # Re-mount root with noatime,nodiratime
+    mount -oremount,noatime,nodiratime  /
+
+    # Enable optical out
+    amixer set IEC958,0 on
+    amixer set PCM 95%
+
+    mkdir -p /var/lock/subsys
+    touch /var/lock/subsys/local
+}
+
+stop() {
+    true
+}
+
+case "$1" in
+stop)
+    stop
+    ;;
+*)
+    start
+    ;;
+esac

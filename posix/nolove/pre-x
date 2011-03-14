@@ -1,0 +1,41 @@
+#!/bin/sh
+# Set up X11
+#
+### BEGIN INIT INFO
+# Provides:          pre-x
+# Required-Start:    $syslog
+# Required-Stop:     $syslog
+# Default-Start:     5
+# Default-Stop:      0 1 6
+# Short-Description: Set up X11 configuration before the display manager starts
+# Description:       Set up X11 configuration begore the display manager starts.
+### END INIT INFO
+
+startPreX () {
+    /sbin/modprobe nvidia
+    echo 1 >> /proc/acpi/video/VID1/DOS
+}
+
+. /lib/lsb/init-functions
+
+case "$1" in
+start)
+    log_daemon_msg "Starting up X11 configuration" "pre-x"
+    startPreX
+    log_end_msg $?
+    ;;
+stop)
+    log_end_msg $?
+    ;;
+restart) 
+    log_end_msg $?
+    ;;
+reload|force-reload)
+    log_end_msg 0
+    ;;
+*)  
+    log_action_msg "Usage: /etc/init.d/pre-x {start|stop|restart|reload|force-reload}"
+    exit 2
+    ;;
+esac
+exit 0

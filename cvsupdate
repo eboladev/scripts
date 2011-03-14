@@ -1,0 +1,156 @@
+#!/bin/sh
+# -*- Mode: Tcl -*-
+#
+# Name		cvsupdate
+# Description	Commit all changes
+# Version	$Id: cvsupdate,v 1.27 2001/04/08 20:44:44 polster Exp $
+# Usage		cvsupdate dir
+#
+# \
+exec tclsh "$0" ${1+"$@"}
+
+##############################################################################
+# Name		updatDirs
+# Description	Find and update new directories
+
+proc updateDirs {dir} {
+
+    global cvs
+
+    puts "cvsupdate: Updating directory $dir"
+    if {![file isdirectory $dir]} {
+	puts stderr "cvsupdate: Fatal: $dir is not a directory"
+	exit 1
+    }
+    if {!([file exists "$dir/CVS"] && [file isdirectory "$dir/CVS"])} {
+	puts "cvsupdate: Adding new directory $dir"
+	exec chmod -R a+r $dir
+	exec chmod a+x $dir
+	puts [exec $cvs add $dir 2>@ stdout]
+    }
+    set cwd [pwd]
+    if {[catch {cd $dir} err]} {
+	puts stderr "cvsupdate: Fatal: $err"
+	exit 1
+    }
+    foreach file [glob -nocomplain -- "*" ".\[a-zA-Z0-9\]*"] {
+	if {[string compare $file "CVS"] && [file isdirectory $file]} {
+	    updateDirs $file
+	}
+    }
+    cd $cwd
+}
+
+##############################################################################
+# Name		updatFiles
+# Description	Find and update new files
+
+proc updateFiles {dir} {
+
+    global cvs
+
+    puts "cvsupdate: Updating files in $dir"
+    flush stdout
+    set cwd [pwd]
+    if {[catch {cd $dir} err]} {
+	puts stderr "cvsupdate: Fatal: $err"
+	exit 1
+    }
+    if {[catch {
+	set fh [open "CVS/Entries"]
+	set entries [read -nonewline $fh]
+	close $fh
+    } err]} {
+	puts stderr "cvsupdate: Error: $err"
+	return
+    }
+    foreach line [split $entries "\n"] {
+	lappend oldFiles [lindex [split $line "/"] 1]
+    }
+    if {![catch {
+	set fh [open "CVS/Entries.Log"]
+	set entries [read -nonewline $fh]
+	close $fh
+    }]} {
+	foreach line [split $entries "\n"] {
+	    lappend oldFiles [lindex [split $line "/"] 1]
+	}
+    }
+    if {![info exists oldFiles]} {
+	set oldFiles {}
+    }
+    foreach file [glob -nocomplain -- "*" ".\[a-zA-Z0-9\]*"] {
+	if {[file isfile $file] && [string compare $file ".cvsignore"]} {
+	    if {[lsearch -exact $oldFiles $file] == -1} {
+		puts "cvsupdate: Adding new file $file"
+		puts [exec $cvs add $file 2>@ stdout]
+	    }
+	}
+    }
+    foreach file $oldFiles {
+	if {[string compare $file ""] && ![file exists $file]} {
+	    puts "cvsupdate: Removing file $file"
+	    puts [exec $cvs remove $file 2>@ stdout]
+	}
+    }
+    foreach file [glob -nocomplain -- "*" ".\[a-zA-Z0-9\]"] {
+	if {[file isdirectory $file] && [string compare $file "CVS"]} {
+	    updateFiles $file
+	}
+    }
+    cd $cwd
+}
+
+###############################################################################
+# main
+
+global argc argv env argv0 cvs
+
+if {[info tclversion] < 8.0} {
+    puts stderr "cvsupdate: Fatal: tclsh 8.0 or later required"
+    exit 1
+}
+
+if {$argc < 2 || $argc > 3} {
+    puts stderr "cvsupdate: Usage: cvsupdate dir cvsroot \[ message \]"
+    exit 1
+}
+set dir [lindex $argv 0]
+set env(CVSROOT) [lindex $argv 1]
+if {$argc == 3} {
+    set commitMessage [lindex $argv 2]
+} else {
+    set commitMessage "(no message)"
+}
+
+if {[catch {cd $dir} err]} {
+    puts stderr "cvsupdate: Fatal: $err"
+    exit 1
+}
+set dir [pwd]
+if {![file isdirectory "CVS"]} {
+    puts stderr "cvsupdate: Fatal: [lindex $argv 0] is not under CVS"
+    exit 1
+}
+
+set cvs "cvs"
+if {[info exists env(CVSUPDATE_CVS)]} {
+    set cvs $env(CVSUPDATE_CVS)
+}
+
+updateDirs $dir
+updateFiles $dir
+
+cd $dir
+set user [exec id -un]
+set now [clock format [clock seconds] -format "%Y%m%d-%H%M"]
+puts "cvsupdate: Commiting all changes"
+puts [exec $cvs commit -m $commitMessage . 2>@ stdout]
+## puts "cvsupdate: Applying tag ${user}${now} to the current revision"
+## puts #exec $cvs tag "${user}${now}" . 2>@ stdout#
+## puts "cvsupdate: Applied tag ${user}${now} to the current revision"
+puts "cvsupdate: All done"
+
+#
+# End		cvsupdate
+#

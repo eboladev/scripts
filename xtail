@@ -1,0 +1,147 @@
+#!/bin/sh
+# -*- Mode: Tcl -*-
+#
+# Name		xtail
+# Description	Monitor files in windows
+# Version	$Id$
+#\
+exec wish $0 ${1+"$@"}
+
+package require Tix
+
+#
+# Create a collection of text windows that (effectively) run "tail -f"
+# on the files named on the command line.
+#
+# tk_setPalette [option get . background Background]
+# option add *foreground white
+# option add *Text.height 10
+# option add *Text.background WhiteSmoke
+# option add *Text.foreground black
+# option add *Text.selectForeground black
+# option add *Text.cursor {xterm black}
+# option add *Scrollbar.width 10
+# option add *Button.font "-dt-application-bold-r-normal-sans-*-100-75-75-*-*-iso8859-1"
+
+#
+# makeTail creates a frame containing a text widget and scrollbars to
+# display the file in question and maps it into $parent.  It also starts
+# the monitor procedure.
+#
+proc makeTail {parent file} {
+    if {"$parent" == "."} {
+        set w ""
+    } else {
+        set w $parent
+    }
+    for {set i 0} {[winfo exists $w.frame$i]} {incr i} {}
+    set f [frame $w.frame$i]
+
+    button $f.label -text $file
+    text $f.text \
+            -xscrollcommand "$f.hscroll set" \
+            -yscrollcommand "$f.vscroll set" \
+            -wrap none
+    scrollbar $f.hscroll \
+            -orient horizontal \
+            -command "$f.text xview"
+    scrollbar $f.vscroll \
+            -orient vertical \
+            -command "$f.text yview"
+
+    grid $f.label   - -row 0 -column 0 -sticky we
+    grid $f.text      -row 1 -column 0 -sticky nswe
+    grid $f.vscroll   -row 1 -column 1 -sticky ns
+    grid $f.hscroll   -row 2 -column 0 -sticky we
+    #grid $f.text -sticky nswe \$f.vscroll -sticky ns
+    #grid $f.hscroll -sticky we
+    grid columnconfigure $f 0 -weight 1
+    grid rowconfigure $f 1 -weight 1
+
+    foreach slave [grid slaves $f] {
+        if {"$slave" == "$f.label"} continue
+        append forget [list grid forget $slave]\n
+        append remember [eval list grid \$slave [grid info $slave]]\n
+    }
+    set rowNum [lindex [grid size $parent] 1]
+    grid columnconfigure $parent 0 -weight 1
+    grid $f -sticky nswe
+    grid rowconfigure $parent $rowNum -weight 1
+    $f.label configure -command "
+        if {\[llength \[grid slaves $f]] > 1} {
+            grid rowconfigure $parent $rowNum -weight 0
+            if {\"\[$f.label cget -foreground]\" != \"red\"} {
+                $f.label configure -foreground gray50 -activeforeground gray50
+            }
+            $forget
+        } else {
+            grid rowconfigure $parent $rowNum -weight 1
+            if {\"\[$f.label cget -foreground]\" != \"red\"} {
+                $f.label configure -foreground black -activeforeground black
+            }
+            $remember
+        }
+    "
+    $f.text insert end <$file>
+    after idle [list monitorFile $f $file -1 -1 100]
+}
+
+proc monitorFile {frame file mtime size delay} {
+    if [catch {
+        if [string match "|*" $file] {
+            #
+            # Run a process every five seconds
+            #
+            if {"[$frame.text cget -foreground]" == "gray50"} {
+                after 5000 [list monitorFile $frame $file 0 0 5000]
+                return
+            }
+            set fd [open $file]
+            set newText [read $fd]
+            close $fd
+            set top [expr int([$frame.text index "@0,0 linestart"]) - 1]
+            $frame.text delete 1.0 end
+            $frame.text insert 1.0 $newText
+            $frame.text yview scroll $top units
+            after 5000 [list monitorFile $frame $file 0 0 5000]
+        } else {
+            #
+            # Check a file for new data
+            #
+            set mtime1 [file mtime $file]
+            set size1 [file size $file]
+            if {$mtime != $mtime1 || $size != $size1} {
+                $frame.label configure -text $file \
+                        -foreground black -activeforeground black
+                $frame.text configure -foreground black
+                $frame.label configure -text $file
+                if {$size1 <= $size || $size < 0} {
+                    $frame.text delete 1.0 end
+                    set size 0
+                }
+                set fd [open $file]
+                seek $fd $size start
+                $frame.text insert end [read $fd]
+                $frame.text see insert
+                close $fd
+            } else {
+                if {[incr delay 100] > 2000} {
+                    set delay 2000
+                }
+            }
+            after $delay [list monitorFile $frame $file $mtime1 $size1 $delay]
+        }
+    } msg] {
+        # $frame.label configure -text "$file: $msg" -foreground red
+        $frame.label configure -text "$msg" \
+                -foreground red -activeforeground red
+        $frame.text configure -foreground red
+        after 2000 [list monitorFile $frame $file -1 -1 100]
+    }
+}
+
+. configure -cursor {left_ptr black}
+foreach file $argv {
+    makeTail . $file
+}
+

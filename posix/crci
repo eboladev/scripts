@@ -1,0 +1,22 @@
+#!/bin/ksh
+#
+#	crci -- Check in for Crisp
+#	$Header: /home/akos/scripts/RCS/crci,v 1.1 1994/11/07 00:22:26 akos Exp $
+#
+
+echo "----------------crci $*------------------"
+set -x 
+
+[ $# != 1 ] && exit 1
+
+Dir=`dirname $1`
+Base=`basename $1`
+
+[ ! -f $Dir/RCS/${Base},v ] && exit 0
+cd $Dir
+ci -q -m"Auto" $File >/dev/null 2>&1
+read line
+
+#
+#	end: crci
+#

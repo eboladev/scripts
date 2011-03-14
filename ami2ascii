@@ -1,0 +1,259 @@
+#!/bin/csh
+#
+# Script to try to extract useful info from amipro documents.
+# Dave Gee 19/12/96.
+# Done with highly selective string removal to avoid loosing real info.
+# Makes file considerably more readable in a unix text window.
+# Real words are probably at the end of the file.
+#
+# 1. convert ^G (i.e. ascii bell) to a single space. (So I can use it later
+#    for subsequent substitutions.
+# 2. strip PC type <cr>'s (ascii \015).
+#    strip ASCII "null" characters '\377' found in amipro graphics etc.
+#    strip ASCII "null" characters '\200'-'\240'
+#    strip ASCII cntrl characters '\1'-'\10' , '\13', '\14', '\16'-'\37'
+#      (Soh,Stx,Etx,Eto,Enq,Ack,Bell,BS,VT,FF,So,Si,Dle,Dc1,Dc2,Dc3,Dc4,
+#       Nak,Syh,Etb,Can,EM,Sub,ESC,FS,GS,RS,US).
+#      found in amipro graphics etc.
+# 3. Assumes text of document begins after [edoc] line
+#    and all lines before it are formatting.
+# 4. Assumes text ends the line before [Embedded].
+# 4a. Also extracts table data between [data] and [e].
+#    and places it at the end of the file.
+# 5. remove the following strings:
+#       <:fXXX,2Times New Roman,XXX,XXX,XXX> where XXX is any positive integer.
+#       <:fXXX,2ITCCentury Book,XXX,XXX,XXX> where XXX is any positive integer.
+#       <:fXXX,2Times,XXX,XXX,XXX> where XXX is any positive integer.
+#       <:fXXX,,> where XXX is any positive integer.
+#          ^size.             ^colour.
+#       Plus numerous varients on the above using different font names etc.
+#       such as:
+#       <:f200,"WingDings,>
+#       <:f,2Perpetua,>
+#
+#       >             as the only contents of a line = EOF marker.
+#       <:f>
+#       <:rh>
+#       <:#XXX,XXX> where XXX is any positive integer.
+#                                            = Move to absolute screen location?
+#       <:s><:#XXX,XXX>                      = Move to absolute screen location?
+#                                              and ignore <:s> part.
+#       <+!> Note ! needs to escaped in sed. Turn on Bold.
+#       <-!> Note ! needs to escaped in sed. Turn off Bold.
+#       <+">                                 Turn on Italics.
+#       <-">                                 Turn off Italics.
+#       <+#>                                 Turn on Under lining.
+#       <-#>                                 Turn off Under lining.
+#       <+)>                                 Turn on Double Under lining.
+#       <-)>                                 Turn off Double Under lining.
+#       <+&>                                 Turn on Superscript.
+#       <-&>                                 Turn off Superscript.
+#       <+'>                                 Turn on Subscript.
+#       <-'>                                 Turn off Subscript.
+#       <+,>
+#       <-,>
+#       <+B>                                 Start Of New Centre Justified Paragraph.
+#       <+@>                                 Start Of New Paragraph Marker.
+#       <:s>                                 Start Of New Paragraph Marker?
+#       <++>
+#       <-+>
+#       <+->
+#       <-->
+#       <:VE+>
+#       <:VE->
+#       <:VS+>
+#       <:VS->
+#       <:v+>
+#       <:v->
+#       <+C>
+#       <+^[>                                ^[ is the ascii character '/33' and
+#                                            the non-printing filter removes it.
+#       <:S+-3>
+#       <:S+-1>
+#       <:tXXX> where XXX is any positive integer.
+#       @Body Single@
+#       @Body Text 2@
+#       @Body Text 3@
+#       @Outline 1@
+#       @Outline 2@
+#       @Outline 3@
+#       @Header@
+#       @Bullet List@
+#       @Title@
+#       @Regarding@
+#       @To/From/Date@
+#       @Subhead@
+#       @Bullet 1@
+#       @Number List@
+#       <:P11,1,>
+#       <:R>
+#       <:R1,12,1,720,1,1440,1,2160,1,2880,1,3600,1,4320,1,5040,1,5760,1,6480,1,7200,1,7920,1,8640,>
+#       <:R1,2,1,1383,1,7584,>
+#       <:R1,3,1,1383,1,2663,1,7584,>
+#       <:R1,4,1,900,1,2070,1,6030,1,7650,>
+#       <:R1,3,1,1620,1,3420,1,7740,>
+#       <:R1,4,1,1260,1,2700,1,6750,1,8010,>
+#         and all similar patterns.
+# 6. </p>  = amipro degree symbol.
+#    So convert to HP-term degree symbol '\263' (via ^G character).
+#    </c>  = amipro Pound sign.
+#    So convert to HP-term Pound sign.
+#    </z>  = amipro No. abbrivation as in PPM Documents.
+#    So convert it to * '/372' (via ^G character).
+# 7. <;> = amipro escaped > symbol.
+#    So convert at the end to >.
+# 8. <[> - amipro escaped [ symbol.
+#    So convert at the end to [.
+# 9. <:B<*/>> = some kind of bullet point (a complex right arrow).
+#    convert it to HP-term double right arrow '\375' (via ^G character).
+#    <:B<*->> and <:B<*,>> both look like bullets of different types
+#    so convert them to '\374' and '\373' respectively.
+# 10. <:IXXX,XXX,XXX,XXX> looks like an indent command, so replace it with a
+#     tab character, where XXX are any positive integers.
+#     e.g. <:I0,2880,3600,0>
+# 11. Remove all existing <cr>.
+# 12. Converts <+@> via ^G to <cr>.
+#     Converts <**> via ^G to <cr>.
+#     Converts <:p<* >> via ^G to <cr><cr> as this is the "new page" marker.
+# 13. <:#288,9025> looks like some kind of absolute screen co-ordiantes so
+#     end the previous paragraph and begin a new one by outputting a <cr>.
+# 14. Converts <:s> via ^G to <cr> as this appears to make the document
+#     more readable (I think this too is the amipro new paragraph marker).
+#     Note multiple new paragraph markers together in amipro do not cause
+#     additional blank lines but rather just come through as one marker.
+#     Therefore this script miss translates such situations.
+#     To compensate for this Multiple blank lines are converted to a single
+#     blank line at the end of the file.
+#     (19/12/96 linked <:s> with <:#XXX,XXX> commands).
+# 15. Expand tabs using about five or six character tab spacing.
+#     (Amipro looks to have a five character tab so 8 looks wrong and
+#     also tab lines would wrap around when they shouldn't).
+# 16. Adds line breaks every 80 characters to ease readability.
+#     However fold can end up starting lines with blanks, so more could
+#     be done to refine the results.
+# 17. Compress duplicate blank lines to a single blank line.
+# 18. All bracketed into one command so output and stderr can be easily
+#     redirected. Output put in /tmp/ccmailPID
+#     and viewed with vuepad.
+# 19. use "exec" to try to cut down open processes.
+#     This makes it cleaner for CCmail, as then all the processes go away
+#     when you close the vuepad window.
+
+setenv CCFILE /tmp/amipro$$
+
+( \
+(sed -e '/\[edoc\]/,/\[Embedded\]/p' \
+    -e 'd' \
+    $1 ; \
+sed -e '/\[data\]/,/\[e\]/p' \
+    -e 'd' \
+    $1 ) | \
+tr '' ' ' | tr -d '\015' | \
+tr -d '\377' | tr -d '\200'-'\240' | tr -d '\1'-'\10' | tr -d '\13' | \
+tr -d '\14' | tr -d '\16'-'\37' | \
+sed -e 's/<\/p>//g' | tr '\007' '\263' | \
+sed -e 's/<\/z>//g' | tr '\007' '\372' | \
+sed -e 's?<:B<\*/>>??g' | tr '\007' '\375' | \
+sed -e 's?<:B<\*,>>??g' | tr '\007' '\374' | \
+sed -e 's?<:B<\*->>??g' | tr '\007' '\373' | \
+sed -e 's/^>$//' \
+    -e 's/<:[R,P][,,0-9]*>//g' \
+    -e 's/<:f[0-9]*,[",A-Z,a-z,0-9, ]*,[\,,0-9]*>//g' \
+    -e 's/<:f[1-9][0-9]*,,>//g' \
+    -e 's/<:f>//g' \
+    -e 's/<:rh>//g' \
+    -e 's/<:I[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*>/ /g' \
+    -e 's/<+\!>//g' \
+    -e 's/<-\!>//g' \
+    -e 's/<+">//g' \
+    -e 's/<-">//g' \
+    -e 's/<+#>//g' \
+    -e 's/<-#>//g' \
+    -e 's/<+,>//g' \
+    -e 's/<-,>//g' \
+    -e 's/<++>//g' \
+    -e 's/<-+>//g' \
+    -e 's/<+->//g' \
+    -e 's/<-->//g' \
+    -e 's/<+)>//g' \
+    -e 's/<-)>//g' \
+    -e 's/<+&>//g' \
+    -e 's/<-&>//g' \
+    -e 's/<:VE+>//g' \
+    -e 's/<:VE->//g' \
+    -e 's/<:VS+>//g' \
+    -e 's/<:VS->//g' \
+    -e 's/<:v+>//g' \
+    -e 's/<:v->//g' \
+    -e "s/<+\'>//g" \
+    -e "s/<-\'>//g" \
+    -e 's/<+C>//g' \
+    -e 's/<:S+-3>//g' \
+    -e 's/<:S+-1>//g' \
+    -e 's/<+>//g' \
+    -e 's/<:t[0-9][0-9]*>//g' \
+    -e 's/<:p<\* >>//g' \
+    -e '/^@Body Single@/s/$//' \
+    -e 's/@Body Single@//' \
+    -e 's/@Header@//g' \
+    -e 's/@Bullet List@//g' \
+    -e 's/@Body Text 2@//g' \
+    -e 's/@Body Text 3@//g' \
+    -e 's/@Outline 1@//g' \
+    -e 's/@Outline 2@//g' \
+    -e 's/@Outline 3@//g' \
+    -e 's/@Title@//g' \
+    -e 's/@Regarding@//g' \
+    -e 's?@To/From/Date@??g' \
+    -e 's/@Subhead@//g' \
+    -e 's/@Bullet 1@//g' \
+    -e 's/@Number List@//g' \
+    -e 's/<+B>/          /g' \
+    -e 's/<:s><:#[1-9][0-9]*,[1-9][0-9]*>//g' \
+    -e 's/<:#[1-9][0-9]*,[1-9][0-9]*>//g' \
+    -e 's/<+@>//g' \
+    -e 's/<\*\*>//g' \
+    -e 's/<:s>//g' \
+    -e 's/ / /g' \
+    -e 's/ / /g' \
+    -e 's/ / /g' \
+    -e 's/ / /g' \
+    -e 's/\[data\]//' \
+    -e 's/\[edoc\]//' \
+    -e 's/\[Embedded\]//' \
+    -e 's/\[e\]//' \
+    -e 's/<\[>/[/g' \
+    -e 's?</c>?#?g' \
+    -e 's/<;>/>/g' | \
+tr -d '\012' | (tr '\007' '\012';echo "") | expand -t 5 | fold -s -80 | \
+sed -e '/^[ ]*$/{ \
+         N \
+         s/^[ ]*\n[ ]*$// \
+        }' | \
+sed -e '/^[ ]*$/{ \
+         N \
+         s/^[ ]*\n[ ]*$// \
+        }' | \
+sed -e '/^[ ]*$/{ \
+         N \
+         s/^[ ]*\n[ ]*$// \
+        }' | \
+sed -e '/^[ ]*$/{ \
+         N \
+         s/^[ ]*\n[ ]*$// \
+        }' | \
+sed -e '/^[ ]*$/{ \
+         N \
+         s/^[ ]*\n[ ]*$// \
+        }' | \
+sed -e '/^[ ]*$/{ \
+         N \
+         s/^[ ]*\n[ ]*$// \
+        }' ; \
+echo ''; \
+echo -n 'amipro decoding script: Dave Gee HP-FCO run: '; date; \
+echo 'warning tables etc are discarded. Only plain text is output.' \
+) | & cat
+#) | & cat > $CCFILE
+# exec process to keep process count low.
+# exec /usr/vue/bin/vuepad $CCFILE

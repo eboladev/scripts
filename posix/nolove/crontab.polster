@@ -1,0 +1,7 @@
+# $Id: crontab.polster,v 1.12 2006/04/07 08:05:43 polster Exp $
+
+# Back up some documents
+1 10,11,12,13,14,15,16,17,18,19 * * * /usr/local/bin/mybackup
+
+# Keep up with DHCP
+7 7 * * * /sbin/ifconfig | mail -s "ifconfig (nolove)" akos.polster@nokia.com

@@ -1,0 +1,733 @@
+!#
+!# Name		/etc/X11/Xresources/xdefaults
+!# Description	Default X resources
+!# Version	$Id: Xresources,v 1.6 2004/10/25 15:49:12 polster Exp $
+!#
+
+!#
+!# Fonts
+!#
+
+#define FONT -*-helvetica-medium-r-*-*-*-120-75-75-*-*-iso8859-1
+#define FONT_SMALL -*-helvetica-medium-r-*-*-*-100-75-75-*-*-iso8859-1
+#define FONT_LARGE -*-helvetica-medium-r-*-*-*-140-75-75-*-*-iso8859-1
+#define FONT_BOLD -*-helvetica-bold-r-*-*-*-120-75-75-*-*-iso8859-1
+#define FONT_ITALIC -*-helvetica-medium-o-*-*-*-120-75-75-*-*-iso8859-1
+#define FONT_FIXED -*-lucidatypewriter-medium-r-*-*-*-120-75-75-*-*-iso8859-1
+#define FONT_FIXED_BOLD \
+	-*-lucidatypewriter-bold-r-*-*-*-120-75-75-*-*-iso8859-1
+
+!#
+!# Colors
+!#
+
+!# These are all set by KDE but not by Gnome
+
+#define BG grey90
+#define BG_TEXT white
+#define BG_DARK grey80
+#define FG black
+
+#define TOPSHADOW grey95
+#define BOTTOMSHADOW grey60
+#define TOPSHADOW_TEXT grey60
+#define BOTTOMSHADOW_TEXT grey95
+
+*background: BG
+*.background: BG
+*Background: BG
+*.Background: BG
+*foreground: FG
+*Foreground: FG
+
+!#
+!# Athena widgets
+!#
+
+*beNiceToColormap: False
+*buttonShape: Rectangle
+*shapeStyle: Rectangle
+
+*Font: FONT
+*font: FONT
+
+*Toggle*Font: FONT
+*Command*Font: FONT
+*Button*Font: FONT
+*MenuButton*Font: FONT
+*Label*Font: FONT
+*Viewport*Font: FONT
+*SimpleMenu*Font: FONT
+*SimpleMenu*labelFont: FONT
+*Text*Font: FONT_FIXED
+
+*Text*background: BG_TEXT
+*Scrollbar*scrollbarBackground: BG_TEXT
+*Scrollbar*background: BG
+*Command*background: BG_TEXT
+*Paned*internalBorderColor: FG
+*Paned*grip*foreground: FG
+
+*SmeBSB*shadowWidth: 2
+
+*MenuButton*borderWidth: 1
+*MenuButton*highlightThickness: 1
+*SimpleMenu*borderWidth: 1
+*SimpleMenu*shadowWidth: 1
+
+!#
+!# Motif widgets
+!#
+
+*keyboardFocusPolicy: explicit
+
+!# Fonts
+
+*fontList: FONT
+*menuBar*fontList: FONT
+*XmArc*fontList: FONT
+*XmBulletinBoard*labelFontList: FONT
+*XmCascadeButton*fontList: FONT
+*XmColorText.fontList: FONT_FIXED
+*XmColorTextField.fontList: FONT_FIXED
+*XmIconGadget*fontList: FONT
+*XmLGrid*fontList:\
+FONT,\
+FONT_BOLD=BOLD,\
+FONT_ITALIC=ITALIC
+*XmLabel*fontList: FONT
+*XmLabelGadget*fontList: FONT
+*XmList*fontList: FONT_FIXED
+*XmList.fontList: FONT_FIXED
+*XmMenuShell*XmPushButton*fontList: FONT
+*XmMenuShell*XmLabelGadget*fontList: FONT
+*XmMenuShell*XmPushButtonGadget*fontList: FONT
+*XmMenuShell*XmCascadeButton*fontList: FONT
+*XmMenuShell*XmCascadeButtonGadget*fontList: FONT
+*XmMenuShell*XmToggleButton*fontList: FONT
+*XmMenuShell*XmToggleButtonGadget*fontList: FONT
+*XmPushButton*fontList: FONT
+*XmPushButtonGadget*fontList: FONT
+*XmScale*fontList: FONT
+*XmTabList*fontList: FONT
+*XmTabList.fontList: FONT
+*XmText.fontList: FONT_FIXED
+*XmTextField.fontList: FONT_FIXED
+*XmToggleButton*fontList: FONT
+*XmToggleButtonGadget*fontList: FONT
+
+!# Colors
+
+*XmText*background: BG_TEXT
+*XmTextField*background: BG_TEXT
+*topShadowColor: TOPSHADOW
+*activeTopShadowColor: TOPSHADOW
+*bottomShadowColor: BOTTOMSHADOW
+*activeBottomShadowColor: BOTTOMSHADOW
+! *XmText*topShadowColor: TOPSHADOW_TEXT
+! *XmTextField*topShadowColor: TOPSHADOW_TEXT
+! *XmText*bottomShadowColor: BOTTOMSHADOW_TEXT
+! *XmTextField*bottomShadowColor: BOTTOMSHADOW_TEXT
+
+!# Shadow widths
+
+*XmList*shadowBorderWidth: 1
+*XmPushButton*shadowBorderWidth: 1
+*XmPushButtonGadget*shadowBorderWidth: 1
+*XmScale*shadowBorderWidth: 1
+*XmTabList*shadowBorderWidth: 1
+*XmText*shadowBorderWidth: 1
+*XmTextField*shadowBorderWidth: 1
+*XmToggleButton*shadowBorderWidth: 1
+*XmToggleButtonGadget*shadowBorderWidth: 1
+
+!#
+!# Tk widgets
+!#
+
+*activeBackground: BG
+*activeForeground: FG
+*selectBorderWidth: 0
+
+*Button.highlightThickness: 1
+*Button.borderWidth: 1
+
+*Entry.hightlightThickness: 1
+*Entry.background: BG_TEXT
+*Entry.borderWidth: 1
+
+*Frame.hightlightThickness: 0
+*Frame.borderWidth: 0
+
+*Label.borderWidth: 0
+*Label.hightlightThickness: 0
+
+*Listbox.highlightThickness: 1
+*Listbox.relief: sunken
+*Listbox.borderWidth: 1
+
+*Menu.font: FONT
+*Menu.selectColor: yellow
+*Menu.highlightThickness: 0
+*Menu.borderWidth: 1
+*Menu.tearOff: False
+
+*Menubutton.font: FONT
+*Menubutton.highlightThickness: 0
+*Menubutton.borderWidth: 1
+
+*Text.relief: sunken
+*Text.backround: BG_TEXT
+*Text.borderWidth: 1
+*Text*font: FONT_FIXED
+
+*Scrollbar.relief: sunken
+*Scrolbar.borderWidth: 1
+
+*Scale.relief: sunken
+*Scale.borderWidth: 1
+
+!#
+!# [incr Widgets] and widget++ widgets
+!#
+
+*Tabnotebook.angle: 0
+
+!#
+!# Java widgets
+!#
+
+!#
+!# Xft
+!#
+
+Xft.dpi: 96
+Xft.hintstyle: hintmedium
+Xft.hinting: true
+
+!#
+!# rxvt 
+!#
+
+Rxvt*background: BG_TEXT
+rxvt.background: BG_TEXT
+Rxvt*backspacekey: ^?
+! Rxvt*deletekey: \\b
+Rxvt*font: fixed
+rxvt.font: fixed
+Rxvt*foreground: FG
+Rxvt*loginShell: True
+Rxvt*pointerColor: FG
+Rxvt*saveLines: 1000
+Rxvt*scrollBar: False
+Rxvt*scrollColor: BG
+Rxvt*scrollTtyKeypress: True
+Rxvt*scrollTtyOutput: False
+Rxvt*termName: xterm
+Rxvt*visualBell: True
+
+!#
+!# Xterm
+!#
+
+XTerm*eightBitOutput: true
+XTerm*eightBitInput: true
+XTerm*VT100*geometry: 80x25
+XTerm*background: BG_TEXT
+XTerm*loginShell: true
+XTerm*rightScrollbar: true
+XTerm*saveLines: 500
+XTerm*scrollBar: false
+XTerm*font: fixed
+
+!# Force Backspace to send Backspace and interpret it as Erase
+XTerm*backarrowKey: true
+XTerm*backarrowKeyIsErase: false
+XTerm*ptyInitialErase: false
+XTerm*ttyModes: erase ^H
+
+xterm*ScrollBar: false
+xterm*VT100*font: fixed
+xterm*SimpleMenu*font: FONT
+
+!#
+!# Pixmap
+!#
+
+Pixmap*Grid: false
+
+!#
+!# Xemacs
+!#
+
+Emacs.default.attributeBackground: BG_TEXT
+Emacs.default.attributeForeground: FG
+
+Emacs.modeline.attributeForeground: FG
+Emacs.modeline.attributeBackground: BG
+
+Emacs*menubar.cursor: left_ptr
+Emacs*menubar*Foreground: FG
+Emacs*menubar*Background: BG
+Emacs*menubar*buttonForeground: FG
+Emacs*menubar*buttonFont: FONT
+Emacs*menubar*Font: FONT
+Emacs*menubar*FontList: FONT
+Emacs*menubar*font: FONT
+Emacs*menubar*fontList: FONT
+
+Emacs*popup*Foreground: FG
+Emacs*popup*Background:	BG
+Emacs*popup*Font: FONT
+
+Emacs*dialog*Foreground: FG
+Emacs*dialog*Background: BG
+Emacs*dialog*XmTextField*Background: BG_TEXT
+Emacs*dialog*XmText*Background: BG_TEXT
+Emacs*dialog*XmList*Background: BG_TEXT
+Emacs*dialog*Command*Background: BG_TEXT
+Emacs*dialog*Font: FONT
+Emacs*Dialog*Font: FONT
+Emacs*XmPushButton*Font: FONT
+Emacs*XmPushButton*FontList: FONT
+
+Emacs*toolBarShadowThickness: 1
+Emacs*topToolBarShadowColor: FG
+Emacs*bottomToolBarShadowColor: FG
+Emacs*backgroundToolBarColor: FG
+
+Emacs*XlwScrollBar.Foreground: FG
+Emacs*XlwScrollBar.Background: BG
+Emacs*XmScrollBar.Foreground: FG
+Emacs*XmScrollBar.Background: BG
+
+Emacs*XmDialogShell*FontList: FONT
+Emacs*XmTextField*FontList: FONT_FIXED
+Emacs*XmText*FontList: FONT_FIXED
+Emacs*XmList*FontList: FONT_FIXED
+
+Emacs*borderWidth: 0
+
+!#
+!# Hpterm
+!#
+
+HPterm*backgroundIsSelect: True
+HPterm*loginShell: true
+HPterm*makeColors: shadow
+HPterm*saveLines: 10s
+HPterm*scrollBar: true
+HPterm*ttyModes: erase ^H intr ^C kill ^U start ^Q stop ^S swtch ^@ susp ^Z
+
+!#
+!# Tgif
+!#
+
+! Tgif*Font: FONT
+! Tgif*font: FONT
+! Tgif*FontList: FONT
+! Tgif*fontList: FONT
+! Tgif*DefaultFont: FONT
+! Tgif*MsgFont: FONT
+! Tgif.DefFixedWidthFont: FONT_FIXED
+! Tgif.DefFixedWidthRulerFont: -*-lucidatypewriter-medium-r-*-*-*-100-*-*-*-*-*-*
+! Tgif*FontSizes: 8 10 12 18 20 24 28 34 40 48 56 64 72 80 100 120
+! Tgif*DefaultFontSize: 12
+! Tgif*DefaultCursor: left_ptr
+! Tgif*DrawCursor: left_ptr
+! Tgif*DragCursor: left_ptr
+! Tgif*BorderWidth: 1
+! Tgif*MaxDomains: 1
+! Tgif*DomainPath0: DRAWING:\n\
+! 	/opt/tgif/symbols
+! Tgif*DefaultDomain: 0
+
+!# Use outline fonts for drawing
+! Tgif.HasAlternateDefaultFonts: true
+! Tgif.Times-Roman: -*-charter-medium-r-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Times-Bold: -*-charter-bold-r-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Times-Italic: -*-charter-medium-i-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Times-BoldItalic: -*-charter-bold-i-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Courier: -*-prestige-medium-r-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Courier-Bold: -*-prestige-bold-r-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Courier-Oblique: -*-prestige-medium-i-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Courier-BoldOblique: -*-prestige-bold-i-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Helvetica: -*-swiss 742-normal-r-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Helvetica-Bold: -*-swiss 742-bold-r-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Helvetica-Oblique: -*-swiss 742-normal-i-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Helvetica-BoldOblique: -*-swiss 742-bold-i-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.NewCenturySchlbk-Roman: -*-utopia-medium-r-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.NewCenturySchlbk-Bold: -*-utopia-bold-r-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.NewCenturySchlbk-Italic: -*-utopia-medium-i-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.NewCenturySchlbk-BoldItalic: -*-utopia-bold-i-*-*-%d-*-*-*-*-*-iso8859-1
+! Tgif.Symbol: -*-symbol-*-r-*-*-%d-*-*-*-*-*-*-*
+
+!#
+!# Kvt
+!#
+
+*login_shell: True
+
+!#
+!# XPaint
+!#
+
+! Test Color resources
+
+Canvas*background:		BG
+Canvas*paint*background:	white
+
+XPaint*background:		BG
+XPaint*foreground:		black
+XPaint*Box.background:		BG_TEXT
+Canvas*Box.background:		BG_TEXT
+
+XPaint*Toggle.background:	white
+XPaint*Toggle.foreground:	white
+Canvas*Toggle.background:	white
+Canvas*Toggle.foreground:	white
+
+XPaint*Text*background:		BG_TEXT
+XPaint*HTML*background:	        BG_TEXT
+Canvas*Text*background:		BG_TEXT
+
+XPaint*filebrowser*Label.background:	BG
+XPaint*filebrowser*Toggle.background:	white
+XPaint*filebrowser*name*background:	white
+XPaint*filebrowser*title.background:	BG_TEXT
+Canvas*filebrowser*Label.background:	BG
+Canvas*filebrowser*Toggle.background:	white
+Canvas*filebrowser*name*background:	white
+Canvas*filebrowser*title.background:	BG_TEXT
+
+XPaint*Command.background:		white
+Canvas*Command.background:		white
+
+Canvas.pane.background:			BG
+
+!#
+!# Netscape
+!#
+
+Netscape*useStderrDialog: False
+Netscape*useStdoutDialog: False
+! Netscape*documentFonts.xResolution*iso-8859-1: 85
+! Netscape*documentFonts.yResolution*iso-8859-1: 85
+! Netscape*documentFonts.xResolution*iso-8859-2: 85
+! Netscape*documentFonts.yResolution*iso-8859-2: 85
+Netscape*XmTextField.fontList: FONT_FIXED
+Netscape*XmText.fontList: FONT_FIXED
+Netscape*XmList*fontList: FONT_FIXED
+! Netscape*documentFonts.defaultFont*iso-8859-1.fixed: FONT_FIXED
+! Netscape*documentFonts.defaultFont*iso-8859-2.fixed: FONT_FIXED
+! Netscape*documentFonts.sizeIncrement: 5
+Netscape*documentFonts.maximumPoints: 240
+
+!#
+!# X-Designer
+!#
+
+XDesigner.definitionsFileName: $STAGE/lib/guicomp/guicoms.def
+XDesigner.resourceFilter: *.srf
+XDesigner.xResourcesCodeSuffix: *.srf
+XDesigner.c++Filter: *.cc
+XDesigner.cppCodeSuffix: *.cc
+XDesigner.cppStubsCodeSuffix: *.cc
+XDesigner.c++BaseClassHeader:
+XDesigner*pm_separate.set:true
+XDesigner.main_window.height: 600
+XDesigner*icon_panel.composite_icons.XmRowColumn.orientation: VERTICAL
+XDesigner*icon_panel.composite_icons.numColumns: 2
+XDesigner*icon_panel.basic_icons.XmRowColumn.orientation: VERTICAL
+XDesigner*icon_panel.basic_icons.numColumns: 2
+XDesigner*icon_panel.defn_icons.XmRowColumn.orientation: VERTICAL
+XDesigner*icon_panel.defn_icons.numColumns: 7
+XDesigner.stopList: 
+XDesigner.dialogsTopLevel: true 
+XDesigner*transient: false
+
+!#
+!# xclearcase
+!#
+
+xclearcase*optionPane*fontList: FONT
+xclearcase*fileLabelFont: FONT
+xclearcase*hlinkLabelFont: FONT
+xclearcase*symlinkLabelFont: FONT
+
+!#
+!# XScreenSaver
+!#
+
+XScreenSaver*Dialog.headingFont: FONT_LARGE
+XScreenSaver*Dialog.bodyFont: FONT
+XScreenSaver*Dialog.labelFont: FONT
+XScreenSaver*Dialog.buttonFont: FONT
+XScreenSaver*Dialog.dateFont: FONT
+XScreenSaver*Dialog.foreground: black
+XScreenSaver*Dialog.background: grey80
+XScreenSaver*Dialog.Button.foreground: black
+XScreenSaver*Dialog.Button.background: grey80
+XScreenSaver*Dialog.text.foreground: black
+XScreenSaver*Dialog.text.background: grey90
+XScreenSaver*passwd.thermometer.foreground: #BB0000
+XScreenSaver*passwd.thermometer.background: #FFFFFF
+XScreenSaver*Dialog.topShadowColor: #E7E7E7
+XScreenSaver*Dialog.bottomShadowColor: #737373
+XScreenSaver*Dialog.logo.width: 210
+XScreenSaver*Dialog.logo.height: 210
+XScreenSaver*Dialog.internalBorderWidth: 30
+XScreenSaver*Dialog.borderWidth: 1
+XScreenSaver*Dialog.shadowThickness: 1
+
+!#
+!# TCM
+!#
+
+!! Make sure that BackSpace and Delete do what is expected.
+
+! TCM*XmText.translations: #override\n\
+! 	<Key>osfDelete: delete-next-character()\n\
+! 	<Key>osfBackSpace: delete-previous-character()\n
+! TCM*XmTextField.translations: #override\n\
+! 	<Key>osfDelete: delete-next-character()\n\
+! 	<Key>osfBackSpace: delete-previous-character()\n
+
+!! Set the application's colors, modify these if you want to.
+
+!! Default foreground and background color.
+TCM*Foreground:				FG
+TCM*Background:				BG
+
+!! Color of the drawing area (canvas).
+TCM*DrawingArea*Background:             purple
+
+!! Color of the bubble help.
+TCM*LiteClueShell*Background:		light yellow
+
+!! The colors of the menu bar and the menus.
+TCM*logo*Background:			BG
+TCM*logo*Foreground:			BG_DARK
+TCM*MenuBar*Background:			BG
+TCM*MenuBar*Foreground:                 FG
+TCM*DrawingArea*_pulldown*Background:  	BG
+TCM*DrawingArea*_pulldown*Foreround:    FG
+TCM*DrawingArea*_popup*Background:      BG
+TCM*DrawingArea*_popup*Foreround:       FG
+
+!! The color of the tiled buttons.
+! TCM*Tiles*Nodes*XmToggleButton*Background: alice blue
+! TCM*Tiles*Edges*XmToggleButton*Background: alice blue
+! TCM*Tiles*DFDiagram.Background: sky blue
+TCM*Tiles*Nodes*XmToggleButton*Background: BG
+TCM*Tiles*Edges*XmToggleButton*Background: BG
+TCM*Tiles*DFDiagram.Background: BG
+
+!! The colors of the document type and name fields.
+TCM*DocumentName.Background:		BG
+TCM*DocumentType.Background:		BG
+TCM*DocumentLevel.Background:		BG
+
+!! The colors of a selected toggle button.
+TCM*XmToggleButtonGadget.SelectColor:	light yellow
+TCM*XmToggleButton.SelectColor:		light yellow
+TCM*XmToggleButton.HighlightColor:	light yellow
+
+!! The colors used in the TCM startup window.
+TCM*StartupWindow*Foreground: 		FG
+TCM*StartupWindow*TGD.Background:	aquamarine
+TCM*StartupWindow*TGT.Background:	aquamarine
+TCM*StartupWindow*TGTT.Background:	aquamarine
+TCM*StartupWindow*TUCD.Background:	light blue
+TCM*StartupWindow*TSSD.Background:	light blue
+TCM*StartupWindow*TATD.Background:	light blue
+TCM*StartupWindow*TSCD.Background: 	light blue
+TCM*StartupWindow*TCBD.Background:	light blue
+TCM*StartupWindow*TSQD.Background:	light gray
+TCM*StartupWindow*TCPD.Background:	light blue
+TCM*StartupWindow*TDPD.Background:	light blue
+TCM*StartupWindow*TESD.Background:	light yellow
+TCM*StartupWindow*TSTD.Background: 	light yellow
+TCM*StartupWindow*TEFD.Background: 	light yellow
+TCM*StartupWindow*TFRT.Background:	light yellow
+TCM*StartupWindow*TFET.Background:	light yellow
+TCM*StartupWindow*TTUT.Background:	light yellow
+TCM*StartupWindow*TERD.Background:	light pink
+TCM*StartupWindow*TPSD.Background:	light pink
+TCM*StartupWindow*TSND.Background:	light pink
+TCM*StartupWindow*TDFD.Background: 	light pink
+TCM*StartupWindow*TCRD.Background:	light pink
+TCM*StartupWindow*TRPG.Background:	light pink
+TCM*StartupWindow*TTDT.Background:	light pink
+
+!! The background of the different kinds of popup dialogs.
+TCM*XmSelectionBox*Background:		BG
+TCM*XmFileSelectionBox*Background:	BG
+TCM*XmMessageBox*Background:		BG
+TCM*XmMessageBox*XmText*Background:	BG_TEXT
+TCM*XmSelectionBox*XmTextField.background:        BG_TEXT
+TCM*XmSelectionBox*XmText.background:             BG_TEXT
+TCM*XmSelectionBox*XmList.background:             BG_TEXT
+TCM*XmFileSelectionBox*XmTextField.background:        BG_TEXT
+TCM*XmFileSelectionBox*XmText.background:             BG_TEXT
+TCM*XmFileSelectionBox*XmList.background:             BG_TEXT
+
+!! default TCM fonts.
+TCM*fontList:                   FONT
+TCM*XmList.fontList:            FONT_FIXED
+TCM*XmText.fontList:            FONT_FIXED
+TCM*XmTextField.fontList:       FONT_FIXED
+
+!! Fonts used for document type and - name and status fields.
+TCM*DocumentName.fontList:  	FONT
+TCM*DocumentType.fontList:  	FONT
+TCM*StatusText.fontList: 	FONT_SMALL
+
+!! Fonts used for TCM startup_window program. 
+TCM*StartupWindow*fontList: FONT
+TCM*StartupWindow*statusBar.fontList: FONT_SMALL
+
+!! Font of the bubble help.
+TCM*LiteClueShell*FontSet: 	FONT_SMALL
+
+!#
+!# CM Synergy
+!#
+
+ccm*background:                BG
+ccm*foreground:                FG
+! ccm*hist*background:           BG
+! ccm*hist*foreground:           FG
+! ccm*hist_main*background:      BG
+! ccm*hist_main*foreground:      FG
+! ccm*hist_menubar*background:   BG
+! ccm*hist_menubar*foreground:   FG
+ccm*proj_menubar*background:   BG
+ccm*proj_menubar*foreground:   FG
+ccm*cp_menubar*background:     BG
+ccm*cp_menubar*foreground:     FG
+ccm*XmDialogShell*background:  BG
+ccm*XmDialogShell*foreground:  FG
+ccm*CompVer*background:        slateblue
+ccm*CompVer*foreground:        midnightblue
+ccm*CompVer*selectBackground:  BG_DARK
+ccm*CompVer*selectForeground:  FG
+ccm*BindSite*background:       white
+ccm*BindSite*foreground:       midnightblue
+ccm*BindSite*selectColor:      pink
+
+ccm*font: FONT
+ccm*fontList: FONT
+ccm*XmText*FontList: FONT
+ccm*XmTextField*FontList: FONT
+ccm*XmList.fontList: FONT_FIXED
+ccm*attr_lb.fontList: FONT_BOLD=local FONT=inherited
+ccm*CompVer*FontList: FONT=detail FONT_BOLD=name FONT_BOLD=header
+ccm*BindSite*FontList: FONT=detail FONT_BOLD=name
+ccm*Processor*FontList: FONT=detail
+ccm*Collector*FontList: FONT=detail
+ccm*cfg_focus_stack_lb.fontList: FONT_BOLD=locked FONT=unlocked
+ccm*selection*fontList: FONT=regular FONT_FIXED=fixedwidth
+ccm*msg_text*fontList: FONT_FIXED
+ccm*db_clropt*clr_table*fontList: FONT_FIXED
+ccm*list_scan_op*fontList: FONT_FIXED
+ccm*table_header_scan_op*fontList: FONT_FIXED
+ccm*list_edit_op*fontList: FONT_FIXED
+ccm*cvt_parallel_defs*font: FONT_FIXED
+ccm*cvt_parallel_defs*fontList: FONT_FIXED
+ccm*cvt_access_list*font: FONT_FIXED
+ccm*cvt_access_list*fontList: FONT_FIXED
+ccm*cvt_access_status_selection_label*font: FONT_FIXED
+ccm*cvt_access_status_selection_label*fontList: FONT_FIXED
+ccm*cvt_parallel_defs_column_label*font: FONT_FIXED
+ccm*cvt_parallel_defs_column_label*fontList: FONT_FIXED
+! ccm*hist*fontList: FONT_SMALL
+! ccm*hist_menubar*fontList: FONT
+! ccm*hist_main*fontList: FONT_SMALL
+
+!#
+!# Nedit
+!#
+
+nedit*foreground: FG
+nedit*background: BG
+nedit*text.foreground: FG
+nedit*text.background: BG_TEXT
+nedit*text.selectForeground: BG
+nedit*text.selectBackground: gray80
+nedit*text.highlightForeground: white
+nedit*text.highlightBackground: red
+nedit*text.cursorForeground: black
+nedit*statsLine.foreground: FG
+nedit*statsLine.background: BG
+
+!#
+!# Purify
+!#
+
+!**********************************************************************
+! A sample of enhanced strings.  The "Color" string means only apply
+! these resources on non-monochrome displays.  This includes gray scale
+! displays that have more than two colors.  Other valid display 
+! types that can be used are:
+!
+!   Monochrome
+!   StaticGray
+!   GrayScale
+!   StaticColor
+!   PseudoColor
+!   TrueColor
+!   DirectColor
+!
+! This is a list of strings I want to enhance in the viewer display.  You
+! should not attempt to enhance strings with the following characters:
+!
+!   * - asterisk
+!   " - double quote
+!   : - colon
+!   . - period
+!   ? - question mark
+!
+! Although the use of spaces within strings looks odd, it works fine.
+!
+!purify*Color*enhanceStrings: "ABR", "local variable", "[Suppressed]"
+!
+! Now for each of the strings listed above, I can specify an enhanceForeground
+!    and an enhanceBackground color as follows:
+!
+!purify*Color*ABR.enhanceForeground: white
+!purify*Color*ABR.enhanceBackground: red
+!
+!purify*Color*local variable.enhanceForeground: red
+!
+!purify*Color*[Suppressed].enhanceBackground: #d8d8d8
+
+purify*Color*foreground: FG
+purify*Color*background: BG
+purify*Color*topShadowColor: TOPSHADOW
+purify*Color*activeTopShadowColor: TOPSHADOW
+purify*Color*bottomShadowColor: BOTTOMSHADOW
+purify*Color*activeBottomShadowColor: BOTTOMSHADOW
+
+!**********************************************************************
+! Fonts
+
+purify*font: FONT
+purify*OI_multi_text.font: FONT_FIXED
+purify*OI_scroll_text.font: FONT_FIXED
+purify*OI_entry_field.font: FONT_FIXED
+purify*PS_OI_MultiText.font: FONT_FIXED
+purify*PS_OI_ScrollText.font: FONT_FIXED
+purify*PS_OI_ScrollTextGang.font: FONT_FIXED
+
+!#
+!# DDD
+!#
+
+Ddd*foreground: FG
+Ddd*background: BG
+
+
+!#
+!# End		/etc/X11/Xresources/xdefaults
+!#

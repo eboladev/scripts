@@ -1,0 +1,332 @@
+# 
+# Name          /etc/mime.types
+# Description   Map file extensions to file types
+# Version       $Id: mime.types,v 1.16 2001/04/05 16:11:09 polster Exp $
+#
+
+application/EDI-Consent
+application/EDI-X12
+application/EDIFACT
+application/activemessage
+application/andrew-inset        ez
+application/applefile
+application/atomicmail
+application/cals-1840
+application/commonground
+application/cybercash
+application/dca-rft
+application/dec-dx
+application/eshop
+application/frame               fm
+application/futuresplash        spl SPL
+application/hyperstudio
+application/iges
+application/mac-binhex40        hqx
+application/mac-compactpro      cpt
+application/macwriteii
+application/marc
+application/mathematica
+application/msword              doc DOC
+application/news-message-id
+application/news-transmission
+application/ninstall            ninstall nin
+application/octet-stream        bin BIN
+application/oda                 oda
+application/openspool
+application/pdf                 pdf PDF
+application/pgp-encrypted
+application/pgp-keys
+application/pgp-signature
+application/pkcs10
+application/pkcs7-mime
+application/pkcs7-signature
+application/postscript          ai eps EPS ps PS
+application/prs.alvestrand.titrax-sheet
+application/prs.cww
+application/prs.nprend
+application/remote-printing
+application/riscos
+application/rtf                 rtf RTF
+application/sdp                 sdp SDP
+application/sendmail
+application/set-payment
+application/set-payment-initiation
+application/set-registration
+application/set-registration-initiation
+application/sgml
+application/sgml-open-catalog
+application/slate
+application/smil                smi SMI smil
+application/vemmi
+application/vemmi
+application/vnd.3M.Post-it-Notes
+application/vnd.FloGraphIt
+application/vnd.acucobol
+application/vnd.anser-web-certificate-issue-initiation
+application/vnd.anser-web-funds-transfer-initiation
+application/vnd.audiograph
+application/vnd.businessobjects
+application/vnd.claymore
+application/vnd.comsocaller
+application/vnd.dna
+application/vnd.dxr
+application/vnd.ecdis-update
+application/vnd.ecowin.chart
+application/vnd.ecowin.filerequest
+application/vnd.ecowin.fileupdate
+application/vnd.ecowin.series
+application/vnd.ecowin.seriesrequest
+application/vnd.ecowin.seriesupdate
+application/vnd.enliven
+application/vnd.epson.salt
+application/vnd.fdf
+application/vnd.ffsns
+application/vnd.framemaker
+application/vnd.fujitsu.oasys
+application/vnd.fujitsu.oasys2
+application/vnd.fujitsu.oasys3
+application/vnd.fujitsu.oasysgp
+application/vnd.fujitsu.oasysprs
+application/vnd.fujixerox.docuworks
+application/vnd.hp-HPGL
+application/vnd.hp-PCL
+application/vnd.hp-PCLXL
+application/vnd.hp-hps
+application/vnd.ibm.MiniPay
+application/vnd.ibm.modcap
+application/vnd.intercon.formnet
+application/vnd.intertrust.digibox
+application/vnd.intertrust.nncp
+application/vnd.is-xpr
+application/vnd.japannet-directory-service
+application/vnd.japannet-jpnstore-wakeup
+application/vnd.japannet-payment-wakeup
+application/vnd.japannet-registration
+application/vnd.japannet-registration-wakeup
+application/vnd.japannet-setstore-wakeup
+application/vnd.japannet-verification
+application/vnd.japannet-verification-wakeup
+application/vnd.koan
+application/vnd.lotus-approach
+
+# We need application/x-freelance instead for backward compatibility
+# application/vnd.lotus-freelance       pre PRE
+
+application/vnd.lotus-organizer
+application/vnd.lotus-screencam
+application/vnd.lotus-wordpro
+application/vnd.mif             mif
+application/vnd.minisoft-hp3000-save
+application/vnd.mitsubishi.misty-guard.trustweb
+application/vnd.ms-artgalry
+application/vnd.ms-asf
+application/vnd.ms-excel        xls XLS xlc XLC
+application/vnd.ms-powerpoint   ppt PPT
+application/vnd.ms-project      prj PRJ
+application/vnd.ms-tnef
+application/vnd.ms-works
+application/vnd.music-niff
+application/vnd.musician
+application/vnd.netfpx
+application/vnd.noblenet-directory
+application/vnd.noblenet-sealer
+application/vnd.noblenet-web
+application/vnd.novadigm.EDM
+application/vnd.novadigm.EDX
+application/vnd.novadigm.EXT
+application/vnd.osa.netdeploy
+application/vnd.powerbuilder6
+application/vnd.powerbuilder6-s
+application/vnd.rapid
+application/vnd.rn-realmedia    rm RM
+application/vnd.seemail
+application/vnd.shana.informed.formtemplate
+application/vnd.shana.informed.interchange
+application/vnd.shana.informed.package
+application/vnd.street-stream
+application/vnd.svd
+application/vnd.swiftview-ics
+application/vnd.truedoc
+application/vnd.visio
+application/vnd.webturbo
+application/vnd.wrq-hp3000-labelled
+application/vnd.wt.stf
+application/vnd.xara
+application/vnd.yellowriver-custom-menu
+application/wita
+application/wordperfect5.1
+application/x-amipro            sam SAM
+application/x-applix-macro      am AM
+application/x-applix-word       aw AW
+application/x-arj               arj ARJ
+application/x-bcpio             bcpio
+application/x-cdlink            vcd
+application/x-compress          Z
+application/x-csh               csh
+application/x-cpio              cpio
+application/x-director          dcr DCR dir DIR dxr DXR
+application/x-dvi               dvi DVI
+application/x-freelance         pre PRE
+application/x-g3                g3 G3
+application/x-gtar              gtar
+application/x-gzip              gz GZ
+application/x-gzip-compressed   tgz TGZ
+application/x-hdf               hdf
+application/x-httpd-cgi         cgi CGI
+application/x-javascript        js JS
+application/x-koan              skp skd skt skm
+application/x-latex             latex
+application/x-lotus123          wks WKS wk1 WK1 wk3 WK3 wk4 WK4
+application/x-lyx               lyx LYX
+application/x-mif               mif
+application/x-mswrite           wri WRI
+application/x-netcdf            nc cdf
+application/x-patchman          pb
+application/x-povray            pov
+application/x-railcad-station   sn      
+application/x-railcad-symbol    sym
+application/x-rpm
+application/x-sdp               sdp SDP
+application/x-sh                sh
+application/x-shar              shar
+application/x-shockwave-flash   swf SWF
+application/x-staroffice        sda SDA sdw SDW sdd SDD
+application/x-stuffit           sit
+application/x-sv4cpio           sv4cpio
+application/x-sv4crc            sv4crc
+application/x-tar               tar TAR
+application/x-tcl               tcl TCL
+application/x-tex               tex TEX
+application/x-texinfo           texinfo texi
+application/x-tgif              obj OBJ sym SYM
+application/x-troff             t tr roff
+application/x-troff-man         man 1 1m 2 3 4 5 6 7 8 9 n
+application/x-troff-me          me
+application/x-troff-ms          ms
+application/x-ustar             ustar
+application/x-wais-source       src
+application/x400-bp
+application/xml
+application/zip                 zip ZIP       
+
+audio/32kadpcm
+audio/basic                     au AU snd SND voc VOC
+audio/midi                      midi mid MID rmi RMI
+audio/vnd.rn-realaudio          ra RA
+audio/vnd.qcelp
+audio/x-aiff                    aif AIF af AF aiff aifc
+audio/x-mod                     mod MOD s3m S3M xm XM med MED it IT 669 dsm DSM 
+far FAR gdm GDM imf IMF m15 M15 mtm MTM stm STM stx STX ult ULT uni UNI
+audio/x-mpeg1                   mp1 MP1
+audio/x-mpeg2                   mp2 MP2
+audio/x-mpeg3                   mp3 MP3
+audio/x-mpegurl                 m3u M3U
+audio/x-pn-realaudio            rmm RMM ram RAM
+audio/x-scpls                   pls PLS
+audio/x-wav                     wav WAV
+
+chemical/x-pdb                  pdb xyz
+
+image/cgm                       cgm CGM
+image/g3fax                     g3 G3 fax FAX
+image/gif                       gif GIF
+image/ief                       ief
+image/jpeg                      jpeg jpg jpe JPG
+image/naplps
+image/pgn                       png PNG
+image/prs.btif
+image/tiff                      tiff tif TIF
+image/vnd.dwg
+image/vnd.dxf
+image/vnd.fpx
+image/vnd.net-fpx
+image/vnd.rn-realpix            rp RP
+image/vnd.svf
+image/vnd.xiff
+image/x-adobe-illustrator       ai AI
+image/x-cmu-raster              ras
+image/x-msbitmap                bmp BMP
+image/x-paintbrush              pcx PCX
+image/x-portable-anymap         pnm PNM
+image/x-portable-bitmap         pbm PBM
+image/x-portable-graymap        pgm PGM
+image/x-portable-pixmap         ppm PPM
+image/x-scaleable-vector        svg SVG
+image/x-sketch                  sk SK
+image/x-windows-metafile        wmf WMF
+image/x-xbitmap                 xbm XBM bm BM
+image/x-xfig                    fig FIG
+image/x-xpixmap                 xpm XPM pm PM
+image/x-xwindowdump             xwd XWD
+
+message/delivery-status
+message/disposition-notification
+message/external-body
+message/http
+message/news
+message/partial
+message/rfc822
+
+model/iges                      igs iges
+model/mesh                      msh mesh silo
+model/vnd.dwf
+model/vrml                      wrl WRL vrml
+
+multipart/alternative
+multipart/appledouble
+multipart/byteranges
+multipart/digest
+multipart/encrypted
+multipart/form-data
+multipart/header-set
+multipart/mixed
+multipart/parallel
+multipart/related
+multipart/report
+multipart/signed
+multipart/voice-message
+
+text/css                        css CSS
+text/directory
+text/html                       html htm HTM
+text/plain                      txt TXT
+text/prs.lines.tag
+text/rfc822-headers
+text/richtext                   rtx
+text/rtf                        rtf RTF
+text/sgml                       sgml sgm SGM
+text/tab-separated-values       tsv TSV
+text/uri-list
+text/vnd.abc
+text/vnd.flatland.3dml
+text/vnd.fmi.flexstor
+text/vnd.in3d.3dml
+text/vnd.in3d.spot
+text/vnd.latex-z
+text/vnd.rn-realtext            rt RT
+text/x-c                        c C h H
+text/x-cc                       cc CC c++ cxx CXX hh HH h++ hxx HXX
+text/x-info                     info
+text/x-setext                   etx
+text/x-sgml                     sgml sgm SGM
+text/x-vCalendar                vcs VCS
+text/xml                        xml XML
+
+video/mpeg                      mpeg mpg MPG mpe MPE m1v M1V vbs VBS mpegv dat D
+AT
+video/quicktime                 qt QT mov MOV moov MooV hqx HQX qtvr
+video/vnd.motorola.video
+video/vnd.motorola.videop
+video/vnd.rn-relflash           rf RF swf SWF
+video/vnd.rn-realvideo          rv RV
+video/vnd.vivo
+video/x-animator                fli FLI
+video/x-ms-asf                  asf ASF asx ASX
+video/x-msvideo                 avi AVI
+video/x-sgi-movie               movie
+
+x-conference/x-cooltalk         ice ICE
+
+#
+# End           /etc/mime.types
+#
