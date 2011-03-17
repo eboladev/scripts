@@ -13,6 +13,9 @@ TARGETS= \
 	/Library/LaunchAgents/locchghook \
 	/Library/LaunchAgents/com.macosxints.locchghook.plist \
 	/etc/smb.conf \
+	/usr/local/bin/vpn-connect.sh \
+	/Applications/Internet/vpn-connect.app \
+
 
 DIRS = maczok marzipan
 
@@ -25,6 +28,18 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/Applications/Internet/vpn-connect.app: vpn-connect.applescript vpn-connect.icns
+	-rm -rf /Applications/Internet/vpn-connect.app
+	mkdir -p /Applications/Internet
+	osacompile -o /Applications/Internet/vpn-connect.app \
+	  vpn-connect.applescript
+	cp -f vpn-connect.icns /Applications/Internet/vpn-connect.app/Contents/Resources/applet.icns
+	touch /Applications/Internet/vpn-connect.app/Contents/Info.plist
+
+/usr/local/bin/vpn-connect.sh: vpn-connect.sh
+	cp -f $< $@
+	chmod a+rx $@
 
 /etc/smb.conf: smb.conf
 	cp -f $< $@
