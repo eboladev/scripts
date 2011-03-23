@@ -61,9 +61,13 @@ for artistDir in $src/*; do
                 fi
                 echo "$flacFile -> $dstDir/$alacFile"
                 flac --totally-silent -o /tmp/x.wav -c -d "$flacFile"
-                ffmpeg -i /tmp/x.wav -acodec alac "$dstDir"/"$alacFile" \
-                    -metadata title="$title" -metadata author="$artist" \
-                    -metadata album="$album" </dev/null >/dev/null 2>&1
+                ffmpeg -i /tmp/x.wav -acodec alac \
+                    -v 0 \
+                    -metadata title="$title" \
+                    -metadata author="$artist" \
+                    -metadata album_artist="$artist" \
+                    -metadata album="$album" \
+                    "$dstDir"/"$alacFile" </dev/null 2>/dev/null
                 rm -f /tmp/x.wav
             fi
         done
