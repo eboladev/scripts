@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Export music directories marked with "export" to MP3
+# Export music directories marked with "export" to MP3, "export-alac" to 
+# ALAC M4A
 
 src=/mnt/maxtor/polster/music
 dst=/media/basix/music-mp3
@@ -24,7 +25,11 @@ for artistDir in $src/*; do
         if [ ! -d "$albumDir" ]; then
             continue
         fi
-        if [ ! -f "$albumDir"/export ]; then
+        if [ -f "$albumDir"/export ]; then
+            lossless=0
+        elif [ -f "$albumDir"/export-alac ]; then
+            lossless=1
+        else
             continue
         fi
 
@@ -38,16 +43,29 @@ for artistDir in $src/*; do
             if [ ! -f "$flacFile" ]; then
                 continue
             fi
-            track=`basename "$flacFile"`
-            track=${track%%.flac}
-            mp3File="$track".mp3
-            if [ -f "$dstDir"/"$mp3File" ]; then
-                continue
+            title=`basename "$flacFile"`
+            title=${track%%.flac}
+            if [ $lossless = 0 ]; then
+                mp3File="$title".mp3
+                if [ -f "$dstDir"/"$mp3File" ]; then
+                    continue
+                fi
+                echo "$flacFile -> $dstDir/$mp3File"
+                flac --totally-silent -c -d "$flacFile" | \
+                lame --preset extreme -S --tt "$track" --ta "$artist" \
+                    --tl "$album" - "$dstDir"/"$mp3File" >/dev/null 2>&1
+            else
+                alacFile="$track".m4a
+                if [ -f "$dstDir"/"$alacFile" ]; then
+                    continue
+                fi
+                echo "$flacFile -> $dstDir/$alacFile"
+                flac --totally-silent -o /tmp/x.wav -c -d "$flacFile"
+                ffmpeg -i /tmp/x.wav -acodec alac "$dstDir"/"$alacFile" \
+                    -metadata title="$title" -metadata author="$artist" \
+                    -metadata album="$album"
+                rm -f /tmp/x.wav
             fi
-            echo "$flacFile -> $dstDir/$mp3File"
-            flac --totally-silent -c -d "$flacFile" | \
-            lame --preset extreme -S --tt "$track" --ta "$artist" \
-                --tl "$album" - "$dstDir"/"$mp3File" >/dev/null 2>&1
         done
 
         # Convert wavs to mp3s
