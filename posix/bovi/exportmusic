@@ -44,7 +44,7 @@ for artistDir in $src/*; do
                 continue
             fi
             title=`basename "$flacFile"`
-            title=${track%%.flac}
+            title=${title%%.flac}
             if [ $lossless = 0 ]; then
                 mp3File="$title".mp3
                 if [ -f "$dstDir"/"$mp3File" ]; then
@@ -55,7 +55,7 @@ for artistDir in $src/*; do
                 lame --preset extreme -S --tt "$track" --ta "$artist" \
                     --tl "$album" - "$dstDir"/"$mp3File" >/dev/null 2>&1
             else
-                alacFile="$track".m4a
+                alacFile="$title".m4a
                 if [ -f "$dstDir"/"$alacFile" ]; then
                     continue
                 fi
@@ -63,7 +63,7 @@ for artistDir in $src/*; do
                 flac --totally-silent -o /tmp/x.wav -c -d "$flacFile"
                 ffmpeg -i /tmp/x.wav -acodec alac "$dstDir"/"$alacFile" \
                     -metadata title="$title" -metadata author="$artist" \
-                    -metadata album="$album"
+                    -metadata album="$album" </dev/null >/dev/null 2>&1
                 rm -f /tmp/x.wav
             fi
         done
