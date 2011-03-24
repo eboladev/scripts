@@ -38,8 +38,10 @@ for artistDir in $src/*; do
         mkdir -p "$dstDir"
 
         # Convert flacs to mp3s
+        track=0
         ls "$albumDir"/*.flac 2>/dev/null | \
         while read flacFile; do
+            track=`expr $track + 1`
             if [ ! -f "$flacFile" ]; then
                 continue
             fi
@@ -52,8 +54,9 @@ for artistDir in $src/*; do
                 fi
                 echo "$flacFile -> $dstDir/$mp3File"
                 flac --totally-silent -c -d "$flacFile" | \
-                lame --preset extreme -S --tt "$track" --ta "$artist" \
-                    --tl "$album" - "$dstDir"/"$mp3File" >/dev/null 2>&1
+                lame --preset extreme -S --tt "$title" --ta "$artist" \
+                    --tl "$album" --tn "$track" - "$dstDir"/"$mp3File" \
+                    >/dev/null 2>&1
             else
                 alacFile="$title".m4a
                 if [ -f "$dstDir"/"$alacFile" ]; then
@@ -67,6 +70,7 @@ for artistDir in $src/*; do
                     -metadata author="$artist" \
                     -metadata album_artist="$artist" \
                     -metadata album="$album" \
+                    -metadata track="$track" \
                     "$dstDir"/"$alacFile" </dev/null 2>/dev/null
                 rm -f /tmp/x.wav
             fi
