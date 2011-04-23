@@ -134,7 +134,7 @@ if [ -z "$NOTTY" ]; then
   fi
   
   # Print message of the day; notify if new news
-  [ -r /etc/motd ] && cat /etc/motd
+  # [ -r /etc/motd ] && cat /etc/motd
   [ -x /usr/bin/news ] && /usr/bin/news -n
 fi
 
