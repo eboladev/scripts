@@ -10,5 +10,4 @@ export SIM96TCL=/usr
 export SIM96TCLSH=tclsh
 export SIM96WISH=wish
 
-alias besthost='ssh colsw01m cat /nokia/co_nmp/groups/gti/share/environment/var/besthost.general'
 alias qmlviewer=/Developer/Applications/Qt/QMLViewer.app/Contents/MacOS/QMLViewer
