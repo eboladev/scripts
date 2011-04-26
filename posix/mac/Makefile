@@ -15,7 +15,7 @@ TARGETS= \
 	/etc/smb.conf \
 	/usr/local/bin/vpn-connect.sh \
 	/Applications/Internet/vpn-connect.app \
-
+	/Applications/Programming/start-synergy.app
 
 DIRS = maczok marzipan
 
@@ -29,6 +29,15 @@ preinstall:
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
 
+/Applications/Programming/start-synergy.app: start-synergy.applescript start-synergy.icns
+	-rm -rf /Applications/Programming/start-synergy.app
+	mkdir -p /Applications/Programming
+	osacompile -o /Applications/Programming/start-synergy.app \
+	  start-synergy.applescript
+	cp -f start-synergy.icns /Applications/Programming/start-synergy.app/Contents/Resources/applet.icns
+	touch /Applications/Programming/start-synergy.app/Contents/Info.plist
+
+/usr/local/bin/vpn-connect.sh: vpn-connect.sh
 /Applications/Internet/vpn-connect.app: vpn-connect.applescript vpn-connect.icns
 	-rm -rf /Applications/Internet/vpn-connect.app
 	mkdir -p /Applications/Internet
