@@ -25,6 +25,7 @@ OTHERS=\
 	/etc/davfs2/secrets \
 	/usr/local/bin/sys \
 	/usr/local/bin/gmail-mailto \
+	/usr/local/bin/besthost
 	
 ONHOLD=\
 	crco \
@@ -47,6 +48,10 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+/usr/local/bin/besthost: besthost
+	cp -f besthost $@
+	chmod a+rx $@
 
 /usr/local/bin/gmail-mailto: gmail-mailto
 	cp -f gmail-mailto $@
