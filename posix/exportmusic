@@ -3,11 +3,19 @@
 # Export music directories marked with "export" to MP3, "export-alac" to 
 # ALAC M4A
 
-src=/mnt/maxtor/polster/music
-dst=/media/basix/music-mp3
-lock=/var/lock/exportmusic
+if [ "$1" == "-v" ]; then
+    set -x
+    shift
+fi
 
-[ "$1" == "-v" ] && set -x
+if [ $# != 2 ]; then
+    echo "exportmusic: Usage: exportmusic [-v] src_dir dst_dir"
+    exit 1
+fi
+
+src="$1"
+dst="$2"
+lock=/var/lock/exportmusic
 
 lockfile -r 0 "$lock" || exit 1
 trap "rm -f $lock; exit" INT TERM EXIT

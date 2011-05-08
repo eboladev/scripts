@@ -26,8 +26,9 @@ OTHERS=\
 	/usr/local/bin/sys \
 	/usr/local/bin/gmail-mailto \
 	/usr/local/bin/besthost \
-	/usr/local/bin/startsynergy
-	
+	/usr/local/bin/startsynergy \
+	/usr/local/bin/exportmusic \
+
 ONHOLD=\
 	crco \
 	crci \
@@ -49,6 +50,10 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+/usr/local/bin/exportmusic: exportmusic
+	cp exportmusic /usr/local/bin
+	chmod a+rx /usr/local/bin/exportmusic
 
 /usr/local/bin/startsynergy: startsynergy
 	cp -f $< $@
