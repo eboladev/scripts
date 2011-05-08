@@ -15,7 +15,7 @@ fi
 
 src="$1"
 dst="$2"
-lock=/var/lock/exportmusic
+lock=~/.exportmusic.lock
 
 lockfile -r 0 "$lock" || exit 1
 trap "rm -f $lock; exit" INT TERM EXIT
