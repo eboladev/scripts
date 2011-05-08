@@ -340,10 +340,6 @@ preinstall:
 	cp -f forward.root /root/.forward
 	chmod og-rwx /root/.forward
 
-/usr/local/bin/exportmusic: exportmusic
-	cp exportmusic /usr/local/bin
-	chmod a+rx /usr/local/bin/exportmusic
-
 /usr/local/bin/fixmediaserver: fixmediaserver
 	cp -f fixmediaserver /usr/local/bin
 	chmod a+rx /usr/local/bin/fixmediaserver
