@@ -2,8 +2,5 @@
 
 MAILTO = akos.polster@gmail.com
 
-# Export some of my music to MP3s
-30 7 * * * /usr/local/bin/exportmusic
-
 # Back up the Eclipse workspace
 41 21 * * * [ -f /home/polster/backup/workspace-bovi.tar.gz ] && mv -f /home/polster/backup/workspace-bovi.tar.gz /home/polster/backup/workspace-bovi-old.tar.gz; cd ~; tar czf /home/polster/backup/workspace-bovi.tar.gz workspace
