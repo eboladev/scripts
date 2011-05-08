@@ -21,7 +21,7 @@ MAILTO=akos.polster@gmail.com
 33 3,11,19,21,23 * * * rsync -avzqr /mnt/pixtor/photos polster@maczok:/Volumes/maxtor/backup
 
 # Back up home movies
-49 5 * * * rsync -avzqr polster@maczok:/Volumes/basix/movies/Home /mnt/maxtor/backup/movies
+# 49 5 * * * rsync -avzqr polster@maczok:/Volumes/basix/movies/Home /mnt/maxtor/backup/movies
 
 # Ensure PPP is up 
 # 0,5,10,15,20,25,30,35,40,45,50,55 * * * * /usr/local/bin/telia.sh
