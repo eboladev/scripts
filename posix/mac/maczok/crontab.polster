@@ -5,3 +5,6 @@ MAILTO=akos.polster@gmail.com
 
 # Back up home movies
 49 5 * * * rsync -avzqr /Volumes/basix/movies/Home /Volumes/maxtor/backup/movies
+
+# Back up my photographs
+33 3,11,19,21,23 * * * rsync -avzqr /Volumes/pixtor/photos /Volumes/maxtor/backup
