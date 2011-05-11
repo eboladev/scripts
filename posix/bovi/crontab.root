@@ -18,7 +18,7 @@ MAILTO=akos.polster@gmail.com
 7 7 * * * rsync -avzqr /mnt/maxtor/dav /mnt/pixtor/backup
 
 # Back up my photographs
-33 3,11,19,21,23 * * * rsync -avzqr /mnt/pixtor/photos polster@maczok:/Volumes/maxtor/backup
+# 33 3,11,19,21,23 * * * rsync -avzqr /mnt/pixtor/photos polster@maczok:/Volumes/maxtor/backup
 
 # Back up home movies
 # 49 5 * * * rsync -avzqr polster@maczok:/Volumes/basix/movies/Home /mnt/maxtor/backup/movies
