@@ -138,12 +138,12 @@ if [ -z "$NOTTY" ]; then
   [ -x /usr/bin/news ] && /usr/bin/news -n
 fi
 
-# Function to list directories only
+# List directories only
 lsd() {
   ls -F $* | grep '/$'
 }
 
-# Function to find processes by name
+# Find processes by name
 export psHead
 case "$OS_NAME" in
   HP-UX)	psHead=`ps -aefl|head -1|tr " " "_"`;;
@@ -159,11 +159,6 @@ psg() {
   ) | grep $* | grep -v grep
 }
 
-# Function to find an environment variable
-setg() {
-  env | grep $*
-}
-
 # Aliases
 alias e=xemacs
 alias l='ls -al'
@@ -176,11 +171,6 @@ alias res='eval `resize`'
 alias sys=sudo
 alias x=xemacs
 
-# Socks 4 
-export SOCKS_NS SOCKS_SERVER
-[ -r /etc/SOCKS_SERVER ] && SOCKS_SERVER=`cat /etc/SOCKS_SERVER`
-[ -r /etc/SOCKS_NS ] && SOCKS_NS=`cat /etc/SOCKS_NS`
-
 # Web proxies
 if [ -r /etc/HTTP_PROXY ]; then
   HTTP_PROXY=`cat /etc/HTTP_PROXY`
@@ -188,8 +178,9 @@ if [ -r /etc/HTTP_PROXY ]; then
   export HTTP_PROXY http_proxy
 fi
 if [ -r /etc/FTP_PROXY ]; then
-  ftp_proxy=`cat /etc/FTP_PROXY`
-  export ftp_proxy
+  FTP_PROXY=`cat /etc/FTP_PROXY`
+  ftp_proxy=$FTP_PROXY
+  export FTP_PROXY ftp_proxy
 fi
 
 # Colour ls
@@ -256,7 +247,7 @@ esac
 
 # Shell type specific settings
 case "$SHELL" in
-  */ksh|/bin/posix/sh|*/zsh|/sbin/sh|/usr/bin/sh)
+  */ksh|/bin/posix/sh|*/zsh|/sbin/sh|/bin/sh|/usr/bin/sh)
     case "$LOGNAME" in
       root)	delim="#";;
       *)	delim="\$";;
