@@ -10,7 +10,7 @@ fi
 unMount() {
   (mount -t smbfs; mount -t fusefs; mount -t webdav) | \
   while read remote on local etc; do
-    sudo umount $local
+    sudo umount -f $local
   done
 }
 
