@@ -1,2 +1,7 @@
 #!/bin/sh
-exec ssh colsw01m cat /nokia/co_nmp/groups/gti/share/environment/var/besthost.general
+host=`ssh colsw01m.europe.nokia.com cat /nokia/co_nmp/groups/gti/share/environment/var/besthost.general`
+case "$host" in
+*nokia.com) ;;
+*) host="$host".europe.nokia.com ;;
+esac
+echo "$host"
