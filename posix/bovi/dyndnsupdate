@@ -1,0 +1,22 @@
+#!/bin/sh
+# Update pipacs.dyndns.org with my IP address
+
+# set -x
+
+PATH=/usr/bin:/bin:/usr/sbin
+
+prog=`basename $0`
+myHost=pipacs.dyndns.org
+myName=pipacs
+myPwd=secdyndns
+
+myIP=`lynx -dump http://www.netins.net/dialup/tools/my_ip.shtml | grep -A2 "Your current IP Address is:" | tail -n1 | tr -d ' '`
+if [ "$myIP" = "unknown" ]; then
+  echo "$prog: Current IP unknown"
+  exit 1
+fi
+oldIP=`nslookup -sil $myHost | tail -2 | head -1 | cut -d" " -f2`
+
+if [ "$oldIP" != "$myIP" ]; then
+  lynx -auth="$myName:$myPwd" -dump "http://$myName:$myPwd@members.dyndns.org/nic/update?system=dyndns&hostname=$myHost&myip=$myIP&wildcard=NOCHG&mx=&backmx=NO&offline=NO"
+fi
