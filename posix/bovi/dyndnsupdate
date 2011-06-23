@@ -1,7 +1,5 @@
 #!/bin/sh
-#
 # Update pipacs.dyndns.org with my IP address
-# $Id: dyndnsupdate,v 1.1 2006/03/26 01:56:29 polster Exp $
 
 # set -x
 
@@ -10,7 +8,7 @@ PATH=/usr/bin:/bin:/usr/sbin
 prog=`basename $0`
 myHost=pipacs.dyndns.org
 myName=pipacs
-myPwd=hbe578
+myPwd=secdyndns
 
 myIP=`lynx -dump http://www.netins.net/dialup/tools/my_ip.shtml | grep -A2 "Your current IP Address is:" | tail -n1 | tr -d ' '`
 if [ "$myIP" = "unknown" ]; then

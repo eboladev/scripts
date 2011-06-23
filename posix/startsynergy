@@ -1,3 +1,5 @@
 #!/bin/sh
-yes yes | \
-nohup ssh -Y `besthost` sh -c "'xrdb -merge ~/.Xdefaults; ccm start &'" >/dev/null 2>&1 &
+set -x
+env
+exec >>/tmp/startsynergy.log 2>&1
+ssh -CYfn `besthost` "nohup ccm start"
