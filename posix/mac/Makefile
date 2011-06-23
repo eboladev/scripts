@@ -61,15 +61,10 @@ preinstall:
 	cp -f $< $@
 	chmod a+rx $@
 
-<<<<<<< HEAD
-/Users/polster/.netrc: netrc-polster
-	cp -f $< $@
-=======
 /Users/polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub
 	rm -f $@
 	sed s/secmaemo/`cat /etc/secmaemo`/g $< | \
 	sed s/secgithub/`cat /etc/secgithub`/g > $@
->>>>>>> 8ea7c4658ccc8f0991dc53edc8540273246ca1b4
 	chown polster:staff $@
 	chmod og-rwx $@
 
