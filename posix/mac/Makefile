@@ -15,7 +15,8 @@ TARGETS= \
 	/etc/smb.conf \
 	/usr/local/bin/vpn-connect.sh \
 	/Applications/Internet/vpn-connect.app \
-	/Applications/Programming/Start-CM-Synergy.app
+	/Applications/Programming/Start-CM-Synergy.app \
+	/Applications/Programming/BuildTerm.app
 
 DIRS = maczok marzipan
 
@@ -28,6 +29,15 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/Applications/Programming/BuildTerm.app: BuildTerm.applescript BuildTerm.icns
+	-rm -rf /Applications/Programming/BuildTerm.app
+	mkdir -p /Applications/Programming
+	osacompile -o /Applications/Programming/BuildTerm.app \
+	  BuildTerm.applescript
+	cp -f BuildTerm.icns \
+	  /Applications/Programming/BuildTerm.app/Contents/Resources/applet.icns
+	touch /Applications/Programming/BuildTerm.app/Contents/Info.plist
 
 /Applications/Programming/Start-CM-Synergy.app: Start-CM-Synergy.applescript Start-CM-Synergy.icns
 	-rm -rf /Applications/Programming/Start-CM-Synergy.app
