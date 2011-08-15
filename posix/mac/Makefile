@@ -10,7 +10,7 @@ TARGETS= \
 	/usr/local/bin/runterm \
 	/Users/polster/.hgrc \
 	/Users/polster/.netrc \
-	/Library/LaunchAgents/locchghook \
+	/usr/local/bin/locchghook \
 	/Library/LaunchAgents/com.macosxints.locchghook.plist \
 	/etc/smb.conf \
 	/usr/local/bin/vpn-connect.sh \
@@ -65,9 +65,11 @@ preinstall:
 
 /Library/LaunchAgents/com.macosxints.locchghook.plist: com.macosxints.locchghook.plist
 	cp -f $< $@
+	chmod a+r $@
+	-launchctl unload $@
 	launchctl load $@
 
-/Library/LaunchAgents/locchghook: locchghook
+/usr/local/bin/locchghook: locchghook
 	cp -f $< $@
 	chmod a+rx $@
 

@@ -1,11 +1,11 @@
 #!/bin/sh
 
+# This script will run whenever the network location changes.
+# See http://forums.applenova.com/archive/index.php/t-17302.html
+
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin export PATH
 set +u
-
-exec >/tmp/locchghook.log 2>&1
 set -x
-date
 
 # User receiving the new configuration
 targetUser=polster
@@ -14,18 +14,20 @@ targetUser=polster
 getLocation()
 {
     location="world"
-    ping -t 1 -c 1 172.27.174.120 >/dev/null 2>&1  && location="nokia"
+    ping -t 1 -c 1 172.27.174.120 >/dev/null 2>&1 && location="nokia"
     echo $location
 }
 
-# Make sure the target user has a subversion and mercurial directories
+# Make sure the target user has Subversion and Mercurial configuration directories
 mkdir -p /etc/subversion
 mkdir -p /etc/mercurial/hgrc.d
+
+echo "# " `date` >/etc/profile.d/proxy.sh
 
 if [ `getLocation` = "nokia" ]; then
 
     # Set up the proxy server
-    proxyHost=172.16.44.133
+    proxyHost=172.16.99.10
     proxyPort=8080
 
     # Fix host name
@@ -44,7 +46,7 @@ if [ `getLocation` = "nokia" ]; then
 
     # Set proxy environment variables for shells
     # Set proxy environment variables for shells
-    echo "http_proxy=http://$proxyHost:$proxyPort/" >/etc/profile.d/proxy.sh
+    echo "http_proxy=http://$proxyHost:$proxyPort/" >>/etc/profile.d/proxy.sh
     echo 'HTTP_PROXY=$http_proxy
 https_proxy=$http_proxy
 HTTPS_PROXY=$http_proxy
@@ -62,7 +64,7 @@ else
 
     # Unset proxy environment variables for shells
     echo 'unset http_proxy HTTP_PROXY https_proxy HTTPS_PROXY' \
-        >/etc/profile.d/proxy.sh
+        >> /etc/profile.d/proxy.sh
 
 fi
 
