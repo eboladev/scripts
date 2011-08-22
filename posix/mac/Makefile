@@ -13,10 +13,8 @@ TARGETS= \
 	/usr/local/bin/locchghook \
 	/Library/LaunchAgents/com.macosxints.locchghook.plist \
 	/etc/smb.conf \
-	/usr/local/bin/vpn-connect.sh \
-	/Applications/Internet/vpn-connect.app \
-	/Applications/Programming/Start-CM-Synergy.app \
-	/Applications/Programming/BuildTerm.app
+	/Applications/Start-CM-Synergy.app \
+	/Applications/BuildTerm.app
 
 DIRS = maczok marzipan
 
@@ -30,34 +28,21 @@ preinstall:
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
 
-/Applications/Programming/BuildTerm.app: BuildTerm.applescript BuildTerm.icns
-	-rm -rf /Applications/Programming/BuildTerm.app
-	mkdir -p /Applications/Programming
-	osacompile -o /Applications/Programming/BuildTerm.app \
+/Applications/BuildTerm.app: BuildTerm.applescript BuildTerm.icns
+	-rm -rf /Applications/BuildTerm.app
+	osacompile -o /Applications/BuildTerm.app \
 	  BuildTerm.applescript
 	cp -f BuildTerm.icns \
-	  /Applications/Programming/BuildTerm.app/Contents/Resources/applet.icns
-	touch /Applications/Programming/BuildTerm.app/Contents/Info.plist
+	  /Applications/BuildTerm.app/Contents/Resources/applet.icns
+	touch /Applications/BuildTerm.app/Contents/Info.plist
 
-/Applications/Programming/Start-CM-Synergy.app: Start-CM-Synergy.applescript Start-CM-Synergy.icns
-	-rm -rf /Applications/Programming/Start-CM-Synergy.app
-	mkdir -p /Applications/Programming
-	osacompile -o /Applications/Programming/Start-CM-Synergy.app \
+/Applications/Start-CM-Synergy.app: Start-CM-Synergy.applescript Start-CM-Synergy.icns
+	-rm -rf /Applications/Start-CM-Synergy.app
+	osacompile -o /Applications/Start-CM-Synergy.app \
 	  Start-CM-Synergy.applescript
-	cp -f Start-CM-Synergy.icns /Applications/Programming/Start-CM-Synergy.app/Contents/Resources/applet.icns
-	touch /Applications/Programming/Start-CM-Synergy.app/Contents/Info.plist
-
-/Applications/Internet/vpn-connect.app: vpn-connect.applescript vpn-connect.icns
-	-rm -rf /Applications/Internet/vpn-connect.app
-	mkdir -p /Applications/Internet
-	osacompile -o /Applications/Internet/vpn-connect.app \
-	  vpn-connect.applescript
-	cp -f vpn-connect.icns /Applications/Internet/vpn-connect.app/Contents/Resources/applet.icns
-	touch /Applications/Internet/vpn-connect.app/Contents/Info.plist
-
-/usr/local/bin/vpn-connect.sh: vpn-connect.sh
-	cp -f $< $@
-	chmod a+rx $@
+	cp -f Start-CM-Synergy.icns \
+	  /Applications/Start-CM-Synergy.app/Contents/Resources/applet.icns
+	touch /Applications/Start-CM-Synergy.app/Contents/Info.plist
 
 /etc/smb.conf: smb.conf
 	cp -f $< $@
