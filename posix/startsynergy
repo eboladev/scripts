@@ -1,2 +1,2 @@
 #!/bin/sh
-ssh -CYfn `besthost` "xrdb -merge ~/.Xdefaults; nohup ccm start"
+ssh -CYfn `besthost` "xrdb -merge ~/.Xdefaults; nohup ccm start -m"
