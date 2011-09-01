@@ -14,7 +14,8 @@ TARGETS= \
 	/Library/LaunchAgents/com.macosxints.locchghook.plist \
 	/etc/smb.conf \
 	/Applications/Start-CM-Synergy.app \
-	/Applications/BuildTerm.app
+	/Applications/BuildTerm.app \
+	/Users/polster/.ssh/config
 
 DIRS = maczok marzipan
 
@@ -27,6 +28,13 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/Users/polster/.ssh/config: ssh-config-polster
+	mkdir -p /Users/polster/.ssh
+	cp ssh-config-polster /Users/polster/.ssh/config
+	chown -R polster:staff /Users/polster/.ssh
+	chmod 700 /Users/polster/.ssh
+	chmod 744 /Users/polster/.ssh/config
 
 /Applications/BuildTerm.app: BuildTerm.applescript BuildTerm.icns
 	-rm -rf /Applications/BuildTerm.app
