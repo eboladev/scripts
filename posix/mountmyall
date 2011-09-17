@@ -97,19 +97,20 @@ cd /tmp
 #   cifs polster cosmb001.europe.nokia.com apps        1     /apps \
 #   cifs polster cosmb001.europe.nokia.com groups      1     /groups \
 #   cifs polster common.europe.nokia.com   dsw         1     /groups/dsw \
+#   ssh  polster bovi-home                 bovi        1     /home/polster \
+#   dav  polster https://code.nokia.com    avalanche   0     /dav/Avalanche \
+#   ssh  polster 192.168.11.5              mimo        1     / \
 set -- \
-    ssh  polster bovi-home                 bovi        1     /home/polster \
     ssh  polster colsw01m.europe.nokia.com colsw01m    1     /home/polster \
     dav  polster https://pipacs.dyndns.org pipacs-dav  0     /dav \
     ssh  polster nolove                    nolove      1     /home/polster \
     cifs polster common.europe.nokia.com   projects    1     /projects \
     cifs polster common.europe.nokia.com   groups      1     /groups \
-    ssh  polster 192.168.11.5              mimo        1     / \
     cifs polster vagrp004.europe.nokia.com groups-5    1     /groups5 \
-    dav  polster https://code.nokia.com    avalanche   0     /dav/Avalanche \
-    hsmb polster 192.168.11.11             pixtor      1     /pixtor \
-    hsmb polster 192.168.11.11             maxtor      1     /maxtor \
+    ssh  polster maczok                    pixtor      1     /Volumes/pixtor \
+    ssh  polster maczok                    maxtor      1     /Volumes/maxtor \
     ssh  polster maczok                    basix       1     /Volumes/basix \
+    ssh  polster maczok                    64k         1     /Volumes/64k \
     hsmb polster maczok                    maczok      1     /polster \
 
 while test $# -ne 0; do
