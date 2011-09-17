@@ -27,6 +27,7 @@ TARGETS=\
 	/etc/samba/creds.polster \
 	/etc/samba/creds-home.polster \
 	/home/polster/etc/creds.polster \
+	/home/polster/etc/creds-home.polster \
 	/etc/samba/creds.tvixhd1 \
 	/home/polster/.xemacs/init.el \
 	/var/spool/cron/crontabs/polster \
@@ -103,7 +104,7 @@ preinstall:
 
 /home/polster/.hgrc: dot-hgrc /etc/secnok /etc/sechom
 	rm -f $@
-	sed s/secnok/`cat /etc/secnok` $< |
+	sed s/secnok/`cat /etc/secnok` $< | \
 	sed s/sechom/`cat /etc/sechom` > $@
 	chown -R polster:polster $@
 	chmod u+r,og-rw $@
@@ -410,8 +411,7 @@ preinstall:
 /home/polster/etc/creds.polster: creds.polster /etc/secnok /etc/sechom
 	mkdir -p /home/polster/etc
 	rm -f $@
-	sed s/secnok/`cat /etc/secnok`/g $< |
-	sed s/sechom/`cat /etc/sechom`/g > $@
+	sed s/secnok/`cat /etc/secnok`/g $< | sed s/sechom/`cat /etc/sechom`/g > $@
 	chown polster:polster $@
 	chmod og-rw $@
 
