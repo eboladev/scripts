@@ -10,12 +10,12 @@ TARGETS= \
 	/usr/local/bin/runterm \
 	/Users/polster/.hgrc \
 	/Users/polster/.netrc \
-	/Library/LaunchAgents/locchghook \
+	/usr/local/bin/locchghook \
 	/Library/LaunchAgents/com.macosxints.locchghook.plist \
 	/etc/smb.conf \
-	/usr/local/bin/vpn-connect.sh \
-	/Applications/Internet/vpn-connect.app \
-	/Applications/Programming/Start-CM-Synergy.app
+	/Applications/Start-CM-Synergy.app \
+	/Applications/BuildTerm.app \
+	/Users/polster/.ssh/config
 
 DIRS = maczok marzipan
 
@@ -29,25 +29,28 @@ preinstall:
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
 
-/Applications/Programming/Start-CM-Synergy.app: Start-CM-Synergy.applescript Start-CM-Synergy.icns
-	-rm -rf /Applications/Programming/Start-CM-Synergy.app
-	mkdir -p /Applications/Programming
-	osacompile -o /Applications/Programming/Start-CM-Synergy.app \
+/Users/polster/.ssh/config: ssh-config-polster
+	mkdir -p /Users/polster/.ssh
+	cp ssh-config-polster /Users/polster/.ssh/config
+	chown -R polster:staff /Users/polster/.ssh
+	chmod 700 /Users/polster/.ssh
+	chmod 744 /Users/polster/.ssh/config
+
+/Applications/BuildTerm.app: BuildTerm.applescript BuildTerm.icns
+	-rm -rf /Applications/BuildTerm.app
+	osacompile -o /Applications/BuildTerm.app \
+	  BuildTerm.applescript
+	cp -f BuildTerm.icns \
+	  /Applications/BuildTerm.app/Contents/Resources/applet.icns
+	touch /Applications/BuildTerm.app/Contents/Info.plist
+
+/Applications/Start-CM-Synergy.app: Start-CM-Synergy.applescript Start-CM-Synergy.icns
+	-rm -rf /Applications/Start-CM-Synergy.app
+	osacompile -o /Applications/Start-CM-Synergy.app \
 	  Start-CM-Synergy.applescript
-	cp -f Start-CM-Synergy.icns /Applications/Programming/Start-CM-Synergy.app/Contents/Resources/applet.icns
-	touch /Applications/Programming/Start-CM-Synergy.app/Contents/Info.plist
-
-/Applications/Internet/vpn-connect.app: vpn-connect.applescript vpn-connect.icns
-	-rm -rf /Applications/Internet/vpn-connect.app
-	mkdir -p /Applications/Internet
-	osacompile -o /Applications/Internet/vpn-connect.app \
-	  vpn-connect.applescript
-	cp -f vpn-connect.icns /Applications/Internet/vpn-connect.app/Contents/Resources/applet.icns
-	touch /Applications/Internet/vpn-connect.app/Contents/Info.plist
-
-/usr/local/bin/vpn-connect.sh: vpn-connect.sh
-	cp -f $< $@
-	chmod a+rx $@
+	cp -f Start-CM-Synergy.icns \
+	  /Applications/Start-CM-Synergy.app/Contents/Resources/applet.icns
+	touch /Applications/Start-CM-Synergy.app/Contents/Info.plist
 
 /etc/smb.conf: smb.conf
 	cp -f $< $@
@@ -55,14 +58,18 @@ preinstall:
 
 /Library/LaunchAgents/com.macosxints.locchghook.plist: com.macosxints.locchghook.plist
 	cp -f $< $@
+	chmod a+r $@
+	-launchctl unload $@
 	launchctl load $@
 
-/Library/LaunchAgents/locchghook: locchghook
+/usr/local/bin/locchghook: locchghook
 	cp -f $< $@
 	chmod a+rx $@
 
-/Users/polster/.netrc: netrc-polster
-	cp -f $< $@
+/Users/polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub
+	rm -f $@
+	sed s/secmaemo/`cat /etc/secmaemo`/g $< | \
+	sed s/secgithub/`cat /etc/secgithub`/g > $@
 	chown polster:staff $@
 	chmod og-rwx $@
 

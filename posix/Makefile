@@ -28,6 +28,7 @@ OTHERS=\
 	/usr/local/bin/besthost \
 	/usr/local/bin/startsynergy \
 	/usr/local/bin/exportmusic \
+	/usr/local/bin/buildterm \
 
 ONHOLD=\
 	crco \
@@ -50,6 +51,10 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+/usr/local/bin/buildterm: buildterm
+	cp -f $< $@
+	chmod a+rx $@
 
 /usr/local/bin/exportmusic: exportmusic
 	cp exportmusic /usr/local/bin

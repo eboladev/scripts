@@ -14,3 +14,6 @@ defaults write com.apple.iTunes full-window -1
 
 # Play movies automatically in QuickTime
 defaults write com.apple.QuickTimePlayerX MGPlayMovieOnOpen 1
+
+# Disable Resume for Preview.app
+defaults write com.apple.Preview NSQuitAlwaysKeepsWindows -bool false
