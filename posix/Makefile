@@ -29,6 +29,7 @@ OTHERS=\
 	/usr/local/bin/startsynergy \
 	/usr/local/bin/exportmusic \
 	/usr/local/bin/buildterm \
+	~polster/.gitignore-global
 
 ONHOLD=\
 	crco \
@@ -51,6 +52,11 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+~polster/.gitignore-global: dot-gitignore-global
+	cp -f $< $@
+	chown polster $@
+	su polster -c "git config --global core.excludesfile "$@
 
 /usr/local/bin/buildterm: buildterm
 	cp -f $< $@
