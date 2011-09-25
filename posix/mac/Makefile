@@ -15,7 +15,8 @@ TARGETS= \
 	/etc/smb.conf \
 	/Applications/Start-CM-Synergy.app \
 	/Applications/BuildTerm.app \
-	/Users/polster/.ssh/config
+	/Users/polster/.ssh/config \
+	/etc/profile.d/aquaterm.sh
 
 DIRS = maczok marzipan
 
@@ -28,6 +29,11 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/etc/profile.d/aquaterm.sh: aquaterm.sh
+	mkdir -p /etc/profile.d
+	cp -f $< $@
+	chmod a+rx $@
 
 /Users/polster/.ssh/config: ssh-config-polster
 	mkdir -p /Users/polster/.ssh
