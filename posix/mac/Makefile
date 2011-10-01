@@ -16,7 +16,8 @@ TARGETS= \
 	/Applications/Start-CM-Synergy.app \
 	/Applications/BuildTerm.app \
 	/Users/polster/.ssh/config \
-	/etc/profile.d/aquaterm.sh
+	/etc/profile.d/aquaterm.sh \
+	/usr/local/bin/ssh-askpass-mac
 
 DIRS = maczok marzipan
 
@@ -29,6 +30,11 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/usr/local/bin/ssh-askpass-mac: ssh-askpass-mac
+	mkdir -p /usr/local/bin
+	cp -f $< $@
+	chmod a+rx $@
 
 /etc/profile.d/aquaterm.sh: aquaterm.sh
 	mkdir -p /etc/profile.d
