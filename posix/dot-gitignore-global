@@ -9,7 +9,7 @@
 # OS generated files
 .DS_Store?
 ehthumbs.db
-Icon?
+# Icon?
 Thumbs.db
 
 # Qt Creator user configuration
