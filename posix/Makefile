@@ -29,7 +29,8 @@ OTHERS=\
 	/usr/local/bin/startsynergy \
 	/usr/local/bin/exportmusic \
 	/usr/local/bin/buildterm \
-	~polster/.gitignore-global
+	~polster/.gitignore-global \
+	/usr/local/bin/findnokiaperson
 
 ONHOLD=\
 	crco \
@@ -52,6 +53,10 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+/usr/local/bin/findnokiaperson: findnokiaperson
+	cp -f $< $@
+	chmod a+rx $@
 
 ~polster/.gitignore-global: dot-gitignore-global
 	cp -f $< $@
