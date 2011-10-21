@@ -30,7 +30,8 @@ OTHERS=\
 	/usr/local/bin/exportmusic \
 	/usr/local/bin/buildterm \
 	~polster/.gitignore-global \
-	/usr/local/bin/findnokiaperson
+	/usr/local/bin/findnokiaperson \
+	/usr/local/bin/bin2c
 
 ONHOLD=\
 	crco \
@@ -53,6 +54,10 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+/usr/local/bin/bin2c: bin2c
+	cp -f $< $@
+	chmod a+rx $@
 
 /usr/local/bin/findnokiaperson: findnokiaperson
 	cp -f $< $@
