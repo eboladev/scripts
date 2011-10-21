@@ -1,0 +1,6 @@
+#!/bin/sh
+# Convert any input to C array
+od -v -t u1 | \
+awk 'BEGIN {printf "byte8 data[] = {\n"}
+{for (i=2;i<=NF;i++) printf("%s,", $i); if (line++ % 2) printf("\n")}
+END {printf("};\n")}'
