@@ -33,10 +33,10 @@ for artistDir in $src/*; do
         if [ ! -d "$albumDir" ]; then
             continue
         fi
-        if [ -f "$albumDir"/export ]; then
-            lossless=0
-        elif [ -f "$albumDir"/export-alac ]; then
+        if [ -f "$albumDir"/export-alac ]; then
             lossless=1
+        elif [ -f "$albumDir"/export ]; then
+            lossless=0
         else
             continue
         fi
