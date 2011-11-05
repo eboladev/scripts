@@ -125,20 +125,45 @@ for artistDir in $src/*; do
              fi
         done
 
-        # Convert oggs to mp3s
+        # Convert oggs to mp3s or m4as
         ls "$albumDir"/*.ogg 2>/dev/null | \
-        while read srcFile; do
-            if [ ! -f "$srcFile" ]; then
+        while read oggFile; do
+            if [ ! -f "$oggFile" ]; then
                 continue
             fi
-            mp3File=`basename "$srcFile"`
-            mp3File=${mp3File%%.ogg}.mp3
-            if [ -f "$dstDir"/"$mp3File" ]; then
-                continue
+            title=`basename "$oggFile"`
+            title=${title%%.ogg}
+            mp3File="$title".mp3
+            alacFile="$title".m4a
+            trackNo=`echo "$title"|awk '{print int("1" $1)-100}' 2>/dev/null`
+            if [ $lossless = 0 ]; then
+                if [ -f "$dstDir"/"$mp3File" ]; then
+                    continue
+                fi
+                echo "$oggFile -> $dstDir/$mp3File"
+                rm -f "$dstDir"/"$alacFile" "dstDir/$title.ogg"
+                oggdec --quiet -o /tmp/x.wav "$oggFile"
+                lame --preset extreme -S --tt "$title" --ta "$artist" \
+                    --tn "$trackNo" --tl "$album" \
+                    /tmp/x.wav "$dstDir"/"$mp3File" >/dev/null 2>&1
+                rm -f /tmp/x.wav
+            else
+                if [ -f "$dstDir"/"$alacFile" ]; then
+                    continue
+                fi
+                echo "$oggFile -> $dstDir/$alacFile"
+                rm -f "$dstDir"/"$mp3File" "$dstDir"/"$title.ogg"
+                oggdec --quiet -o /tmp/x.wav "$oggFile"
+                ffmpeg -i /tmp/x.wav -acodec alac \
+                    -v 0 \
+                    -metadata title="$title" \
+                    -metadata author="$artist" \
+                    -metadata album_artist="$artist" \
+                    -metadata album="$album" \
+                    -metadata track="$track" \
+                    "$dstDir"/"$alacFile" </dev/null 2>/dev/null
+                rm -f /tmp/x.wav
             fi
-            echo "$srcFile -> $dstDir/$mp3File"
-            cp -f "$srcFile" "$dstDir"
-            ogg2mp3 -v 0 -q 2 -d "$dstDir"/*.ogg
         done
 
         # Copy mp3s
