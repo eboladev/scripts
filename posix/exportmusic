@@ -92,18 +92,37 @@ for artistDir in $src/*; do
             if [ ! -f "$wavFile" ]; then
                 continue
             fi
-            track=`basename "$wavFile"`
-            track=${track%%.wav}
-            mp3File="$track".mp3
+            title=`basename "$wavFile"`
+            title=${title%%.wav}
+            mp3File="$title".mp3
             alacFile="$title".m4a
-            if [ -f "$dstDir"/"$mp3File" ]; then
-                continue
-            fi
-            echo "$wavFile -> $dstDir/$mp3File"
-            trackNo=`echo "$track"|awk '{print int("1" $1)-100}' 2>/dev/null`
-            lame --preset extreme -S --tt "$track" --ta "$artist" \
-                --tn "$trackNo" --tl "$album" \
-                "$wavFile" "$dstDir"/"$mp3File" >/dev/null 2>&1
+            trackNo=`echo "$title"|awk '{print int("1" $1)-100}' 2>/dev/null`
+            if [ $lossless = 0 ]; then
+                if [ -f "$dstDir"/"$mp3File" ]; then
+                    continue
+                fi
+                echo "$wavFile -> $dstDir/$mp3File"
+                rm -f "$dstDir"/"$alacFile"
+                lame --preset extreme -S --tt "$title" --ta "$artist" \
+                    --tn "$trackNo" --tl "$album" \
+                    "$wavFile" "$dstDir"/"$mp3File" >/dev/null 2>&1
+             else
+                if [ -f "$dstDir"/"$alacFile" ]; then
+                    continue
+                fi
+                echo "$wavFile -> $dstDir/$alacFile"
+                rm -f "$dstDir"/"$mp3File"
+                flac --totally-silent -o /tmp/x.wav -c -d "$flacFile"
+                ffmpeg -i "$wavFile" -acodec alac \
+                    -v 0 \
+                    -metadata title="$title" \
+                    -metadata author="$artist" \
+                    -metadata album_artist="$artist" \
+                    -metadata album="$album" \
+                    -metadata track="$track" \
+                    "$dstDir"/"$alacFile" </dev/null 2>/dev/null
+                :
+             fi
         done
 
         # Convert oggs to mp3s
