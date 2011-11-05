@@ -45,7 +45,7 @@ for artistDir in $src/*; do
         dstDir="$dst"/"$artist"/"$album"
         mkdir -p "$dstDir"
 
-        # Convert flacs to mp3s
+        # Convert flacs to mp3s or m4as
         track=0
         ls "$albumDir"/*.flac 2>/dev/null | \
         while read flacFile; do
@@ -55,22 +55,24 @@ for artistDir in $src/*; do
             fi
             title=`basename "$flacFile"`
             title=${title%%.flac}
+            mp3File="$title".mp3
+            alacFile="$title".m4a
             if [ $lossless = 0 ]; then
-                mp3File="$title".mp3
                 if [ -f "$dstDir"/"$mp3File" ]; then
                     continue
                 fi
                 echo "$flacFile -> $dstDir/$mp3File"
+                rm -f "$dstDir"/"$alacFile"
                 flac --totally-silent -c -d "$flacFile" | \
                 lame --preset extreme -S --tt "$title" --ta "$artist" \
                     --tl "$album" --tn "$track" - "$dstDir"/"$mp3File" \
                     >/dev/null 2>&1
             else
-                alacFile="$title".m4a
                 if [ -f "$dstDir"/"$alacFile" ]; then
                     continue
                 fi
                 echo "$flacFile -> $dstDir/$alacFile"
+                rm -f "$dstDir"/"$mp3File"
                 flac --totally-silent -o /tmp/x.wav -c -d "$flacFile"
                 ffmpeg -i /tmp/x.wav -acodec alac \
                     -v 0 \
@@ -84,7 +86,7 @@ for artistDir in $src/*; do
             fi
         done
 
-        # Convert wavs to mp3s
+        # Convert wavs to mp3s or m4as
         ls "$albumDir"/*.wav 2>/dev/null | \
         while read wavFile; do
             if [ ! -f "$wavFile" ]; then
@@ -93,6 +95,7 @@ for artistDir in $src/*; do
             track=`basename "$wavFile"`
             track=${track%%.wav}
             mp3File="$track".mp3
+            alacFile="$title".m4a
             if [ -f "$dstDir"/"$mp3File" ]; then
                 continue
             fi
