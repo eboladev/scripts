@@ -215,7 +215,7 @@ install: preinstall $(OTHERS)
 	cp -f runkvt /usr/local/bin; chmod a+x /usr/local/bin/runkvt
 
 preinstall: 
-	@if [ `id -un` != "root" ]; then echo "Run make as root"; exit 1; fi
+	@if sh -c ../checknonroot; then echo "Run make as root"; exit 1; fi
 	@if [ `uname` != "Linux" -a `uname` != "Darwin" ]; then \
 	  echo "Can't install this on non-Posix systems"; \
 	  exit 1; \
