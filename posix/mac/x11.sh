@@ -1,0 +1,2 @@
+PATH=/usr/X11/bin:$PATH
+MANPATH=/usr/X11/man:$MANPATH
