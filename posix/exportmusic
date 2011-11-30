@@ -3,6 +3,99 @@
 # Export music directories marked with "export" to MP3, "export-alac" to 
 # ALAC M4A
 
+export() {
+    ext="$1"
+    srcFile="$2"
+
+    title=`basename "$srcFile"`
+    title=${title%%.$ext}
+    mp3File="$title".mp3
+    alacFile="$title".m4a
+
+    if [ $lossless = 0 ]; then
+        if [ -f "$dstDir"/"$mp3File" ]; then
+            continue
+        fi
+        echo "$srcFile -> $dstDir/$mp3File"
+        rm -f "$dstDir"/"$alacFile"
+        export$ext "$srcFile" "$dstDir"/"$mp3File"
+    else
+        if [ -f "$dstDir"/"$alacFile" ]; then
+            continue
+        fi
+        echo "$srcFile -> $dstDir/$alacFile"
+        rm -f "$dstDir"/"$mp3File"
+        export$ext "$srcFile" "$dstDir"/"$alacFile"
+    fi
+}
+
+exportflac() {
+    srcFile="$1"
+    dstFile="$2"
+    if [ $lossless = 0 ]; then
+        flac --totally-silent -c -d "$srcFile" | \
+        lame --preset extreme -S --tt "$title" --ta "$artist" \
+            --tl "$album" --tn "$trackNo" - "$dstFile" \
+            >/dev/null 2>&1
+    else
+        flac --totally-silent -o /tmp/x.wav -c -d "$srcFile"
+        ffmpeg -i /tmp/x.wav -acodec alac \
+            -v 0 \
+            -metadata title="$title" \
+            -metadata author="$artist" \
+            -metadata album_artist="$artist" \
+            -metadata album="$album" \
+            -metadata track="$trackNo" \
+            "$dstFile" </dev/null 2>/dev/null
+        rm -f /tmp/x.wav
+    fi
+}
+
+exportmp3() {
+    srcFile="$1"
+    dstFile="$2"
+    cp -f "$srcFile" "$dstFile"
+}
+
+exportwav() {
+    srcFile="$1"
+    dstFile="$2"
+    if [ $lossless = 0 ]; then
+        lame --preset extreme -S --tt "$title" --ta "$artist" \
+            --tn "$trackNo" --tl "$album" \
+            "$srcFile" "$dstFile" >/dev/null 2>&1
+    else
+        ffmpeg -i "$srcFile" -acodec alac -v 0 \
+            -metadata title="$title" \
+            -metadata author="$artist" \
+            -metadata album_artist="$artist" \
+            -metadata album="$album" \
+            -metadata track="$trackNo" \
+            "$dstFile" </dev/null 2>/dev/null
+    fi
+}
+
+exportogg() {
+    srcFile="$1"
+    dstFile="$2"
+    oggdec --quiet -o /tmp/x.wav "$srcFile"
+    if [ $lossless = 0 ]; then
+        lame --preset extreme -S --tt "$title" --ta "$artist" \
+            --tn "$trackNo" --tl "$album" \
+            /tmp/x.wav "$dstFile" >/dev/null 2>&1
+        rm -f /tmp/x.wav
+    else
+        ffmpeg -i /tmp/x.wav -acodec alac -v 0 \
+            -metadata title="$title" \
+            -metadata author="$artist" \
+            -metadata album_artist="$artist" \
+            -metadata album="$album" \
+            -metadata track="$trackNo" \
+            "$dstFile" </dev/null 2>/dev/null
+    fi
+    rm -f /tmp/x.wav
+}
+
 if [ "$1" == "-v" ]; then
     set -x
     shift
@@ -16,6 +109,7 @@ fi
 src="$1"
 dst="$2"
 lock=~/.exportmusic.lock
+export artist album title trackNo lossless
 
 lockfile -r 0 "$lock" || exit 1
 trap "rm -f $lock; exit" INT TERM EXIT
@@ -33,10 +127,10 @@ for artistDir in $src/*; do
         if [ ! -d "$albumDir" ]; then
             continue
         fi
-        if [ -f "$albumDir"/export ]; then
-            lossless=0
-        elif [ -f "$albumDir"/export-alac ]; then
+        if [ -f "$albumDir"/export-alac ]; then
             lossless=1
+        elif [ -f "$albumDir"/export ]; then
+            lossless=0
         else
             continue
         fi
@@ -45,92 +139,36 @@ for artistDir in $src/*; do
         dstDir="$dst"/"$artist"/"$album"
         mkdir -p "$dstDir"
 
-        # Convert flacs to mp3s
-        track=0
+        # Convert flacs
+        trackNo=0
         ls "$albumDir"/*.flac 2>/dev/null | \
-        while read flacFile; do
-            track=`expr $track + 1`
-            if [ ! -f "$flacFile" ]; then
-                continue
-            fi
-            title=`basename "$flacFile"`
-            title=${title%%.flac}
-            if [ $lossless = 0 ]; then
-                mp3File="$title".mp3
-                if [ -f "$dstDir"/"$mp3File" ]; then
-                    continue
-                fi
-                echo "$flacFile -> $dstDir/$mp3File"
-                flac --totally-silent -c -d "$flacFile" | \
-                lame --preset extreme -S --tt "$title" --ta "$artist" \
-                    --tl "$album" --tn "$track" - "$dstDir"/"$mp3File" \
-                    >/dev/null 2>&1
-            else
-                alacFile="$title".m4a
-                if [ -f "$dstDir"/"$alacFile" ]; then
-                    continue
-                fi
-                echo "$flacFile -> $dstDir/$alacFile"
-                flac --totally-silent -o /tmp/x.wav -c -d "$flacFile"
-                ffmpeg -i /tmp/x.wav -acodec alac \
-                    -v 0 \
-                    -metadata title="$title" \
-                    -metadata author="$artist" \
-                    -metadata album_artist="$artist" \
-                    -metadata album="$album" \
-                    -metadata track="$track" \
-                    "$dstDir"/"$alacFile" </dev/null 2>/dev/null
-                rm -f /tmp/x.wav
-            fi
+        while read srcFile; do
+            trackNo=`expr $trackNo + 1`
+            export flac "$srcFile"
         done
 
-        # Convert wavs to mp3s
+        # Convert wavs
+        trackNo=0
         ls "$albumDir"/*.wav 2>/dev/null | \
-        while read wavFile; do
-            if [ ! -f "$wavFile" ]; then
-                continue
-            fi
-            track=`basename "$wavFile"`
-            track=${track%%.wav}
-            mp3File="$track".mp3
-            if [ -f "$dstDir"/"$mp3File" ]; then
-                continue
-            fi
-            echo "$wavFile -> $dstDir/$mp3File"
-            trackNo=`echo "$track"|awk '{print int("1" $1)-100}' 2>/dev/null`
-            lame --preset extreme -S --tt "$track" --ta "$artist" \
-                --tn "$trackNo" --tl "$album" \
-                "$wavFile" "$dstDir"/"$mp3File" >/dev/null 2>&1
+        while read srcFile; do
+            trackNo=`expr $trackNo + 1`
+            export wav "$srcFile"
         done
 
-        # Convert oggs to mp3s
+        # Convert oggs
+        trackNo=0
         ls "$albumDir"/*.ogg 2>/dev/null | \
         while read srcFile; do
-            if [ ! -f "$srcFile" ]; then
-                continue
-            fi
-            mp3File=`basename "$srcFile"`
-            mp3File=${mp3File%%.ogg}.mp3
-            if [ -f "$dstDir"/"$mp3File" ]; then
-                continue
-            fi
-            echo "$srcFile -> $dstDir/$mp3File"
-            cp -f "$srcFile" "$dstDir"
-            ogg2mp3 -v 0 -q 2 -d "$dstDir"/*.ogg
+            trackNo=`expr $trackNo + 1`
+            export ogg "$srcFile"
         done
 
-        # Copy mp3s
+        # Convert mp3s
+        trackNo=0
         ls "$albumDir"/*.mp3 2>/dev/null | \
         while read srcFile; do
-            if [ ! -f "$srcFile" ]; then
-                continue
-            fi
-            mp3File=`basename "$srcFile"`
-            if [ -f "$dstDir"/"$mp3File" ]; then
-                continue
-            fi
-            echo "$srcFile -> $dstDir/$mp3File"
-            cp -f "$srcFile" "$dstDir"
+            trackNo=`expr $trackNo + 1`
+            export mp3 "$srcFile"
         done
     done
 done

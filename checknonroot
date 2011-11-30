@@ -1,0 +1,6 @@
+#/bin/sh
+[ `id -un` = "root" ] && exit 1
+case "$`groups`" in
+    *[aA]dministrators*) exit 1;
+esac
+exit 0
