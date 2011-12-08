@@ -31,7 +31,8 @@ OTHERS=\
 	/usr/local/bin/buildterm \
 	~polster/.gitignore-global \
 	/usr/local/bin/findnokiaperson \
-	/usr/local/bin/bin2c
+	/usr/local/bin/bin2c \
+	~polster/.vimrc
 
 ONHOLD=\
 	crco \
@@ -54,6 +55,10 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+~polster/.vimrc: dot-vimrc
+	cp -f $< $@
+	chown polster $@
 
 /usr/local/bin/bin2c: bin2c
 	cp -f $< $@
@@ -215,6 +220,7 @@ install: preinstall $(OTHERS)
 	cp -f runkvt /usr/local/bin; chmod a+x /usr/local/bin/runkvt
 
 preinstall: 
+	@chmod a+rx ../checknonroot
 	@if sh -c ../checknonroot; then echo "Run make as root"; exit 1; fi
 	@if [ `uname` != "Linux" -a `uname` != "Darwin" ]; then \
 	  echo "Can't install this on non-Posix systems"; \
