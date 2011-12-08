@@ -32,7 +32,8 @@ OTHERS=\
 	~polster/.gitignore-global \
 	/usr/local/bin/findnokiaperson \
 	/usr/local/bin/bin2c \
-	~polster/.vimrc
+	~polster/.vimrc \
+	~polster/.vim/colors/wombat.vim
 
 ONHOLD=\
 	crco \
@@ -55,6 +56,11 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+~polster/.vim/colors/wombat.vim: wombat.vim
+	mkdir -p ~polster/.vim/colors
+	cp -f $< $@
+	chown -R polster ~polster/.vim
 
 ~polster/.vimrc: dot-vimrc
 	cp -f $< $@
