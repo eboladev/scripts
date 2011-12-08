@@ -19,3 +19,5 @@ set shiftwidth=4
 set showcmd
 set smartindent
 set tabstop=4
+
+set tags+=~/.vim/tags/harmattan
