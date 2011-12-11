@@ -23,7 +23,6 @@ OTHERS=\
 	/etc/vpnc/vpnc-aruba.conf \
 	/etc/davfs2/davfs2.conf \
 	/etc/davfs2/secrets \
-	/usr/local/bin/sys \
 	/usr/local/bin/gmail-mailto \
 	/usr/local/bin/besthost \
 	/usr/local/bin/startsynergy \
@@ -98,10 +97,6 @@ install: preinstall $(OTHERS)
 /usr/local/bin/gmail-mailto: gmail-mailto
 	cp -f gmail-mailto $@
 	chmod a+rx $@
-
-/usr/local/bin/sys: /usr/bin/sudo
-	rm -f /usr/local/bin/sys
-	ln -s /usr/bin/sudo /usr/local/bin/sys
 
 /etc/davfs2/secrets: secrets /etc/secnok /etc/sechom
 	mkdir -p /etc/davfs2
@@ -228,7 +223,7 @@ install: preinstall $(OTHERS)
 preinstall: 
 	@chmod a+rx ../checknonroot
 	@if sh -c ../checknonroot; then echo "Run make as root"; exit 1; fi
-	@if [ `uname` != "Linux" -a `uname` != "Darwin" ]; then \
+	@if [ `uname` != "Linux" -a `uname` != "Darwin" -a `uname -o` != "Cygwin" ]; then \
 	  echo "Can't install this on non-Posix systems"; \
 	  exit 1; \
 	fi
