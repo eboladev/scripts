@@ -5,20 +5,27 @@ syntax on
 colorscheme wombat
 helptags $HOME/.vim/doc/
 set backupdir=$HOME/backup
-set autoindent
 set autoread
 set autowrite
-set backspace=indent,eol,start
 set browsedir=current
 set complete+=k
 set history=200
-set hlsearch
-set incsearch
 set mouse=a
 set ruler
-set shiftwidth=4
-set showcmd
-set smartindent
-set tabstop=4
+set showcmd						" Display incomplete commands
+set encoding=utf-8
 
+"" Whitespace
+set autoindent
+set shiftwidth=4
+set tabstop=4
+set smartindent
+
+"" Searching
+set hlsearch					" Highlight matches
+set incsearch					" Incremental searching
+set ignorecase					" Cases insensitive searching
+set smartcase					" Unless key has capital letters
+
+"" Tag files
 set tags+=~/.vim/tags/harmattan
