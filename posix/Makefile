@@ -62,6 +62,8 @@ install: preinstall $(OTHERS)
 	chown -R polster ~polster/.vim
 
 ~polster/.vimrc: dot-vimrc
+	mkdir -p ~polster/.vim/doc
+	touch ~polster/.vim/doc/empty
 	cp -f $< $@
 	chown polster $@
 
