@@ -1,3 +1,6 @@
 Host *
-ControlMaster auto
-ControlPath /tmp/%r@%h:%p
+	ControlMaster auto
+	ControlPath /tmp/%r@%h:%p
+Host 192.168.11.*
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
