@@ -225,7 +225,7 @@ install: preinstall $(OTHERS)
 preinstall: 
 	@chmod a+rx ../checknonroot
 	@if sh -c ../checknonroot; then echo "Run make as root"; exit 1; fi
-	@if [ `uname` != "Linux" -a `uname` != "Darwin" -a `uname -o` != "Cygwin" ]; then \
+	@if [ `uname` != "Linux" -a `uname` != "Darwin" -a `uname -s` != "Cygwin" ]; then \
 	  echo "Can't install this on non-Posix systems"; \
 	  exit 1; \
 	fi
