@@ -1,3 +1,6 @@
 machine vcs.maemo.org
 login pipacs
 password secmaemo
+machine ftp.millionmoves.com
+login millionmoves.com
+password secmillionmoves
