@@ -84,34 +84,48 @@ davMount()
     esac
 }
 
+ftpMount()
+{
+	case "$osName" in
+	Darwin)
+		uid=`id -u $user`
+		chown $user $mnt/$name
+		su $user -c "curlftpfs -oui=$uid ftp://$host/ $mnt/$name"
+		;;
+	*)
+		;;
+	esac
+}
+
 mkdir -p $lockDir
 lockfile -r 0 "$lock" || exit 0
 trap "rm -f $lock; exit" INT TERM EXIT
 cd /tmp
 
-#   Type User    Host                      Mount point Ping? Source dir/share
-#   ssh  polster pipacs.dyndns.org         pipacs      1     /home/polster \
-#   cifs tvixhd1 soap                      tvixhd1     1     /tvixhd1 \
-#   cifs polster vagrp011.europe.nokia.com groups5     1     /groups5 \
-#   ssh  polster colsw01m.europe.nokia.com nokia       1     /nokia \
-#   cifs polster cosmb001.europe.nokia.com apps        1     /apps \
-#   cifs polster cosmb001.europe.nokia.com groups      1     /groups \
-#   cifs polster common.europe.nokia.com   dsw         1     /groups/dsw \
-#   ssh  polster bovi-home                 bovi        1     /home/polster \
-#   dav  polster https://code.nokia.com    avalanche   0     /dav/Avalanche \
-#   ssh  polster 192.168.11.5              mimo        1     / \
+#   Type User    Host                      Mount pt   Ping? Source dir/share
+#   ssh  polster pipacs.dyndns.org         pipacs     1     /home/polster \
+#   cifs tvixhd1 soap                      tvixhd1    1     /tvixhd1 \
+#   cifs polster vagrp011.europe.nokia.com groups5    1     /groups5 \
+#   ssh  polster colsw01m.europe.nokia.com nokia      1     /nokia \
+#   cifs polster cosmb001.europe.nokia.com apps       1     /apps \
+#   cifs polster cosmb001.europe.nokia.com groups     1     /groups \
+#   cifs polster common.europe.nokia.com   dsw        1     /groups/dsw \
+#   ssh  polster bovi-home                 bovi       1     /home/polster \
+#   dav  polster https://code.nokia.com    avalanche  0     /dav/Avalanche \
+#   ssh  polster 192.168.11.5              mimo       1     / \
 set -- \
-    ssh  polster colsw01m.europe.nokia.com colsw01m    1     /home/polster \
-    dav  polster https://pipacs.dyndns.org pipacs-dav  0     /dav \
-    ssh  polster nolove                    nolove      1     /home/polster \
-    cifs polster common.europe.nokia.com   projects    1     /projects \
-    cifs polster common.europe.nokia.com   groups      1     /groups \
-    cifs polster vagrp004.europe.nokia.com groups-5    1     /groups5 \
-    ssh  polster maczok                    pixtor      1     /Volumes/pixtor \
-    ssh  polster maczok                    maxtor      1     /Volumes/maxtor \
-    ssh  polster maczok                    basix       1     /Volumes/basix \
-    ssh  polster maczok                    64k         1     /Volumes/64k \
-    hsmb polster maczok                    maczok      1     /polster \
+    ssh  polster colsw01m.europe.nokia.com colsw01m   1 /home/polster \
+    dav  polster https://pipacs.dyndns.org pipacs-dav 0 /dav \
+    ssh  polster nolove                    nolove     1 /home/polster \
+    cifs polster common.europe.nokia.com   projects   1 /projects \
+    cifs polster common.europe.nokia.com   groups     1 /groups \
+    cifs polster vagrp004.europe.nokia.com groups-5   1 /groups5 \
+    ssh  polster maczok                    pixtor     1 /Volumes/pixtor \
+    ssh  polster maczok                    maxtor     1 /Volumes/maxtor \
+    ssh  polster maczok                    basix      1 /Volumes/basix \
+    ssh  polster maczok                    64k        1 /Volumes/64k \
+    hsmb polster maczok                    maczok     1 /polster \
+	ftp  polster ftp.millionmoves.com      ftp.millionmoves.com 0 . \
 
 while test $# -ne 0; do
     fsType=$1
@@ -138,6 +152,7 @@ while test $# -ne 0; do
         cifs) cifsMount;;
         dav)  davMount;;
         hsmb) hsmbMount;;
+	    ftp)  ftpMount;;
         *)    false;;
         esac
     )
