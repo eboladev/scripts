@@ -2,6 +2,7 @@ TARGETS= \
 	/var/at/tabs/polster \
 	/Users/polster/.bash_profile \
 	/var/at/tabs/root \
+	/Users/polster/Documents/defaultzoom.css
 
 install: preinstall $(TARGETS)
 
@@ -11,6 +12,10 @@ preinstall:
 		maczok*)	;; \
 		*)		echo "Run this on maczok"; exit 1;; \
 	esac
+
+/Users/polster/Documents/defaultzoom.css: defaultzoom.css
+	cp -f $< $@
+	chown polster $@
 
 /var/at/tabs/root: crontab.root
 	crontab crontab.root
