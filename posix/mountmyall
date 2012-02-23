@@ -34,6 +34,7 @@ hsmbMount()
     case "$osName" in
     Darwin)
         chown $user $mnt/$name
+		rmdir $mnt/$name >/dev/null 2>&1
         su $user -c "mount_smbfs -N //$user@$host$dir $mnt/$name"
         ;;
     *)
@@ -48,6 +49,8 @@ cifsMount()
     # Mount CIFS share in user domain $domain
     case "$osName" in
     Darwin)
+		rmdir $mnt/$name >/dev/null 2>&1
+		mkdir $mnt/$name >/dev/null 2>&1
         chown $user $mnt/$name
         su $user -c "mount_smbfs -N //$domain\;$user@$host$dir $mnt/$name"
         ;;
@@ -62,6 +65,7 @@ sshMount()
 {
     case "$osName" in
     Darwin) 
+		rmdir $mnt/$name >/dev/null 2>&1
         sshfs "$user@$host:$dir" \
             "$mnt/$name" "$sshOptions,uid=`id -u $user`,volname=$name"
         ;;
@@ -75,6 +79,7 @@ davMount()
 {
     case "$osName" in
     Darwin)
+		# rmdir $mnt/$name >/dev/null 2>&1
         # mount_webdav -a10 $host$dir $mnt/$name
         false
         ;;
@@ -89,6 +94,8 @@ ftpMount()
 	case "$osName" in
 	Darwin)
 		uid=`id -u $user`
+		rmdir $mnt/$name >/dev/null 2>&1
+		mkdir $mnt/$name >/dev/null 2>&1
 		chown $user $mnt/$name
 		su $user -c "curlftpfs -oui=$uid ftp://$host/ $mnt/$name"
 		;;
