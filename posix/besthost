@@ -1,5 +1,5 @@
 #!/bin/sh
-host=`ssh colsw01m.europe.nokia.com cat /nokia/co_nmp/groups/gti/share/environment/var/besthost.general`
+host=`ssh colsw02m.europe.nokia.com cat /nokia/co_nmp/groups/gti/share/environment/var/besthost.general`
 case "$host" in
 *nokia.com) ;;
 *) host="$host".europe.nokia.com ;;
