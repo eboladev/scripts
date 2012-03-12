@@ -57,15 +57,15 @@ install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
 
 ~polster/.vim/colors/wombat.vim: wombat.vim
-	mkdir -p ~polster/.vim/colors
-	cp -f $< $@
-	chown -R polster ~polster/.vim
+	-mkdir -p ~polster/.vim/colors
+	-cp -f $< $@
+	-chown -R polster ~polster/.vim
 
 ~polster/.vimrc: dot-vimrc
-	mkdir -p ~polster/.vim/doc
-	touch ~polster/.vim/doc/empty
-	cp -f $< $@
-	chown polster $@
+	-mkdir -p ~polster/.vim/doc
+	-touch ~polster/.vim/doc/empty
+	-cp -f $< $@
+	-chown polster $@
 
 /usr/local/bin/bin2c: bin2c
 	cp -f $< $@
@@ -76,9 +76,9 @@ install: preinstall $(OTHERS)
 	chmod a+rx $@
 
 ~polster/.gitignore-global: dot-gitignore-global
-	cp -f $< $@
-	chown polster $@
-	su polster -c "git config --global core.excludesfile "$@
+	-cp -f $< $@
+	-chown polster $@
+	-su polster -c "git config --global core.excludesfile "$@
 
 /usr/local/bin/buildterm: buildterm
 	cp -f $< $@
@@ -225,9 +225,9 @@ install: preinstall $(OTHERS)
 preinstall: 
 	@chmod a+rx ../checknonroot
 	@if sh -c ../checknonroot; then echo "Run make as root"; exit 1; fi
-	@if [ `uname` != "Linux" -a `uname` != "Darwin" -a `uname -s` != "Cygwin" ]; then \
-	  echo "Can't install this on non-Posix systems"; \
-	  exit 1; \
-	fi
+	@case "`uname -s`" in \
+	  Linux|Darwin|Cygwin|CYGWIN*) ;; \
+	  *) echo "Can't install on non-Posix system"; exit 1;; \
+	esac
 	mkdir -p /usr/local/bin
 	chmod a+rx /usr/local/bin
