@@ -4,3 +4,6 @@ password secmaemo
 machine ftp.millionmoves.com
 login millionmoves.com
 password secmillionmoves
+machine github.com
+login pipacs
+password secgithub
