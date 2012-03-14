@@ -19,7 +19,6 @@ TARGETS= \
 	/etc/profile.d/aquaterm.sh \
 	/usr/local/bin/ssh-askpass-mac \
 	/etc/profile.d/x11.sh \
-	/etc/profile.d/xcode.sh
 
 DIRS = maczok marzipan
 
@@ -32,10 +31,6 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
-
-/etc/profile.d/xcode.sh: xcode.sh
-	cp -f $< $@
-	chmod a+rx $@
 
 /etc/profile.d/x11.sh: x11.sh
 	cp -f $< $@
@@ -88,7 +83,7 @@ preinstall:
 	cp -f $< $@
 	chmod a+rx $@
 
-/Users/polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub
+/Users/polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub /etc/secmillionmoves
 	rm -f $@
 	sed s/secmaemo/`cat /etc/secmaemo`/g $< | \
 	sed s/secgithub/`cat /etc/secgithub`/g | \
