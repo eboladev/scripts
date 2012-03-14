@@ -1,15 +1,10 @@
 #! /bin/sh  
 
-#
-# An SSH_ASKPASS command for MacOS X
-#
-# Author: Joseph Mocker, Sun Microsystems  
-
+# An SSH_ASKPASS command for MacOS X, with minor modifications to macos-askpass
+# by Joseph Mocker, Sun Microsystems.
 #
 # To use this script:
-#     setenv SSH_ASKPASS "macos-askpass"
-#     setenv DISPLAY ":0"
-#  
+#     setenv SSH_ASKPASS "ssh-askpass-mac"
 
 TITLE="Enter SSH Password"  
 DIALOG="display dialog \"$@\" default answer \"\" with title \"$TITLE\""
