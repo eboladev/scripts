@@ -1,0 +1,3 @@
+#!/bin/bash --noprofile
+
+rm -f tags *cscope.*

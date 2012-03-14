@@ -32,7 +32,9 @@ OTHERS=\
 	/usr/local/bin/findnokiaperson \
 	/usr/local/bin/bin2c \
 	~polster/.vimrc \
-	~polster/.vim/colors/wombat.vim
+	~polster/.vim/colors/wombat.vim \
+	/usr/local/bin/mktag \
+	/usr/local/bin/rmtag \
 
 ONHOLD=\
 	crco \
@@ -68,6 +70,14 @@ install: preinstall $(OTHERS)
 	chown polster $@
 
 /usr/local/bin/bin2c: bin2c
+	cp -f $< $@
+	chmod a+rx $@
+
+/usr/local/bin/mktag: mktag
+	cp -f $< $@
+	chmod a+rx $@
+
+/usr/local/bin/rmtag: rmtag
 	cp -f $< $@
 	chmod a+rx $@
 
