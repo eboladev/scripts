@@ -28,4 +28,25 @@ set ignorecase					" Cases insensitive searching
 set smartcase					" Unless key has capital letters
 
 "" Tag files
-set tags+=~/.vim/tags/harmattan
+
+let s:tagfile = findfile("tags", ".;")
+if s:tagfile =~ "tags"
+    execute "set tags=./tags,tags," . s:tagfile
+endif
+ 
+if has("cscope")
+    let s:csc_file = findfile("cscope.out", ".;")
+    if s:csc_file =~ "cscope.out"
+        execute "cs add " . s:csc_file
+    endif
+endif
+
+nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <F2> :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-_>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
