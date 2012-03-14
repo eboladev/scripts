@@ -1,0 +1,28 @@
+#!/bin/bash --noprofile
+
+if [ -e cscope.files ]; then
+    rm -f cscope.files 2>&1 /dev/null;
+fi
+
+if [ $# -eq 0 ]; then
+    find $PWD -follow -name "*.[cChH]" -o -name "*.[cChH][pP][pP]" | egrep -v '\/test\w*\/' > cscope.files
+    if [ -s cscope.files ]; then
+        cscope -bkq -i cscope.files
+        ctags --C++-kinds=+lpx -L cscope.files
+    else
+        rm -f cscope.files
+    fi
+else
+    working_dir=$PWD
+    for dir do
+        cd $dir
+        find $PWD -follow -name "*.[cChH]" -o -name "*.[cChH][pP][pP]" | egrep -v '\/test\w*\/' >> $working_dir/cscope.files
+        cd $working_dir
+    done
+    if [ -s cscope.files ]; then
+        cscope -bkq -i cscope.files
+        ctags --C++-kinds=+lpx -L cscope.files
+    else
+        rm -f cscope.files
+    fi
+fi
