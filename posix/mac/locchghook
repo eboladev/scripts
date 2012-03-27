@@ -47,10 +47,12 @@ if [ `getLocation` = "nokia" ]; then
     # Set proxy environment variables for shells
     # Set proxy environment variables for shells
     echo "http_proxy=http://$proxyHost:$proxyPort/" >>/etc/profile.d/proxy.sh
+	echo "RSYNC_PROXY=$proxyHost:$proxyPort" >>/etc/profile.d/proxy.sh
     echo 'HTTP_PROXY=$http_proxy
 https_proxy=$http_proxy
 HTTPS_PROXY=$http_proxy
-export http_proxy HTTP_PROXY https_proxy HTTPS_PROXY' >>/etc/profile.d/proxy.sh
+export http_proxy HTTP_PROXY https_proxy HTTPS_PROXY RSYNC_PROXY' \
+	    >>/etc/profile.d/proxy.sh
 
 else
 
@@ -63,7 +65,7 @@ else
     > /etc/mercurial/hgrc.d/proxy.rc
 
     # Unset proxy environment variables for shells
-    echo 'unset http_proxy HTTP_PROXY https_proxy HTTPS_PROXY' \
+    echo 'unset http_proxy HTTP_PROXY https_proxy HTTPS_PROXY RSYNC_PROXY' \
         >> /etc/profile.d/proxy.sh
 
 fi
