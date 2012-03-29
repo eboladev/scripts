@@ -15,6 +15,11 @@ set ruler
 set showcmd						" Display incomplete commands
 set encoding=utf-8
 
+"" Enlarge GUI window
+if has("gui_running")
+	set lines=50 columns=100
+endif
+
 "" Whitespace
 set autoindent
 set shiftwidth=4
