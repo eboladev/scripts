@@ -1,6 +1,5 @@
 set nocompatible
 filetype plugin on
-filetype indent on
 syntax on
 colorscheme wombat
 helptags $HOME/.vim/doc/
@@ -17,14 +16,14 @@ set encoding=utf-8
 
 "" Enlarge GUI window
 if has("gui_running")
-	set lines=50 columns=100
+    set lines=50 columns=100
 endif
 
-"" Whitespace
-set autoindent
+"" Indentation
 set shiftwidth=4
 set tabstop=4
-set smartindent
+set expandtab
+filetype indent on
 
 "" Searching
 set hlsearch					" Highlight matches
