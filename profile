@@ -37,7 +37,7 @@ export PATH
 case "$OS_NAMEREL" in
   HP-UX*B.10.*|HP-UX*B.11.*) PATH=/sbin:/usr/bin:/usr/sbin;;
   HP-UX*)                    PATH=/bin:/usr/bin:/etc:/usr/lib;;
-  Cygwin*)                   PATH=/usr/bin;;
+  Cygwin*|CYGWIN*)           PATH=/usr/bin;;
   *)                         PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin;;
 esac
 [ -r /etc/PATH ] && PATH=`cat /etc/PATH`
@@ -146,15 +146,15 @@ lsd() {
 # Find processes by name
 export psHead
 case "$OS_NAME" in
-  HP-UX)	psHead=`ps -aefl|head -1|tr " " "_"`;;
-  Linux|Darwin)	psHead=`ps awxl|head -1|tr " " "_"`;;
+  HP-UX)                        psHead=`ps -aefl|head -1|tr " " "_"`;;
+  Linux|Darwin|Cygwin*|CYGWIN*) psHead=`ps awxl|head -1|tr " " "_"`;;
 esac
 psg() {
   echo $psHead | tr '_' ' '
   (
   case "$OS_NAME" in
-    HP-UX)		ps -aefl;;
-    Linux|Darwin)	ps awxl;;
+    HP-UX)                       ps -aefl;;
+    Linux|DarwinCygwin*|CYGWIN*) ps awxl;;
   esac
   ) | grep $* | grep -v grep
 }

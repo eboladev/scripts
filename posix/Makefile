@@ -35,6 +35,7 @@ OTHERS=\
 	~polster/.vim/colors/wombat.vim \
 	/usr/local/bin/mktag \
 	/usr/local/bin/rmtag \
+	/usr/local/bin/askpass \
 
 ONHOLD=\
 	crco \
@@ -68,6 +69,10 @@ install: preinstall $(OTHERS)
 	-touch ~polster/.vim/doc/empty
 	-cp -f $< $@
 	-chown polster $@
+
+/usr/local/bin/askpass: askpass
+	cp -f $< $@
+	chmod a+rx $@
 
 /usr/local/bin/bin2c: bin2c
 	cp -f $< $@
