@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set +u
+[ -z "$SSH_TTY" ] && SSH_TTY=$(/bin/tty)
+
+TTY=$SSH_TTY
+[ -c "$TTY" -a -r "$TTY" -a -w "$TTY" ] \
+  || { echo "Failed to open device \`$TTY'!"; exit 1; }
+exec <$TTY
+
+echo -n "$@" >$TTY
+read -s P
+echo >$TTY
+
+echo $P
