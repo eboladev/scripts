@@ -19,6 +19,7 @@ TARGETS= \
 	/etc/profile.d/aquaterm.sh \
 	/usr/local/bin/ssh-askpass-mac \
 	/etc/profile.d/x11.sh \
+	/usr/local/bin/git-diff
 
 DIRS = maczok marzipan
 
@@ -31,6 +32,10 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/usr/local/bin/git-diff: git-diff
+	cp -f $< $@
+	chmod a+rx $@
 
 /etc/profile.d/x11.sh: x11.sh
 	cp -f $< $@
