@@ -153,8 +153,8 @@ psg() {
   echo $psHead | tr '_' ' '
   (
   case "$OS_NAME" in
-    HP-UX)                       ps -aefl;;
-    Linux|DarwinCygwin*|CYGWIN*) ps awxl;;
+    HP-UX)                        ps -aefl;;
+    Linux|Darwin|Cygwin*|CYGWIN*) ps awxl;;
   esac
   ) | grep $* | grep -v grep
 }
