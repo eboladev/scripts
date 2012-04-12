@@ -3,4 +3,7 @@
 case "$`groups`" in
     *[aA]dministrators*) exit 1;
 esac
+case "`uname`" in
+    CYGWIN* | Cygwin*) exit 1;;
+esac
 exit 0
