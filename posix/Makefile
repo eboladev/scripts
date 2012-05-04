@@ -36,6 +36,7 @@ OTHERS=\
 	/usr/local/bin/mktag \
 	/usr/local/bin/rmtag \
 	/usr/local/bin/askpass \
+	~polster/backup \
 
 ONHOLD=\
 	crco \
@@ -58,6 +59,10 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+~polster/backup: backup-dir
+	-mkdir ~polster/backup
+	-chown -R polster ~polster/backup
 
 ~polster/.vim/colors/wombat.vim: wombat.vim
 	-mkdir -p ~polster/.vim/colors

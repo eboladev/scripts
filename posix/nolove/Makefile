@@ -104,8 +104,8 @@ preinstall:
 
 /home/polster/.hgrc: dot-hgrc /etc/secnok /etc/sechom
 	rm -f $@
-	sed s/secnok/`cat /etc/secnok` $< | \
-	sed s/sechom/`cat /etc/sechom` > $@
+	sed s/secnok/`cat /etc/secnok`/ $< | \
+	sed s/sechom/`cat /etc/sechom`/ > $@
 	chown -R polster:polster $@
 	chmod u+r,og-rw $@
 
