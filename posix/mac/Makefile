@@ -9,7 +9,6 @@ TARGETS= \
 	/Users/polster/Library/Preferences/nsmb.conf \
 	/usr/local/bin/runterm \
 	/Users/polster/.hgrc \
-	/Users/polster/.netrc \
 	/usr/local/bin/locchghook \
 	/Library/LaunchAgents/com.macosxints.locchghook.plist \
 	/etc/smb.conf \
@@ -87,14 +86,6 @@ preinstall:
 /usr/local/bin/locchghook: locchghook
 	cp -f $< $@
 	chmod a+rx $@
-
-/Users/polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub /etc/secmillionmoves
-	rm -f $@
-	sed s/secmaemo/`cat /etc/secmaemo`/g $< | \
-	sed s/secgithub/`cat /etc/secgithub`/g | \
-	sed s/secmillionmoves/`cat /etc/secmillionmoves`/g > $@
-	chown polster:staff $@
-	chmod og-rwx $@
 
 /Users/polster/.hgrc: dot-hgrc /etc/secnok
 	rm -f $@

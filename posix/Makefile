@@ -37,6 +37,7 @@ OTHERS=\
 	/usr/local/bin/rmtag \
 	/usr/local/bin/askpass \
 	~polster/backup \
+	~polster/.netrc \
 
 ONHOLD=\
 	crco \
@@ -59,6 +60,14 @@ DIRS = bovi nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+~polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub /etc/secmillionmoves
+	rm -f $@
+	sed s/secmaemo/`cat /etc/secmaemo`/g $< | \
+	sed s/secgithub/`cat /etc/secgithub`/g | \
+	sed s/secmillionmoves/`cat /etc/secmillionmoves`/g > $@
+	chown polster $@
+	chmod og-rwx $@
 
 ~polster/backup: backup-dir
 	-mkdir ~polster/backup
