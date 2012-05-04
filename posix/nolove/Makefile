@@ -101,6 +101,7 @@ preinstall:
 /home/polster/.netrc: netrc-polster
 	cp -f $< $@
 	chmod og-rwx $@
+	chown polster $@
 
 /home/polster/.hgrc: dot-hgrc /etc/secnok /etc/sechom
 	rm -f $@
