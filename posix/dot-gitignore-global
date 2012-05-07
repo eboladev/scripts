@@ -5,6 +5,7 @@
 *.exe
 *.o
 *.so
+*.pyc
 
 # OS generated files
 .DS_Store?
@@ -12,5 +13,7 @@ ehthumbs.db
 # Icon?
 Thumbs.db
 
-# Qt Creator user configuration
+# Project files
 *.pro.user
+*.project
+*.pydevproject
