@@ -5,4 +5,5 @@ Host 192.168.11.*
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 Host pipacs.dyndns.org
+    StrictHostKeyChecking no
     ProxyCommand corkscrew 172.16.99.10 8080 %h %p
