@@ -84,6 +84,10 @@ install: preinstall $(OTHERS)
 	-cp -f $< $@
 	-chown polster $@
 
+~polster/.screenrc: dot-screenrc
+	-cp -f $< $@
+	-chown polster $@
+
 /usr/local/bin/askpass: askpass
 	cp -f $< $@
 	chmod a+rx $@
