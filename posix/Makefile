@@ -38,6 +38,7 @@ OTHERS=\
 	/usr/local/bin/askpass \
 	~polster/backup \
 	~polster/.netrc \
+	~polster/.screenrc
 
 ONHOLD=\
 	crco \
