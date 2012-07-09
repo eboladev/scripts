@@ -11,4 +11,6 @@ export SIM96TCL=/usr
 export SIM96TCLSH=tclsh
 export SIM96WISH=wish
 
+export QC_TEST_LOCAL=1
+
 alias qmlviewer=/Developer/Applications/Qt/QMLViewer.app/Contents/MacOS/QMLViewer
