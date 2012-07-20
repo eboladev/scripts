@@ -1,0 +1,19 @@
+MAILTO=akos.polster@gmail.com
+
+# Export some music to MP3
+30 7 * * * /usr/local/bin/exportmusic /Users/polster/Music/Lossless /Users/polster/Music/MP3
+
+# Back up books
+11 1 * * * rsync -avzqr /Users/polster/Books /Volumes/pixtor/backup
+
+# Back up source code
+22 2 * * * rsync -avzqr /Users/polster/src /Volumes/pixtor/backup
+
+# Back up photographs
+33 3,11,19,21,23 * * * rsync -avzqr /Volumes/pixtor/photos /Volumes/maxtor/backup
+
+# Back up documents
+44 4 * * * rsync -avzqr /Users/polster/Documents /Volumes/pixtor/backup
+
+# Back up home movies
+55 5 * * * rsync -avzqr /Volumes/basix/movies/Home /Volumes/maxtor/backup/movies

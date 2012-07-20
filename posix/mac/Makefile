@@ -21,7 +21,7 @@ TARGETS= \
 	/usr/local/bin/git-diff \
 	/var/root/.ssh/config
 
-DIRS = maczok marzipan
+DIRS = maczok marzipan filemon
 
 install: preinstall $(TARGETS)
 	-for d in $(DIRS); do (cd $$d; make install); done
