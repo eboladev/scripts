@@ -12,8 +12,6 @@ TARGETS= \
 	/usr/local/bin/locchghook \
 	/Library/LaunchAgents/com.macosxints.locchghook.plist \
 	/etc/smb.conf \
-	/Applications/Start-CM-Synergy.app \
-	/Applications/BuildTerm.app \
 	/Users/polster/.ssh/config \
 	/etc/profile.d/aquaterm.sh \
 	/usr/local/bin/ssh-askpass-mac \
