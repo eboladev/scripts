@@ -17,3 +17,6 @@ defaults write com.apple.QuickTimePlayerX MGPlayMovieOnOpen 1
 
 # Disable Resume for Preview.app
 defaults write com.apple.Preview NSQuitAlwaysKeepsWindows -bool false
+
+# Enable smooth scrolling
+defaults write -g NSScollAnimationEnabled -bool true
