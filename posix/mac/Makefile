@@ -17,7 +17,8 @@ TARGETS= \
 	/usr/local/bin/ssh-askpass-mac \
 	/etc/profile.d/x11.sh \
 	/usr/local/bin/git-diff \
-	/var/root/.ssh/config
+	/var/root/.ssh/config \
+	/Users/polster/.bash_profile \
 
 DIRS = maczok marzipan filemon
 
@@ -30,6 +31,10 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/Users/polster/.bash_profile: polster.bash_profile
+	cp -f $< $@
+	chown polster $@
 
 /var/root/.ssh/config: ssh-config-root
 	mkdir -p /var/root/.ssh
