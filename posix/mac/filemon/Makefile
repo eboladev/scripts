@@ -1,6 +1,5 @@
 TARGETS= \
 	/var/at/tabs/polster \
-	/Users/polster/.bash_profile \
 	/var/at/tabs/root \
 	/Users/polster/Documents/defaultzoom.css
 
@@ -19,10 +18,6 @@ preinstall:
 
 /var/at/tabs/root: crontab.root
 	crontab crontab.root
-
-/Users/polster/.bash_profile: polster.bash_profile
-	cp -f polster.bash_profile $@
-	chown polster $@
 
 /var/at/tabs/polster: crontab.polster
 	su polster -c "crontab crontab.polster"
