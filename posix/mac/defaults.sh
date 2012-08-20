@@ -3,7 +3,7 @@
 # Increase font size in Mail
 defaults write com.apple.mail MinimumHTMLFontSize 15
 
-# Don't create .DS_store  files on network shares
+# Don't create .DS_Store  files on network shares
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 
 # Allow peeking into a folder's content
@@ -20,3 +20,15 @@ defaults write com.apple.Preview NSQuitAlwaysKeepsWindows -bool false
 
 # Enable smooth scrolling
 defaults write -g NSScollAnimationEnabled -bool true
+
+# Save screenshots to the desktop
+defaults write com.apple.screencapture location -string "$HOME/Desktop"
+
+# Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
+defaults write com.apple.screencapture type -string "png"
+
+# Disable shadow in screenshots
+defaults write com.apple.screencapture disable-shadow -bool true
+
+# Show the ~/Library folder
+chflags nohidden ~/Library

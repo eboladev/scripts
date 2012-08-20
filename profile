@@ -1,18 +1,12 @@
-# -*- Mode: Ksh -*-
 #
-# Name		/etc/profile
-# Description	Commands common to all logins
-# Version	$Id: profile,v 1.65 2005/12/02 17:15:53 polster Exp $
+# Shell initializations
 #
 
 # set -x
 
-getComputerName()
-{
-  if [ -r /etc/HOSTNAME ]; then
-    cat /etc/HOSTNAME
-  elif [ `uname` = "Darwin" ]; then
-    scutil --get ComputerName
+getComputerName() {
+  if [ `uname` = "Darwin" ]; then
+    /usr/sbin/scutil --get ComputerName
   else
     hostname
   fi
@@ -25,7 +19,7 @@ PATH=/bin:/usr/bin                      # Initial PATH
 # Set up login name
 export LOGNAME USER
 [ -z "$LOGNAME" ] && LOGNAME=`id -un` 
-[ -z "$USER" ] && USER=$LOGNAME
+[ -z "$USER" ] && USER="$LOGNAME"
 
 # Set up OS and OS release
 OS_NAME=`uname -s` export OS_NAME
@@ -40,12 +34,10 @@ case "$OS_NAMEREL" in
   Cygwin*|CYGWIN*)           PATH=/usr/bin;;
   *)                         PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin;;
 esac
-[ -r /etc/PATH ] && PATH=`cat /etc/PATH`
 [ ! -z "$HOME" -a -f "$HOME"/bin ] && PATH="$PATH":"$HOME/bin"
 
 # Set up the manual search path
 MANPATH="/usr/share/man:/usr/man:/usr/local/man" export MANPATH
-[ -r /etc/MANPATH ] && MANPATH=`cat /etc/MANPATH`
 
 # Set time zone
 export TZ
@@ -64,7 +56,6 @@ fi
 if [ -z "$NOTTY" ]; then
   stty cs8 -istrip -parenb 2>/dev/null || NOTTY=1
 fi
-ANSITERM=""
 
 if [ -z "$NOTTY" ]; then
 
@@ -110,29 +101,14 @@ if [ -z "$NOTTY" ]; then
 
   esac
 
-  case "$TERM" in
-    vt2*|console|linux|xterm*) ANSITERM=1;;
-  esac
-
   # Emacs mode doesn't work on HP terminals
   [ "$TERM" = "hp" ] && set -o vi
 
   # Set terminal size
-  if [ -z "$LINES" -a -x /usr/bin/X11/resize ]; then
-    eval `/usr/bin/X11/resize`
+  if [ -z "$LINES" -a -x /usr/X11/bin/resize ]; then
+    eval `/usr/X11/bin/resize`
   fi
 
-  # Display fortune cookie of the day
-  if [ -x /usr/local/bin/fortune ]; then
-    fortune=/usr/local/bin/fortune
-  elif [ -x /usr/games/fortune ]; then
-    fortune=/usr/games/fortune
-  fi
-  if [ ! -z "$fortune" -a ! -f "$HOME/.no-fortunes" ]; then
-    sep="_____________________________________________________________________"
-    echo $sep; echo; $fortune; echo $sep; echo
-  fi
-  
   # Print message of the day; notify if new news
   # [ -r /etc/motd ] && cat /etc/motd
   [ -x /usr/bin/news ] && /usr/bin/news -n
@@ -148,6 +124,7 @@ export psHead
 case "$OS_NAME" in
   HP-UX)                        psHead=`ps -aefl|head -1|tr " " "_"`;;
   Linux|Darwin|Cygwin*|CYGWIN*) psHead=`ps awxl|head -1|tr " " "_"`;;
+  *)                            psHead=""
 esac
 psg() {
   echo $psHead | tr '_' ' '
@@ -192,12 +169,6 @@ if [ -x /usr/bin/dircolors ]; then
   fi
 fi
 
-# Organization
-if [ -r /etc/organization ]; then
-  ORGANIZATION=`cat /etc/organization`
-  export ORGANIZATION
-fi
-
 # Command history
 HISTSIZE=1000 export HISTSIZE				# Command history
 HISTFILESIZE=$HISTSIZE export HISTFILESIZE
@@ -210,11 +181,6 @@ case "$SHELL" in
     ;;
 esac
 
-# FlexLM
-LM_PROJECT=111_000
-LM_LICENSE_FILE=1730@salmg01.nmp.nokia.com:1730@salmg01:7598@colic04:1730@colic04:19353@salmg01.nmp.nokia.com:1720@colic07.europe.nokia.com:1719@saslmg04.nmp.nokia.com:1730@salmg01.nmp.nokia.com:1669@salmg01.nmp.nokia.com
-export LM_PROJECT LM_LICENSE_FILE
-
 # Everything else
 
 EDITOR=vi export EDITOR					# Default editor
@@ -223,8 +189,6 @@ INFOPATH=$INFODIR export INFOPATH			# Location of info files
 LESS=-MM export LESS					# less
 # LESSCHARSET=latin1 export LESSCHARSET
 MINICOM="-c on" export MINICOM				# minicom
-export NNTPSERVER					# Default NNTP server
-[ -r /etc/NNTPSERVER ] && NNTPSERVER=`cat /etc/nntpserver`
 PG='-c' export PG					# pg to clear screen
 XFORCE_INTERNET=1 export XFORCE_INTERNET		# HPterm workaround
 VISUAL=vi export VISUAL					# Command line editor
@@ -240,7 +204,7 @@ case "$OS_NAME" in
     export PAGER
     SPEAKER=external export SPEAKER
     ;;
-  Linux)
+  *)
     PAGER=less export PAGER
     ;;
 esac
@@ -277,13 +241,6 @@ if [ "${BASH-no}" != "no" ]; then
     test -r /etc/bash_completion && . /etc/bash_completion
   fi
 fi
-
-# Source Fink configuration
-test -r /sw/bin/init.sh && . /sw/bin/init.sh
-
-# Source Maemo configuration files
-test -r /etc/ptmalloc.conf && . /etc/ptmalloc.conf
-test -r /etc/osso-af-init/af-defines.sh && . /etc/osso-af-init/af-defines.sh
 
 # Source other customizations from /etc/profile.d
 if [ -d /etc/profile.d ]; then
