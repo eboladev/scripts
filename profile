@@ -104,11 +104,6 @@ if [ -z "$NOTTY" ]; then
   # Emacs mode doesn't work on HP terminals
   [ "$TERM" = "hp" ] && set -o vi
 
-  # Set terminal size
-  if [ -z "$LINES" -a -x /usr/X11/bin/resize ]; then
-    eval `/usr/X11/bin/resize`
-  fi
-
   # Print message of the day; notify if new news
   # [ -r /etc/motd ] && cat /etc/motd
   [ -x /usr/bin/news ] && /usr/bin/news -n
