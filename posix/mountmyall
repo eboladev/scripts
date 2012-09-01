@@ -33,8 +33,9 @@ hsmbMount()
     # Mount home CIFS share
     case "$osName" in
     Darwin)
-        chown $user $mnt/$name
         rmdir $mnt/$name >/dev/null 2>&1
+        mkdir -p $mnt/$name
+        chown $user $mnt/$name
         su $user -c "mount_smbfs -N //$user@$host$dir $mnt/$name"
         ;;
     *)
@@ -121,12 +122,12 @@ cd /tmp
 #   dav  polster https://code.nokia.com    avalanche  0     /dav/Avalanche \
 #   dav  polster https://pipacs.dyndns.org pipacs-dav 0     /dav \
 #   ssh  polster 192.168.11.5              mimo       1     / \
+#   ssh  polster colsw01m.europe.nokia.com colsw01m   1 /home/polster \
+#   cifs polster common.europe.nokia.com   projects   1 /projects \
+#   cifs polster common.europe.nokia.com   groups     1 /groups \
+#   cifs polster vagrp004.europe.nokia.com groups-5   1 /groups5 \
 set -- \
-    ssh  polster colsw01m.europe.nokia.com colsw01m   1 /home/polster \
     ssh  polster nolove                    nolove     1 /home/polster \
-    cifs polster common.europe.nokia.com   projects   1 /projects \
-    cifs polster common.europe.nokia.com   groups     1 /groups \
-    cifs polster vagrp004.europe.nokia.com groups-5   1 /groups5 \
     ssh  polster maczok                    pixtor     1 /Volumes/pixtor \
     ssh  polster maczok                    maxtor     1 /Volumes/maxtor \
     ssh  polster maczok                    basix      1 /Volumes/basix \
