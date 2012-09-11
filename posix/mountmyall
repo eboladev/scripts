@@ -99,7 +99,7 @@ ftpMount()
 		rmdir $mnt/$name >/dev/null 2>&1
 		mkdir $mnt/$name >/dev/null 2>&1
 		chown $user $mnt/$name
-		su $user -c "curlftpfs -oui=$uid ftp://$host/ $mnt/$name"
+		su $user -c "curlftpfs ftp://$host/ $mnt/$name"
 		;;
 	*)
 		;;
