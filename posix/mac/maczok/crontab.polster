@@ -6,14 +6,17 @@ MAILTO=akos.polster@gmail.com
 # Back up books
 11 1 * * * rsync -avzqr /Users/polster/Books /Volumes/pixtor/backup
 
-# Back up source code
-22 2 * * * rsync -avzqr /Users/polster/src /Volumes/pixtor/backup
-
 # Back up photographs
 33 3,11,19,21,23 * * * rsync -avzqr /Volumes/pixtor/photos /Volumes/maxtor/backup
+
+# Back up source code
+4 4 * * * for repo in longwire/meego cow o2 quantis-api-ios quantis-api-android quantis-gae steps steps-ios steps-android; do cd /Users/polster/src/$repo && git pull; done; rsync -avzqr /Users/polster/src /Volumes/pixtor/backup
 
 # Back up documents
 44 4 * * * rsync -avzqr /Users/polster/Documents /Volumes/pixtor/backup
 
 # Back up home movies
 55 5 * * * rsync -avzqr /Volumes/basix/movies/Home /Volumes/maxtor/backup/movies
+
+# Back up Quantis documents
+6 6 * * * rsync -avzqr /Users/polster/Google\ Drive/Quantis /Volumes/pixtor/backup
