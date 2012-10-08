@@ -10,7 +10,7 @@ MAILTO=akos.polster@gmail.com
 33 3,11,19,21,23 * * * rsync -avzqr /Volumes/pixtor/photos /Volumes/maxtor/backup
 
 # Back up source code
-4 4 * * * for repo in longwire/meego cow o2 quantis-api-ios quantis-api-android quantis-gae steps steps-ios steps-android; do cd /Users/polster/src/$repo && git pull; done; rsync -avzqr /Users/polster/src /Volumes/pixtor/backup
+4 4 * * * for repo in longwire/meego cow o2 quantis-api-ios quantis-api-android quantis-gae steps steps-ios steps-android; do (cd /Users/polster/src/$repo && git pull); done; rsync -avzqr /Users/polster/src /Volumes/pixtor/backup
 
 # Back up documents
 44 4 * * * rsync -avzqr /Users/polster/Documents /Volumes/pixtor/backup
