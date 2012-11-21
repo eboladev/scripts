@@ -19,6 +19,7 @@ TARGETS= \
 	/usr/local/bin/git-diff \
 	/var/root/.ssh/config \
 	/Users/polster/.bash_profile \
+	/usr/local/bin/join-quantis.applescript
 
 DIRS = maczok marzipan filemon
 
@@ -31,6 +32,10 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/usr/local/bin/join-quantis.applescript: join-quantis.applescript
+	cp -f $< $@
+	chmod a+rx $@
 
 /Users/polster/.bash_profile: polster.bash_profile
 	cp -f $< $@

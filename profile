@@ -142,6 +142,7 @@ alias r='fc -e -'
 alias res='eval `resize`'
 alias sys=sudo
 alias x=xemacs
+  alias top="/usr/bin/top -o cpu"
 
 # Web proxies
 if [ -r /etc/HTTP_PROXY ]; then
@@ -198,6 +199,10 @@ case "$OS_NAME" in
     fi
     export PAGER
     SPEAKER=external export SPEAKER
+    ;;
+  Darwin)
+    PAGER=less
+    alias top='/usr/bin/top -o cpu'
     ;;
   *)
     PAGER=less export PAGER
