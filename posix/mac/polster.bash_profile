@@ -1,7 +1,3 @@
-# Direct UI
-# export DYLD_LIBRARY_PATH=/usr/local/hb/lib
-# export HB_THEMES_DIR=/usr/local/hb/themes
-
 export GIT_SSL_NO_VERIFY=1
 export PATH="$PATH":/Users/polster/bin
 export QMAKESPEC=macx-g++
@@ -17,3 +13,6 @@ export SIM96WISH=wish
 export QC_TEST_LOCAL=1
 export QC_TEST_VERBOSE=1
 export QC_ADMIN_LOCAL=1
+
+# Android SDK
+export PATH="$PATH":/Users/polster/android-sdk-macosx/platform-tools

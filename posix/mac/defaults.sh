@@ -32,3 +32,6 @@ defaults write com.apple.screencapture disable-shadow -bool true
 
 # Show the ~/Library folder
 chflags nohidden ~/Library
+
+# Remove duplicates from Finder/Open With...
+/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain system -domain user
