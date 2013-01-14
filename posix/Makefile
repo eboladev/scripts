@@ -38,7 +38,9 @@ OTHERS=\
 	/usr/local/bin/askpass \
 	~polster/backup \
 	~polster/.netrc \
-	~polster/.screenrc
+	~polster/.screenrc \
+	~polster/.vim/ftdetect/markdown.vim \
+	~polster/.vim/syntax/markdown.vim
 
 ONHOLD=\
 	crco \
@@ -73,6 +75,16 @@ install: preinstall $(OTHERS)
 ~polster/backup: backup-dir
 	-mkdir ~polster/backup
 	-chown -R polster ~polster/backup
+
+~polster/.vim/ftdetect/markdown.vim: ftdetect.markdown.vim
+	-mkdir -p ~polster/.vim/ftdetect
+	-cp -f $< $@
+	-chown -R polster ~polster/.vim
+
+~polster/.vim/syntax/markdown.vim: syntax.markdown.vim
+	-mkdir -p ~polster/.vim/syntax
+	-cp -f $< $@
+	-chown -R polster ~polster/.vim
 
 ~polster/.vim/colors/wombat.vim: wombat.vim
 	-mkdir -p ~polster/.vim/colors
