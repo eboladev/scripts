@@ -19,7 +19,8 @@ TARGETS= \
 	/usr/local/bin/git-diff \
 	/var/root/.ssh/config \
 	/Users/polster/.bash_profile \
-	/usr/local/bin/join-quantis.applescript
+	/usr/local/bin/join-quantis.applescript \
+	/System/Library/LaunchAgents/com.pipacs.resetmountmyall.plist
 
 DIRS = maczok marzipan filemon
 
@@ -32,6 +33,10 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/System/Library/LaunchAgents/com.pipacs.resetmountmyall.plist: com.pipacs.resetmountmyall.plist
+	cp -f $< $@
+	chmod a+rx $@
 
 /usr/local/bin/join-quantis.applescript: join-quantis.applescript
 	cp -f $< $@
