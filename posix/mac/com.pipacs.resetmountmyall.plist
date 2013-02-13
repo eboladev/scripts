@@ -12,7 +12,7 @@
     <array>
         <string>/bin/rm</string>
         <string>-f</string>
-        <string>/var/lock/mountmyall.lock</string>
+        <string>/var/lock/mountmyall</string>
     </array>
     
     <key>KeepAlive</key>
