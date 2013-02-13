@@ -20,7 +20,7 @@ TARGETS= \
 	/var/root/.ssh/config \
 	/Users/polster/.bash_profile \
 	/usr/local/bin/join-quantis.applescript \
-	/Library/LaunchAgents/com.pipacs.resetmountmyall.plist
+	/Library/LaunchDaemons/com.pipacs.resetmountmyall.plist
 
 DIRS = maczok marzipan filemon
 
@@ -34,7 +34,7 @@ preinstall:
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
 
-/Library/LaunchAgents/com.pipacs.resetmountmyall.plist: com.pipacs.resetmountmyall.plist
+/Library/LaunchDaemons/com.pipacs.resetmountmyall.plist: com.pipacs.resetmountmyall.plist
 	cp -f $< $@
 	chmod a+rx $@
 	-launchctl unload $@
