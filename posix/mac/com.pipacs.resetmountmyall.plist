@@ -4,12 +4,17 @@
 <dict>
     <key>Label</key>
     <string>com.pipacs.resetmountmyall</string>
+    
+    <key>OnDemand</key>
+    <false/>
+    
     <key>ProgramArguments</key>
     <array>
         <string>/bin/rm</string>
         <string>-f</string>
         <string>/var/lock/mountmyall.lock</string>
     </array>
+    
     <key>KeepAlive</key>
     <false/>
 </dict>
