@@ -35,3 +35,6 @@ chflags nohidden ~/Library
 
 # Remove duplicates from Finder/Open With...
 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain system -domain user
+
+# Set the XCode device console font size
+defaults write com.apple.Xcode PBXTableFontSize 14
