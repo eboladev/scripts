@@ -142,7 +142,6 @@ alias r='fc -e -'
 alias res='eval `resize`'
 alias sys=sudo
 alias x=xemacs
-  alias top="/usr/bin/top -o cpu"
 
 # Web proxies
 if [ -r /etc/HTTP_PROXY ]; then
