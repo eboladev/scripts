@@ -242,11 +242,13 @@ if [ "${BASH-no}" != "no" ]; then
 fi
 
 # Source other customizations from /etc/profile.d
-if [ -d /etc/profile.d ]; then
-  for i in /etc/profile.d/*.sh; do
-    test -r $i && . $i
-  done
-fi
+for d in /etc/profile.d /opt/local/etc/profile.d; do
+  if [ -d "$d" ]; then
+    for i in "$d"/*.sh; do
+      test -r $i && . $i
+    done
+  fi
+done
 
 # Source in the local profile, too
 [ -r /etc/profile.local ] && . /etc/profile.local
