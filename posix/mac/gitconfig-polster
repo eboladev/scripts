@@ -1,0 +1,9 @@
+[core]
+excludesfile = /Users/polster/.gitignore-global
+
+[user]
+name = Akos Polster
+email = akos@pipacs.com
+
+[push]
+default = simple
