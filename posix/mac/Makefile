@@ -20,7 +20,10 @@ TARGETS= \
 	/var/root/.ssh/config \
 	/Users/polster/.bash_profile \
 	/usr/local/bin/join-quantis.applescript \
-	/Library/LaunchDaemons/com.pipacs.resetmountmyall.plist
+	/Library/LaunchDaemons/com.pipacs.resetmountmyall.plist \
+	/Users/polster/.gitconfig \
+	/Applications/IPythonQt.app/Contents/MacOS/IPythonQt \
+	/Applications/Inkscape.app
 
 DIRS = maczok marzipan filemon
 
@@ -33,6 +36,28 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/Applications/Inkscape.app: Inkscape-Info.plist inkscape_icon.icns Inkscape
+	mkdir -p /Applications/Inkscape.app/Contents/MacOS
+	mkdir -p /Applications/Inkscape.app/Contents/Resources
+	cp -f Inkscape /Applications/Inkscape.app/Contents/MacOS
+	cp -f inkscape_icon.icns /Applications/Inkscape.app/Contents/Resources
+	cp -f Inkscape-Info.plist \
+	    /Applications/Inkscape.app/Contents/Info.plist
+	chmod -R a+rx /Applications/Inkscape.app
+
+/Applications/IPythonQt.app/Contents/MacOS/IPythonQt: IPythonQt
+	mkdir -p /Applications/IPythonQt.app/Contents/MacOS
+	mkdir -p /Applications/IPythonQt.app/Contents/Resources
+	cp -f $< $@
+	cp -f ipython_icon.icns /Applications/IPythonQt.app/Contents/Resources
+	cp -f IPythonQt-Info.plist \
+	    /Applications/IPythonQt.app/Contents/Info.plist
+	chmod -R a+rx /Applications/IPythonQt.app
+
+/Users/polster/.gitconfig: gitconfig-polster
+	cp -f $< $@
+	chown polster $@
 
 /Library/LaunchDaemons/com.pipacs.resetmountmyall.plist: com.pipacs.resetmountmyall.plist
 	cp -f $< $@
