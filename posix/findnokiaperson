@@ -1,3 +1,0 @@
-#!/bin/sh
-# Find someone in Nokia by name
-exec ldapsearch -h nedi.europe.nokia.com -x -b 'o=Nokia' "cn=*"$1"*"
