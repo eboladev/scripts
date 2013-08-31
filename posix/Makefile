@@ -20,7 +20,6 @@ OTHERS=\
 	/etc/resolv.conf.nokia \
 	/usr/local/bin/nokiaup \
 	/usr/local/bin/nokiadown \
-	/etc/vpnc/vpnc-aruba.conf \
 	/etc/davfs2/davfs2.conf \
 	/etc/davfs2/secrets \
 	/usr/local/bin/gmail-mailto \
@@ -43,6 +42,7 @@ OTHERS=\
 	~polster/.vim/syntax/markdown.vim
 
 ONHOLD=\
+	/etc/vpnc/vpnc-aruba.conf \
 	crco \
 	crci \
 	saveconfig \
