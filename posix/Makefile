@@ -17,10 +17,6 @@ OTHERS=\
 	/usr/local/bin/mediatomb-transcode-video \
 	/etc/init.d/umountcifs \
 	/etc/issue.net \
-	/etc/resolv.conf.nokia \
-	/usr/local/bin/nokiaup \
-	/usr/local/bin/nokiadown \
-	/etc/vpnc/vpnc-aruba.conf \
 	/etc/davfs2/davfs2.conf \
 	/etc/davfs2/secrets \
 	/usr/local/bin/gmail-mailto \
@@ -29,7 +25,6 @@ OTHERS=\
 	/usr/local/bin/exportmusic \
 	/usr/local/bin/buildterm \
 	~polster/.gitignore-global \
-	/usr/local/bin/findnokiaperson \
 	/usr/local/bin/bin2c \
 	~polster/.vimrc \
 	~polster/.vim/colors/wombat.vim \
@@ -117,10 +112,6 @@ install: preinstall $(OTHERS)
 	cp -f $< $@
 	chmod a+rx $@
 
-/usr/local/bin/findnokiaperson: findnokiaperson
-	cp -f $< $@
-	chmod a+rx $@
-
 ~polster/.gitignore-global: dot-gitignore-global
 	-cp -f $< $@
 	-chown polster $@
@@ -146,45 +137,15 @@ install: preinstall $(OTHERS)
 	cp -f gmail-mailto $@
 	chmod a+rx $@
 
-/etc/davfs2/secrets: secrets /etc/secnok /etc/sechom
+/etc/davfs2/secrets: secrets /etc/sechom
 	mkdir -p /etc/davfs2
 	rm -f $@
-	sed -e s/secnok/`cat /etc/secnok`/g -e s/sechom/`cat /etc/sechom`/g $< \
-	  > $@
+	sed -e -e s/sechom/`cat /etc/sechom`/g $< > $@
 	chmod og-rwx $@
 
 /etc/davfs2/davfs2.conf: davfs2.conf
 	mkdir -p /etc/davfs2
 	cp -f davfs2.conf $@
-
-/etc/vpnc/vpnc-aruba.conf: vpnc-aruba.conf /etc/secvpncarubagrp /etc/secvpncarubapwd
-	mkdir -p /etc/vpnc
-	sed -e s/secvpncarubagrp/`cat /etc/secvpncarubagrp`/g \
-	  -e s/secvpncarubapwd/`cat /etc/secvpncarubapwd`/g $< > $@
-	cp -f $< $@
-	chmod u+r,og-rw $@
-
-/etc/vpnc/vpnc-nokia-espoo.conf: vpnc-nokia-espoo.conf
-	mkdir -p /etc/vpnc
-	cp -f $< $@
-	chmod u+r,og-rw $@
-
-/etc/vpnc/vpnc-nokia-dallas.conf: vpnc-nokia-dallas.conf
-	mkdir -p /etc/vpnc
-	cp -f $< $@
-	chmod u+r,og-rw $@
-
-/usr/local/bin/nokiadown: nokiadown
-	cp -f nokiadown /usr/local/bin
-	chmod a+rx /usr/local/bin/nokiadown
-
-/usr/local/bin/nokiaup: nokiaup
-	cp -f nokiaup /usr/local/bin
-	chmod a+rx /usr/local/bin/nokiaup
-
-/etc/resolv.conf.nokia: resolv.conf.nokia
-	cp -f resolv.conf.nokia $@
-	chmod a+r $@
 
 /etc/issue.net: issue.net
 	cp issue.net $@
