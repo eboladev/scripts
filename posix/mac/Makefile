@@ -23,7 +23,7 @@ TARGETS= \
 	/Library/LaunchDaemons/com.pipacs.resetmountmyall.plist \
 	/Users/polster/.gitconfig \
 	/Applications/IPythonQt.app/Contents/MacOS/IPythonQt \
-	/Applications/Inkscape.app
+	# /Applications/Inkscape.app
 
 DIRS = maczok marzipan filemon
 
