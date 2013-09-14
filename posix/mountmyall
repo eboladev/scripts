@@ -126,14 +126,14 @@ cd /tmp
 #   cifs polster common.europe.nokia.com   projects   1 /projects \
 #   cifs polster common.europe.nokia.com   groups     1 /groups \
 #   cifs polster vagrp004.europe.nokia.com groups-5   1 /groups5 \
+#   ftp  polster ftp.millionmoves.com      ftp.millionmoves.com 0 . \
+#   hsmb polster maczok.local              maczok     1 /polster \
 set -- \
     ssh  polster nolove                    nolove     1 /home/polster \
     ssh  polster maczok.local              pixtor     1 /Volumes/pixtor \
     ssh  polster maczok.local              maxtor     1 /Volumes/maxtor \
     ssh  polster maczok.local              basix      1 /Volumes/basix \
     ssh  polster maczok.local              64k        1 /Volumes/64k \
-    hsmb polster maczok.local              maczok     1 /polster \
-    ftp  polster ftp.millionmoves.com      ftp.millionmoves.com 0 . \
     ssh  polster pipacs.dyndns.org         pipacs     0 /Users/polster
 
 while test $# -ne 0; do

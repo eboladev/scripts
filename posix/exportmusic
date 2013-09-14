@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# Export music directories marked with "export" to MP3, "export-alac" to 
-# ALAC M4A
+# Export music directories marked with "export" to MP3 or AIF, "export-alac" to 
+# ALAC M4A or AIF.
+#
+# Dependencies: lame, ffmpeg, flac, vorbis-tools.
 
 export() {
     ext="$1"
@@ -11,9 +13,13 @@ export() {
     title=${title%%.$ext}
     mp3File="$title".mp3
     alacFile="$title".m4a
+    aifFile="$title".aif
 
-    if [ $lossless = 0 ]; then
+    if [ "$lossless" = 0 ]; then
         if [ -f "$dstDir"/"$mp3File" ]; then
+            continue
+        fi
+        if [ -f "$dstDir"/"$aifFile" ]; then
             continue
         fi
         echo "$srcFile -> $dstDir/$mp3File"
@@ -23,9 +29,26 @@ export() {
         if [ -f "$dstDir"/"$alacFile" ]; then
             continue
         fi
+        if [ -f "$dstDir"/"$aifFile" ]; then
+            continue
+        fi
         echo "$srcFile -> $dstDir/$alacFile"
         rm -f "$dstDir"/"$mp3File"
         export$ext "$srcFile" "$dstDir"/"$alacFile"
+    fi
+}
+
+exportartist() {
+    # Skip .artist files
+    :
+}
+
+exportaif() {
+    srcFile="$1"
+    dstFile="$2"
+    dstFile=${dstFile%.*}.aif
+    if [ ! -f "$dstFile" ]; then
+        cp -f "$srcFile" "$dstFile"
     fi
 }
 
@@ -38,15 +61,15 @@ exportflac() {
             --tl "$album" --tn "$trackNo" - "$dstFile" \
             >/dev/null 2>&1
     else
-        flac --totally-silent -o /tmp/x.wav -c -d "$srcFile"
+        flac --totally-silent -o /tmp/x.wav -c -d -F "$srcFile"
         ffmpeg -i /tmp/x.wav -acodec alac \
-            -v 0 \
+            -v 1 \
             -metadata title="$title" \
             -metadata author="$artist" \
             -metadata album_artist="$artist" \
             -metadata album="$album" \
             -metadata track="$trackNo" \
-            "$dstFile" </dev/null 2>/dev/null
+            "$dstFile" </dev/null # 2>/dev/null
         rm -f /tmp/x.wav
     fi
 }
@@ -138,6 +161,14 @@ for artistDir in $src/*; do
         album=`basename "$albumDir"`
         dstDir="$dst"/"$artist"/"$album"
         mkdir -p "$dstDir"
+
+        # Convert AIFs
+        trackNo=0
+        ls "$albumDir"/*.aif 2>/dev/null | \
+        while read srcFile; do
+            trackNo=`expr $trackNo + 1`
+            export aif "$srcFile"
+        done
 
         # Convert flacs
         trackNo=0
