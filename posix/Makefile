@@ -140,7 +140,7 @@ install: preinstall $(OTHERS)
 /etc/davfs2/secrets: secrets /etc/sechom
 	mkdir -p /etc/davfs2
 	rm -f $@
-	sed -e -e s/sechom/`cat /etc/sechom`/g $< > $@
+	sed -e s/sechom/`cat /etc/sechom`/g $< > $@
 	chmod og-rwx $@
 
 /etc/davfs2/davfs2.conf: davfs2.conf
