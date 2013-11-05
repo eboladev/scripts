@@ -59,11 +59,12 @@ DIRS = bovi nolove maemo-vm mac
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
 
-~polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub /etc/secmillionmoves
+~polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub /etc/secmillionmoves /etc/secquantisproject
 	rm -f $@
 	sed s/secmaemo/`cat /etc/secmaemo`/g $< | \
 	sed s/secgithub/`cat /etc/secgithub`/g | \
-	sed s/secmillionmoves/`cat /etc/secmillionmoves`/g > $@
+	sed s/secmillionmoves/`cat /etc/secmillionmoves`/g | \
+	sed s/secquantisproject/`cat /etc/secquantisproject`/g > $@
 	chown polster $@
 	chmod og-rwx $@
 

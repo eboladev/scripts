@@ -7,3 +7,6 @@ password secmillionmoves
 machine github.com
 login pipacs
 password secgithub
+machine ftp.quantisproject.com
+login quantisproject.com
+password secquantisproject
