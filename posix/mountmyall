@@ -81,7 +81,7 @@ davMount()
 {
     case "$osName" in
     Darwin)
-		# rmdir $mnt/$name >/dev/null 2>&1
+        # rmdir $mnt/$name >/dev/null 2>&1
         # mount_webdav -a10 $host$dir $mnt/$name
         false
         ;;
@@ -99,7 +99,7 @@ ftpMount()
 		rmdir $mnt/$name >/dev/null 2>&1
 		mkdir $mnt/$name >/dev/null 2>&1
 		chown $user $mnt/$name
-		su $user -c "curlftpfs -oallow_other,fsname=$name,uid=$uid ftp://$host/ $mnt/$name"
+		su $user -c "curlftpfs -oallow_other,fsname=$name,volname=$name,uid=$uid ftp://$host/ $mnt/$name"
 		;;
 	*)
 		;;
@@ -129,12 +129,13 @@ cd /tmp
 #   ftp  polster ftp.millionmoves.com      ftp.millionmoves.com 0 . \
 #   hsmb polster maczok.local              maczok     1 /polster \
 set -- \
-    ssh  polster nolove                    nolove     1 /home/polster \
-    ssh  polster maczok.local              pixtor     1 /Volumes/pixtor \
-    ssh  polster maczok.local              maxtor     1 /Volumes/maxtor \
-    ssh  polster maczok.local              basix      1 /Volumes/basix \
-    ssh  polster maczok.local              64k        1 /Volumes/64k \
-    ssh  polster pipacs.dyndns.org         pipacs     0 /Users/polster
+    ssh  polster nolove                 nolove         1 /home/polster \
+    ssh  polster maczok.local           pixtor         1 /Volumes/pixtor \
+    ssh  polster maczok.local           maxtor         1 /Volumes/maxtor \
+    ssh  polster maczok.local           basix          1 /Volumes/basix \
+    ssh  polster maczok.local           64k            1 /Volumes/64k \
+    ssh  polster pipacs.dyndns.org      pipacs         0 /Users/polster \
+    ftp  polster ftp.quantisproject.com quantisproject 0 . \
 
 while test $# -ne 0; do
     fsType=$1
