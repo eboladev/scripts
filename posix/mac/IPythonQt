@@ -1,7 +1,11 @@
-#!/opt/local/Library/Frameworks/Python.framework/Versions/2.7/Resources/Python.app/Contents/MacOS/Python
+#!/usr/bin/env python
  
 import os
 executable = '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin/ipython'
+os.environ["PYTHONPATH"] = os.getenv("PYTHONPATH", "")
+if os.path.exists('/usr/local/bin/ipython'):
+    executable = '/usr/local/bin/ipython'
+    os.environ["PYTHONPATH"] += ':/usr/local/lib/python2.7/site-packages'
+print executable
 arguments = [executable, 'qtconsole', '--pylab', '--no-confirm-exit']
-os.environ["PYTHONPATH"]=os.getenv("PYTHONPATH", "")
 os.execve(executable, arguments, os.environ)
