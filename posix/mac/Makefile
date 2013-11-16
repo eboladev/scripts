@@ -25,7 +25,7 @@ TARGETS= \
 	/Applications/IPythonQt.app/Contents/MacOS/IPythonQt \
 	# /Applications/Inkscape.app
 
-DIRS = maczok marzipan filemon
+DIRS = maczok marzipan filemon charming
 
 install: preinstall $(TARGETS)
 	-for d in $(DIRS); do (cd $$d; make install); done
