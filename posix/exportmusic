@@ -24,6 +24,9 @@ exportFile() {
         if [ -f "$dstDir"/"$aifFile" ]; then
             continue
         fi
+        if [ -f "$dstDir"/"$alacFile" ]; then
+            continue
+        fi
         echo "$srcFile -> $dstDir/$mp3File"
         rm -f "$dstDir"/"$alacFile"
         export$ext "$srcFile" "$dstDir"/"$mp3File"
