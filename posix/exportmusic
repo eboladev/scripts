@@ -5,7 +5,9 @@
 #
 # Dependencies: lame, ffmpeg, flac, vorbis-tools.
 
-export() {
+# set -x
+
+exportFile() {
     ext="$1"
     srcFile="$2"
 
@@ -46,9 +48,15 @@ exportartist() {
 exportaif() {
     srcFile="$1"
     dstFile="$2"
-    dstFile=${dstFile%.*}.aif
-    if [ ! -f "$dstFile" ]; then
-        cp -f "$srcFile" "$dstFile"
+    if [ $lossless = 1 ]; then
+        dstFile=${dstFile%.*}.aif
+        if [ ! -f "$dstFile" ]; then
+            cp -f "$srcFile" "$dstFile"
+        fi
+    else
+        dstFile=${dstFile%.*}.m4a
+        ffmpeg -y -i "$srcFile" -vn -acodec alac -ar 48000 "$dstFile" \
+            -v 1 </dev/null
     fi
 }
 
@@ -167,7 +175,7 @@ for artistDir in $src/*; do
         ls "$albumDir"/*.aif 2>/dev/null | \
         while read srcFile; do
             trackNo=`expr $trackNo + 1`
-            export aif "$srcFile"
+            exportFile aif "$srcFile"
         done
 
         # Convert flacs
@@ -175,7 +183,7 @@ for artistDir in $src/*; do
         ls "$albumDir"/*.flac 2>/dev/null | \
         while read srcFile; do
             trackNo=`expr $trackNo + 1`
-            export flac "$srcFile"
+            exportFile flac "$srcFile"
         done
 
         # Convert wavs
@@ -183,7 +191,7 @@ for artistDir in $src/*; do
         ls "$albumDir"/*.wav 2>/dev/null | \
         while read srcFile; do
             trackNo=`expr $trackNo + 1`
-            export wav "$srcFile"
+            exportFile wav "$srcFile"
         done
 
         # Convert oggs
@@ -191,7 +199,7 @@ for artistDir in $src/*; do
         ls "$albumDir"/*.ogg 2>/dev/null | \
         while read srcFile; do
             trackNo=`expr $trackNo + 1`
-            export ogg "$srcFile"
+            exportFile ogg "$srcFile"
         done
 
         # Convert mp3s
@@ -199,7 +207,7 @@ for artistDir in $src/*; do
         ls "$albumDir"/*.mp3 2>/dev/null | \
         while read srcFile; do
             trackNo=`expr $trackNo + 1`
-            export mp3 "$srcFile"
+            exportFile mp3 "$srcFile"
         done
     done
 done
