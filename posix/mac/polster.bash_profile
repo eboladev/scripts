@@ -5,9 +5,9 @@ export SVN_EDITOR=vi
 
 # RailCAD
 export SIM96ROOT=/Users/sim96
-export SIM96TCL=/usr
-export SIM96TCLSH=tclsh
-export SIM96WISH=wish
+export SIM96TCL=/usr/local
+export SIM96TCLSH=tclsh8.5
+export SIM96WISH=wish8.5
 
 # Quantis
 export QC_TEST_LOCAL=1
