@@ -1,12 +1,3 @@
-machine vcs.maemo.org
-login pipacs
-password secmaemo
-machine ftp.millionmoves.com
-login millionmoves.com
-password secmillionmoves
-machine github.com
-login pipacs
-password secgithub
-machine ftp.quantisproject.com
-login quantisproject.com
-password secquantisproject
+machine ftp.millionmoves.com login millionmoves.com password secmillionmoves
+machine github.com login pipacs password secgithub
+machine ftp.quantisproject.com login quantisproject.com password secquantisproject
