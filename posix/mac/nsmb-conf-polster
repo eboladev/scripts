@@ -4,8 +4,5 @@ password=sechom
 [192.168.11.11:polster]
 password=sechom
 
-[cosmb001.europe.nokia.com:polster]
-password=secnok
-
-[common.europe.nokia.com:polster]
-password=secnok
+[maczok.local:polster]
+password=sechom
