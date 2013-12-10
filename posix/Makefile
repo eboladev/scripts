@@ -54,7 +54,7 @@ ONHOLD=\
 	/usr/share/mime-info/extra.mime \
 	/etc/cron.hourly/mountall \
 	
-DIRS = bovi nolove maemo-vm mac
+DIRS = nolove maemo-vm mac
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
