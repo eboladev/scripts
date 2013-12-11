@@ -1,7 +1,7 @@
 MAILTO=akos.polster@gmail.com
 
 # Export some music to MP3
-30 7 * * * /usr/local/bin/exportitunes /Users/polster/Music/Lossless /Volumes/basix/music-itunes
+30 7 * * * /usr/local/bin/exportitunes /Users/polster/Music/Lossless /Volumes/64k/music-itunes
 
 # Back up books
 11 1 * * * rsync -avzqr /Users/polster/Books /Volumes/pixtor/backup
