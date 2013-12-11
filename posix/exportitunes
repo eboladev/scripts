@@ -1,0 +1,228 @@
+#!/bin/bash
+
+# Export music in directories marked with "export" to iTunes compatible format.
+# Dependencies: lame, ffmpeg, flac, vorbis-tools, sox
+
+# set -x
+
+# Export single file to iTunes compatible format
+# $1: Input file name
+# $dstDir: Output directory
+exportFile() {
+	srcFile="$1"
+ 	ext=${srcFile##*.}
+    title=`basename "$srcFile"`
+    title=${title%%.$ext}
+	dstBase="$dstDir"/"$title"
+	case "$ext" in
+		wav|mp3|aif|flac|ogg) export_$ext "$srcFile" "$dstBase";;
+	esac
+}
+
+# Export an AIF file to M4A (down-sample) or AIF (copy)
+# $1: Input file name
+# $2: Output file name without extension
+export_aif() {
+    srcFile="$1"
+    dstBase="$2"
+	
+	# If the sampling frequency is too high then down-sample to m4a, else copy original
+	rate=$(soxi "$srcFile" | grep 'Sample Rate')
+	rateArray=( $rate )
+	freq=${rateArray[3]}
+	if [ ${freq} -gt 48000 ]; then
+		dstExt=m4a
+	else
+		dstExt=aif
+	fi
+	
+	dstFile="$dstBase".$dstExt
+	tmpFile=/tmp/$$.$dstExt
+	
+	if [ -f "$dstFile" ]; then
+		return
+	fi
+	
+	rm -f "$dstBase".*
+	echo "export_aif: $srcFile -> $dstFile"
+		
+    if [ "$dstExt" = "aif" ]; then
+		cp -f "$srcFile" $tmpFile
+    else
+        ffmpeg -y -i "$srcFile" -vn -acodec alac -ar 48000 $tmpFile \
+            </dev/null 2>/dev/null
+    fi
+	mv -f $tmpFile "$dstFile"
+}
+
+# Export WAV file to M4A
+# $1: Input file name
+# $2: Output file name without extension
+# $title: Track title
+# $artist: Artist name
+# $album: Album name
+# $trackNo: Track number
+export_wav() {
+    srcFile="$1"
+	dstBase="$2"
+    dstFile="$dstBase".m4a
+	tmpFile=/tmp/$$.m4a
+	
+	if [ -f "$dstFile" ]; then
+		return
+	fi
+	
+	rm -f "$dstBase".*
+	echo "export_wav: $srcFile -> $dstFile"
+	
+    ffmpeg -y -i "$srcFile" -acodec alac -v 0 \
+        -metadata title="$title" \
+        -metadata author="$artist" \
+        -metadata album_artist="$artist" \
+        -metadata album="$album" \
+        -metadata track="$trackNo" \
+        "$tmpFile" </dev/null 2>/dev/null
+	mv -f "$tmpFile" "$dstFile"
+}
+
+# Export FLAC file to M4A
+# $1: Input file name
+# $2: Output file name without extension
+# $title: Track title
+# $artist: Artist name
+# $album: Album name
+# $trackNo: Track number
+export_flac() {
+    srcFile="$1"
+	dstBase="$2"
+    dstFile="$dstBase".m4a
+	tmpFile=/tmp/$$.m4a
+
+	if [ -f "$dstFile" ]; then
+		return
+	fi
+	
+	rm -f "$dstBase".*
+	echo "export_flac: $srcFile -> $dstFile"
+	
+    flac --totally-silent -o /tmp/x.wav -c -d -F "$srcFile"
+    ffmpeg -y -i /tmp/x.wav -acodec alac \
+        -v 1 \
+        -metadata title="$title" \
+        -metadata author="$artist" \
+        -metadata album_artist="$artist" \
+        -metadata album="$album" \
+        -metadata track="$trackNo" \
+        "$tmpFile" </dev/null # 2>/dev/null
+    rm -f /tmp/x.wav
+	mv -f $tmpFile "$dstFile"
+}
+
+# Export (copy) MP3 file
+# $1: Input file name
+# $2: Output file name without extension
+export_mp3() {
+    srcFile="$1"
+	dstBase="$2"
+    dstFile="$dstBase".mp3
+	tmpFile=/tmp/$$.mp3
+
+	if [ -f "$dstFile" ]; then
+		return
+	fi
+	
+	rm -f "$dstBase".*
+	echo "export_mp3: $srcFile -> $dstFile"
+	
+	cp -f "$srcFile" $tmpFile
+	mv -f $tmpFile "$dstFile"
+}
+
+# Export Ogg Vorbis file to M4A
+# $1: Input file name
+# $2: Output file name without extension
+# $title: Track title
+# $artist: Artist name
+# $album: Album name
+# $trackNo: Track number
+export_ogg() {
+    srcFile="$1"
+    dstBase="$2"
+	dstFile="$dstBase".m4a
+	tmpFile=/tmp/$$.m4a
+	
+	if [ -f "$dstFile" ]; then
+		return
+	fi
+	
+	rm -f "$dstBase".*
+	echo "export_ogg: $srcFile -> $dstFile"
+	
+    oggdec --quiet -o /tmp/x.wav "$srcFile"
+    ffmpeg -y -i /tmp/x.wav -acodec alac -v 0 \
+        -metadata title="$title" \
+        -metadata author="$artist" \
+        -metadata album_artist="$artist" \
+        -metadata album="$album" \
+        -metadata track="$trackNo" \
+        "$tmpFile" </dev/null 2>/dev/null
+    rm -f /tmp/x.wav
+	mv -f $tmpFile "$dstFile"
+}
+
+# Main
+
+if [ "$1" == "-v" ]; then
+    set -x
+    shift
+fi
+
+if [ $# != 2 ]; then
+    echo "exportitunes: Usage: exportitunes [-v] src_dir dst_dir"
+    exit 1
+fi
+
+src="$1"
+dst="$2"
+lock=~/.exportitunes.lock
+export artist album title trackNo lossless dstDir
+export FFMPEG_FORCE_NOCOLOR=1
+export NO_COLOR=1
+
+lockfile -r 0 "$lock" || exit 1
+trap "rm -f $lock; exit" INT TERM EXIT
+
+for artistDir in $src/*; do
+    artist=${artistDir##*/}
+    if [ "$artist" == "random" ]; then
+        continue
+    fi
+    if [ ! -d "$artistDir" ]; then
+        continue
+    fi
+
+    for albumDir in "$artistDir"/*; do
+        if [ ! -d "$albumDir" ]; then
+            continue
+        fi
+        if [ ! -f "$albumDir"/export-alac -a ! -f "$albumDir"/export ]; then
+			continue
+		fi
+
+        album=`basename "$albumDir"`
+        dstDir="$dst"/"$artist"/"$album"
+        mkdir -p "$dstDir"
+
+		for ext in aif flac wav mp3 ogg; do
+	        trackNo=0
+	        ls "$albumDir"/*.$ext 2>/dev/null | \
+	        while read srcFile; do
+	            trackNo=`expr $trackNo + 1`
+	            exportFile "$srcFile"
+	        done
+		done
+    done
+done
+
+# chown -R polster "$dst"/
+chmod -R ug+rwx,o+rx "$dst"/

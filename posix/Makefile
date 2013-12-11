@@ -35,7 +35,8 @@ OTHERS=\
 	~polster/.netrc \
 	~polster/.screenrc \
 	~polster/.vim/ftdetect/markdown.vim \
-	~polster/.vim/syntax/markdown.vim
+	~polster/.vim/syntax/markdown.vim \
+	/usr/local/bin/exportitunes
 
 ONHOLD=\
 	crco \
@@ -121,6 +122,10 @@ install: preinstall $(OTHERS)
 /usr/local/bin/buildterm: buildterm
 	cp -f $< $@
 	chmod a+rx $@
+
+/usr/local/bin/exportitunes: exportitunes
+	cp exportitunes /usr/local/bin
+	chmod a+rx /usr/local/bin/exportitunes
 
 /usr/local/bin/exportmusic: exportmusic
 	cp exportmusic /usr/local/bin
