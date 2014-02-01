@@ -38,3 +38,7 @@ chflags nohidden ~/Library
 
 # Set the XCode device console font size
 defaults write com.apple.Xcode PBXTableFontSize 14
+
+# Make Dock translucent
+defaults write com.apple.dock hide-mirror -bool true
+killall Dock
