@@ -17,5 +17,7 @@ export QC_ADMIN_LOCAL=1
 # Android SDK
 export PATH="$PATH":/Users/polster/android-sdk-macosx/platform-tools
 
-# gsutil (Google Cloud Storage)
-export PATH="$PATH":/Users/polster/gsutil
+# Google Cloud SDK
+export PATH="$PATH":/Users/polster/google-cloud-sdk/bin
+source /Users/polster/google-cloud-sdk/arg_rc
+
