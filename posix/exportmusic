@@ -7,6 +7,8 @@
 
 # set -x
 
+PATH="$PATH":/bin:/usr/bin:/usr/local/bin:/opt/local/bin
+
 exportFile() {
     ext="$1"
     srcFile="$2"
