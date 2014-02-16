@@ -7,7 +7,7 @@
 
 # set -x
 
-PATH="$PATH":/bin:/usr/bin:/usr/local/bin:/opt/local/bin
+PATH=/bin:/usr/bin:/usr/local/bin:/opt/local/bin export PATH
 
 exportFile() {
     ext="$1"

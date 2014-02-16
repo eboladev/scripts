@@ -4,6 +4,7 @@
 # Dependencies: lame, ffmpeg, flac, vorbis-tools, sox
 
 # set -x
+PATH=/bin:/usr/bin:/usr/local/bin:/opt/local/bin export PATH
 
 # Export single file to iTunes compatible format
 # $1: Input file name
