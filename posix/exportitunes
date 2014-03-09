@@ -63,9 +63,7 @@ export_aif() {
 # $2: Output file name without extension
 export_m4a() {
     srcFile="$1"
-    dstBase="$2"
-    dstExt=m4a  
-    dstFile="$dstBase".$dstExt
+    dstFile="$2".m4a
     
     if [ -f "$dstFile" ]; then
         return
@@ -73,7 +71,7 @@ export_m4a() {
     
     rm -f "$dstBase".*
     echo "export_m4a: $srcFile -> $dstFile"
-    cp -f "$srcFile" $dstFile
+    cp -f "$srcFile" "$dstFile"
 }
 
 # Export WAV file to M4A
