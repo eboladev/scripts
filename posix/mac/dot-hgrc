@@ -1,15 +1,10 @@
 [ui]
-username = Akos Polster <akos.polster@nokia.com>
+username = Akos Polster <akos.polster@gmail.com>
 verbose = True
 merge = diffmerge
 
 [auth]
-codenokia.prefix = code.nokia.com/hg
-codenokia.schemes = http https
-codenokia.username = polster
-codenokia.password = secnok
-
-pipacs.prefix = pipacs.dyndns.org/hg
+pipacs.prefix = pipacs.no-ip.biz/hg
 pipacs.schemes = https
 pipacs.username = polster
 pipacs.password = sechom
