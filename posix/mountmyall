@@ -120,7 +120,7 @@ cd /tmp
 #   cifs polster common.europe.nokia.com   dsw        1     /groups/dsw \
 #   ssh  polster bovi-home                 bovi       1     /home/polster \
 #   dav  polster https://code.nokia.com    avalanche  0     /dav/Avalanche \
-#   dav  polster https://pipacs.dyndns.org pipacs-dav 0     /dav \
+#   dav  polster https://pipacs.no-ip.biz  pipacs-dav 0     /dav \
 #   ssh  polster 192.168.11.5              mimo       1     / \
 #   ssh  polster colsw01m.europe.nokia.com colsw01m   1 /home/polster \
 #   cifs polster common.europe.nokia.com   projects   1 /projects \
@@ -138,7 +138,7 @@ set -- \
     hsmb polster maczok.local           maxtor         1 /Volumes/maxtor \
     hsmb polster maczok.local           basix          1 /Volumes/basix \
     hsmb polster maczok.local           64k            1 /Volumes/64k \
-    ssh  polster pipacs.dyndns.org      pipacs         0 /Users/polster \
+    ssh  polster pipacs.no-ip.biz       pipacs         0 /Users/polster \
     ftp  polster ftp.quantisproject.com quantisproject 0 . \
 
 while test $# -ne 0; do
