@@ -1,0 +1,1 @@
+export SENSORTAG_AKOS="34:B1:F7:D4:FE:8C"
