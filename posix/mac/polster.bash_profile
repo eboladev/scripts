@@ -5,9 +5,9 @@ export SVN_EDITOR=vi
 
 # RailCAD
 export SIM96ROOT=/Users/sim96
-export SIM96TCL=/usr
-export SIM96TCLSH=tclsh
-export SIM96WISH=wish
+export SIM96TCL=/usr/local
+export SIM96TCLSH=tclsh8.5
+export SIM96WISH=wish8.5
 
 # Quantis
 export QC_TEST_LOCAL=1
@@ -17,5 +17,7 @@ export QC_ADMIN_LOCAL=1
 # Android SDK
 export PATH="$PATH":/Users/polster/android-sdk-macosx/platform-tools
 
-# gsutil (Google Cloud Storage)
-export PATH="$PATH":/Users/polster/gsutil
+# Google Cloud SDK
+export PATH="$PATH":/Users/polster/google-cloud-sdk/bin
+source /Users/polster/google-cloud-sdk/arg_rc
+

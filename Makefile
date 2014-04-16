@@ -1,8 +1,4 @@
-#
-# Name		Makefile
-# Description	Makefile for common UNIX scripts
-# Version	$Id: Makefile,v 1.126 2004/09/07 20:58:55 polster Exp $
-#
+# Makefile for common UNIX scripts
 
 ALL=\
 	/etc/profile \

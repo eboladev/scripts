@@ -120,7 +120,7 @@ cd /tmp
 #   cifs polster common.europe.nokia.com   dsw        1     /groups/dsw \
 #   ssh  polster bovi-home                 bovi       1     /home/polster \
 #   dav  polster https://code.nokia.com    avalanche  0     /dav/Avalanche \
-#   dav  polster https://pipacs.dyndns.org pipacs-dav 0     /dav \
+#   dav  polster https://pipacs.no-ip.biz  pipacs-dav 0     /dav \
 #   ssh  polster 192.168.11.5              mimo       1     / \
 #   ssh  polster colsw01m.europe.nokia.com colsw01m   1 /home/polster \
 #   cifs polster common.europe.nokia.com   projects   1 /projects \
@@ -128,13 +128,17 @@ cd /tmp
 #   cifs polster vagrp004.europe.nokia.com groups-5   1 /groups5 \
 #   ftp  polster ftp.millionmoves.com      ftp.millionmoves.com 0 . \
 #   hsmb polster maczok.local              maczok     1 /polster \
+#   ssh  polster maczok.local           pixtor         1 /Volumes/pixtor \
+#   ssh  polster maczok.local           maxtor         1 /Volumes/maxtor \
+#   ssh  polster maczok.local           basix          1 /Volumes/basix \
+#   ssh  polster maczok.local           64k            1 /Volumes/64k \
 set -- \
     ssh  polster nolove                 nolove         1 /home/polster \
-    ssh  polster maczok.local           pixtor         1 /Volumes/pixtor \
-    ssh  polster maczok.local           maxtor         1 /Volumes/maxtor \
-    ssh  polster maczok.local           basix          1 /Volumes/basix \
-    ssh  polster maczok.local           64k            1 /Volumes/64k \
-    ssh  polster pipacs.dyndns.org      pipacs         0 /Users/polster \
+    hsmb polster maczok.local           pixtor         1 /Volumes/pixtor \
+    hsmb polster maczok.local           maxtor         1 /Volumes/maxtor \
+    hsmb polster maczok.local           basix          1 /Volumes/basix \
+    hsmb polster maczok.local           64k            1 /Volumes/64k \
+    ssh  polster pipacs.no-ip.biz       pipacs         0 /Users/polster \
     ftp  polster ftp.quantisproject.com quantisproject 0 . \
 
 while test $# -ne 0; do
@@ -162,7 +166,7 @@ while test $# -ne 0; do
         cifs) cifsMount;;
         dav)  davMount;;
         hsmb) hsmbMount;;
-	    ftp)  ftpMount;;
+        ftp)  ftpMount;;
         *)    false;;
         esac
     )

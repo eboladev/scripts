@@ -6,6 +6,9 @@ os.environ["PYTHONPATH"] = os.getenv("PYTHONPATH", "")
 if os.path.exists('/usr/local/bin/ipython'):
     executable = '/usr/local/bin/ipython'
     os.environ["PYTHONPATH"] += ':/usr/local/lib/python2.7/site-packages'
+else:
+    os.environ["PYTHONPATH"] += ":/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python"
 print executable
+print os.environ["PYTHONPATH"]
 arguments = [executable, 'qtconsole', '--pylab', '--no-confirm-exit']
 os.execve(executable, arguments, os.environ)
