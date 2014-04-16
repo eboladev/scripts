@@ -1,4 +1,4 @@
-# Makefile for common Linux scripts
+# Makefile for common Posix scripts
 
 OTHERS=\
 	/usr/local/bin/runkvt \
@@ -54,7 +54,7 @@ ONHOLD=\
 	/usr/share/mime-info/extra.mime \
 	/etc/cron.hourly/mountall \
 	
-DIRS = bovi nolove maemo-vm mac
+DIRS = bovi nolove maemo-vm mac berry
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
