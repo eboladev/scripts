@@ -35,7 +35,8 @@ OTHERS=\
 	~polster/.netrc \
 	~polster/.screenrc \
 	~polster/.vim/ftdetect/markdown.vim \
-	~polster/.vim/syntax/markdown.vim
+	~polster/.vim/syntax/markdown.vim \
+	/usr/local/bin/exportitunes
 
 ONHOLD=\
 	crco \
@@ -54,7 +55,7 @@ ONHOLD=\
 	/usr/share/mime-info/extra.mime \
 	/etc/cron.hourly/mountall \
 	
-DIRS = bovi nolove maemo-vm mac berry
+DIRS = nolove maemo-vm mac berry
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
@@ -121,6 +122,10 @@ install: preinstall $(OTHERS)
 /usr/local/bin/buildterm: buildterm
 	cp -f $< $@
 	chmod a+rx $@
+
+/usr/local/bin/exportitunes: exportitunes
+	cp exportitunes /usr/local/bin
+	chmod a+rx /usr/local/bin/exportitunes
 
 /usr/local/bin/exportmusic: exportmusic
 	cp exportmusic /usr/local/bin

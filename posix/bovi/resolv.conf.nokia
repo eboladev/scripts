@@ -1,4 +1,0 @@
-; $Id: resolv.conf.nokia,v 1.4 2006/02/18 17:14:26 polster Exp $
-search europe.nokia.com nokia.com ntc.nokia.com nmp.nokia.com
-nameserver 172.27.118.50
-nameserver 172.27.112.60

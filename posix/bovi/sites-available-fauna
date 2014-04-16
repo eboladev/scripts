@@ -1,8 +1,0 @@
-NameVirtualHost 192.168.11.11:8008
-Listen 192.168.11.11:8008
-
-<VirtualHost 192.168.11.11:8008>
-    ServerName bovi
-    DocumentRoot /var/www/html-fauna
-    AddDefaultCharset iso-8859-2
-</VirtualHost>

@@ -1,0 +1,9 @@
+#
+# Warning - this file should only be modified with vifs(8)
+#
+# Failure to do so is unsupported and may be destructive.
+#
+UUID=5541E368-E3BC-38BA-835D-0B4ACE88BA6D /mnt/64k hfs rw 1 0
+UUID=ACAED1B4-CBA5-3180-8AA3-FA34052AD1EC /mnt/maxtor hfs rw 1 0
+UUID=6BA24A18-3788-31FF-8C07-631FA92FD47D /mnt/pixtor hfs rw 1 0
+UUID=7B4DDCEC-28F1-3FE1-AB8B-289D467F5DDF /mnt/basix hfs rw 1 0

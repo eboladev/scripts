@@ -1,3 +1,3 @@
 tell application "Adium"
-  GetURL("irc://pipacs.dyndns.org#quantis")
+  GetURL("irc://pipacs.no-ip.biz#quantis")
 end tell

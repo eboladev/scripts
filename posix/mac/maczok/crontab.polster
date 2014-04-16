@@ -1,22 +1,25 @@
 MAILTO=akos.polster@gmail.com
 
 # Export some music to MP3
-30 7 * * * /usr/local/bin/exportmusic /Users/polster/Music/Lossless /Users/polster/Music/MP3
+30 7 * * * /usr/local/bin/exportitunes /Users/polster/Music/Lossless /mnt/64k/music-itunes
 
 # Back up books
-11 1 * * * rsync -avzqr /Users/polster/Books /Volumes/pixtor/backup
+11 1 * * * rsync -avzqr /Users/polster/Books /mnt/pixtor/backup
+
+# Back up music
+22 2 * * * rsync -avzqr /mnt/maxtor/polster/music /mnt/64k/backup
 
 # Back up photographs
-33 3,11,19,21,23 * * * rsync -avzqr /Volumes/pixtor/photos /Volumes/maxtor/backup
+33 3 * * * rsync -avzqr /mnt/pixtor/photos /mnt/maxtor/backup
 
 # Back up source code
-4 4 * * * for repo in longwire/meego cow o2 quantis-api-ios quantis-api-android quantis-gae steps steps-ios steps-android steps-android-common steps-android-pro lungsalive-ios lungsalive-android shadow-racer bt-connect; do (cd /Users/polster/src/$repo && git pull); done; rsync -avzqr /Users/polster/src /Volumes/pixtor/backup
+4 4 * * * for repo in longwire/meego cow o2 quantis-api-ios quantis-api-android quantis-gae steps steps-ios steps-android steps-android-common steps-android-pro lungsalive-ios lungsalive-android shadow-racer bt-connect esof-ios esof-android esof-ios.wiki steps-ios.wiki experiments; do (cd /Users/polster/src/$repo && git pull); done; rsync -avzqr /Users/polster/src /mnt/pixtor/backup
 
 # Back up documents
-44 4 * * * rsync -avzqr /Users/polster/Documents /Volumes/pixtor/backup
+44 4 * * * rsync -avzqr /Users/polster/Documents /mnt/pixtor/backup
 
 # Back up home movies
-55 5 * * * rsync -avzqr /Volumes/basix/movies/Home /Volumes/maxtor/backup/movies
+55 5 * * * rsync -avzqr /mnt/basix/movies/Home /mnt/maxtor/backup/movies
 
 # Back up Quantis documents
-6 6 * * * rsync -avzqr /Users/polster/Google\ Drive/Quantis /Volumes/pixtor/backup
+6 6 * * * rsync -avzqr /Users/polster/Google\ Drive/Quantis /mnt/pixtor/backup
