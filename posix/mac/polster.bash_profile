@@ -19,5 +19,5 @@ export PATH="$PATH":/Users/polster/android-sdk-macosx/platform-tools
 
 # Google Cloud SDK
 export PATH="$PATH":/Users/polster/google-cloud-sdk/bin
-source /Users/polster/google-cloud-sdk/arg_rc
+source /Users/polster/google-cloud-sdk/arg_rc 2>/dev/null
 
