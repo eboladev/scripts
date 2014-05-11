@@ -28,6 +28,7 @@ OTHERS=\
 	/usr/local/bin/bin2c \
 	~polster/.vimrc \
 	~polster/.vim/colors/wombat.vim \
+	~polster/.vim/colors/blueshift.vim \
 	/usr/local/bin/mktag \
 	/usr/local/bin/rmtag \
 	/usr/local/bin/askpass \
@@ -80,6 +81,11 @@ install: preinstall $(OTHERS)
 
 ~polster/.vim/syntax/markdown.vim: syntax.markdown.vim
 	-mkdir -p ~polster/.vim/syntax
+	-cp -f $< $@
+	-chown -R polster ~polster/.vim
+
+~polster/.vim/colors/blueshift.vim: blueshift.vim
+	-mkdir -p ~polster/.vim/colors
 	-cp -f $< $@
 	-chown -R polster ~polster/.vim
 
