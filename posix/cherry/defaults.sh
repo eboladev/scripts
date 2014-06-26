@@ -8,3 +8,5 @@ ccache -M2048M; ccache -s
 
 # Satisfy git
 git config --global push.default simple
+git config --global user.name "Akos Polster"
+git config --global user.email akos.polster@greenwavereality.com
