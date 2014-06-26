@@ -1,5 +1,7 @@
 TARGETS=\
 	/home/polster/.bash_profile \
+	/home/polster/.ssh/config \
+	/etc/default/tftpd-hpa \
 
 install: preinstall $(TARGETS)
 
@@ -23,3 +25,7 @@ preinstall:
 	chown polster /home/polster/.ssh
 	cp $< $@
 	chown polster $@
+
+/etc/default/tftpd-hpa: tftpd-hpa
+	cp -f $< $@
+	@service tftpd-hpa restart
