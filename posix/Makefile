@@ -56,7 +56,7 @@ ONHOLD=\
 	/usr/share/mime-info/extra.mime \
 	/etc/cron.hourly/mountall \
 	
-DIRS = nolove maemo-vm mac berry
+DIRS = nolove maemo-vm mac berry cherry
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
