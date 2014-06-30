@@ -4,6 +4,7 @@ TARGETS=\
 	/etc/default/tftpd-hpa \
 	/etc/exports \
 	/home/polster/.minirc.dfl \
+	/home/polster/.bashrc \
 
 install: preinstall $(TARGETS)
 
@@ -17,6 +18,10 @@ preinstall:
 		*)		echo "Run this on akosthink"; exit 1;; \
 	esac
 
+/home/polster/.bashrc: dot-bashrc
+	cp -f $< $@
+	chown polster:polster $@
+
 /home/polster/.minirc.dfl: dot-minirc.dfl
 	cp -f $< $@
 	chown polster:polster $@
@@ -26,8 +31,8 @@ preinstall:
 	mkdir -p /nfsroot
 	chown polster:polster /nfsroot
 
-/home/polster/.bash_profile: polster.bash_profile
-	cp -f polster.bash_profile $@
+/home/polster/.bash_profile: dot-bash_profile
+	cp -f $< $@
 	chmod u+rwx $@
 	chown polster:polster $@
 
