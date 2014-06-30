@@ -1,18 +1,1 @@
-<<<<<<< HEAD
-#
-# Name          /etc/hosts
-# Description   Map IP addresses to hostnames
-#
-
-127.0.0.1       localhost.localdomain localhost
-
-# BME KKA machines
-
-152.66.97.20    mimoza amarillis
-
-#
-# End           /etc/hosts
-#
-=======
-127.0.0.1       localhost.localdomain localhost cherry
->>>>>>> af5b51b83d1cf08b554fcd48533574accc13b839
+127.0.0.1       localhost.localdomain localhost cherry akosthink
