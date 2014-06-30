@@ -1,0 +1,4 @@
+TFTP_DIRECTORY="/nfsroot" 
+TFTP_ADDRESS="0.0.0.0:69" 
+TFTP_USERNAME="tftp" 
+TFTP_OPTIONS="--secure --blocksize 4096"
