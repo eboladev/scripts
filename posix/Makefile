@@ -56,7 +56,7 @@ ONHOLD=\
 	/usr/share/mime-info/extra.mime \
 	/etc/cron.hourly/mountall \
 	
-DIRS = nolove maemo-vm mac berry cherry akosthink
+DIRS = nolove maemo-vm mac berry greenwave
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done

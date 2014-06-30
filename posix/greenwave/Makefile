@@ -16,7 +16,8 @@ preinstall:
 	fi
 	@case `hostname -s` in \
 		akosthink*)	;; \
-		*)		echo "Run this on akosthink"; exit 1;; \
+		cherry*)	;; \
+		*)		echo "Run this on a Greenwave PC"; exit 1;; \
 	esac
 
 /usr/local/bin/qcp.sh: qcp.sh
