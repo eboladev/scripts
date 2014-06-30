@@ -5,6 +5,7 @@ TARGETS=\
 	/etc/exports \
 	/home/polster/.minirc.dfl \
 	/home/polster/.bashrc \
+	/usr/local/bin/qcp.sh
 
 install: preinstall $(TARGETS)
 
@@ -17,6 +18,11 @@ preinstall:
 		akosthink*)	;; \
 		*)		echo "Run this on akosthink"; exit 1;; \
 	esac
+
+/usr/local/bin/qcp.sh: qcp.sh
+	mkdir -p /usr/local/bin
+	cp -f $< $@
+	chmod a+rx $@
 
 /home/polster/.bashrc: dot-bashrc
 	cp -f $< $@
