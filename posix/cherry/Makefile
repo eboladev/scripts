@@ -3,6 +3,7 @@ TARGETS=\
 	/home/polster/.ssh/config \
 	/etc/default/tftpd-hpa \
 	/etc/exports \
+	/home/polster/.bashrc \
 
 install: preinstall $(TARGETS)
 
@@ -19,8 +20,13 @@ preinstall:
 /etc/exports: exports
 	cp -f $< $@
 
-/home/polster/.bash_profile: polster.bash_profile
-	cp -f polster.bash_profile $@
+/home/polster/.bashrc: dot-bashrc
+	cp -f $< $@
+	chmod u+rwx $@
+	chown polster:polster $@
+
+/home/polster/.bash_profile: dot-bash_profile
+	cp -f $< $@
 	chmod u+rwx $@
 	chown polster:polster $@
 
