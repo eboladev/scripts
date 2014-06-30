@@ -2,6 +2,7 @@ TARGETS=\
 	/home/polster/.bash_profile \
 	/home/polster/.ssh/config \
 	/etc/default/tftpd-hpa \
+	/etc/exports \
 
 install: preinstall $(TARGETS)
 
@@ -14,6 +15,9 @@ preinstall:
 		cherry*)	;; \
 		*)		echo "Run this on cherry"; exit 1;; \
 	esac
+
+/etc/exports: exports
+	cp -f $< $@
 
 /home/polster/.bash_profile: polster.bash_profile
 	cp -f polster.bash_profile $@
