@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Create a Qt Creator project file from a lego repository.
+# Create a Qt Creator project file from a lego source/product.
 
 set +u
 if [ -z "$LEGO_PRODUCT" ]; then
