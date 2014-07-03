@@ -4,20 +4,18 @@
 
 set +u
 if [ -z "$LEGO_PRODUCT" ]; then
-    echo "Run lego product_name first"
+    echo "Run 'lego product_name' first"
     exit 1
 fi
 
 PROJNAME=$LEGO_ROOT/$LEGO_PRODUCT
 cd $LEGO_ROOT
-find proprietary opensource thirdparty \
-    products/$LEGO_PRODUCT \
+find proprietary opensource thirdparty products/$LEGO_PRODUCT \
     $LEGO_OUTPUT/include -type f -iname '*.cpp' -or -iname '*.h' -or \
     -iname 'Makefile' -or -iname '*.mk' -or -iname '*.sh'-or \
     -iname '*.cfg' -or -iname '.config' -or -iname '*.menu'> $PROJNAME.files
-find proprietary opensource thirdparty \
-    $LEGO_OUTPUT/include $LEGO_OUTPUT/thirdparty-include -type d \
-    > $PROJNAME.includes
+find proprietary opensource thirdparty $LEGO_OUTPUT/include \
+    $LEGO_OUTPUT/thirdparty-include -type d > $PROJNAME.includes
 echo "[General]" > $PROJNAME.creator
 echo "// ADD PREDEFINED MACROS HERE!" > $PROJNAME.config
 echo '<?xml version="1.0" encoding="UTF-8"?>
@@ -207,7 +205,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
  </data>
  <data>
   <variable>ProjectExplorer.Project.Updater.EnvironmentId</variable>
-  <value type="QByteArray">{92ff6dce-6b8c-4644-a25d-a0355c4604f1}</value>
+  <value type="QByteArray">{'`uuidgen`'}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
