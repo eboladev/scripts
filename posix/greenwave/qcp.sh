@@ -16,7 +16,7 @@ find proprietary opensource thirdparty \
     -iname 'Makefile' -or -iname '*.mk' -or -iname '*.sh'-or \
     -iname '*.cfg' -or -iname '.config' -or -iname '*.menu'> $PROJNAME.files
 find proprietary opensource thirdparty \
-    $LEGO_OUTPUT/include -type d \
+    $LEGO_OUTPUT/include $LEGO_OUTPUT/thirdparty-include -type d \
     > $PROJNAME.includes
 echo "[General]" > $PROJNAME.creator
 echo "// ADD PREDEFINED MACROS HERE!" > $PROJNAME.config
