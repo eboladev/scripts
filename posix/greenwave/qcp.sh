@@ -7,6 +7,10 @@ if [ -z "$LEGO_PRODUCT" ]; then
     echo "Run 'lego product_name' first"
     exit 1
 fi
+if [ ! -d $LEGO_OUTPUT/include ]; then
+    echo "Output files not found. Perform an initial 'make' first"
+    exit 1
+fi
 
 PROJNAME=$LEGO_ROOT/$LEGO_PRODUCT
 cd $LEGO_ROOT
@@ -202,10 +206,6 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
  <data>
   <variable>ProjectExplorer.Project.TargetCount</variable>
   <value type="int">1</value>
- </data>
- <data>
-  <variable>ProjectExplorer.Project.Updater.EnvironmentId</variable>
-  <value type="QByteArray">{'`uuidgen`'}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
