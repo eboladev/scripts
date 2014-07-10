@@ -37,7 +37,8 @@ OTHERS=\
 	~polster/.screenrc \
 	~polster/.vim/ftdetect/markdown.vim \
 	~polster/.vim/syntax/markdown.vim \
-	/usr/local/bin/exportitunes
+	/usr/local/bin/exportitunes \
+	/etc/machine-info
 
 ONHOLD=\
 	crco \
@@ -60,6 +61,9 @@ DIRS = nolove mac berry greenwave
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+/etc/machine-info: update-machine-info
+	hostname -s > /etc/machine-info
 
 ~polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub /etc/secmillionmoves /etc/secquantisproject
 	rm -f $@
