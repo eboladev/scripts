@@ -11,7 +11,7 @@ DIRS=\
 	akosthink
 
 install: preinstall $(TARGETS)
-        -for d in $(DIRS); do (cd $$d; make install); done
+	-for d in $(DIRS); do (cd $$d; make install); done
 
 preinstall:
 	@if id | grep -iqv root; then \
