@@ -99,7 +99,7 @@ install: preinstall $(OTHERS)
 	-chown -R polster ~polster/.vim
 
 ~polster/.vimrc: dot-vimrc
-	-mkdir -p ~polster/.vim/doc
+	-mkdir -p ~polster/.vim/doc ~polster/backup
 	-touch ~polster/.vim/doc/empty
 	-cp -f $< $@
 	-chown polster $@
