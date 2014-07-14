@@ -3,8 +3,8 @@ filetype plugin on
 syntax on
 colorscheme blueshift
 helptags $HOME/.vim/doc/
-set backupdir=$HOME/backup
-set directory=$HOME/backup
+set backupdir=$HOME/backup,.
+set directory=$HOME/backup,.
 set autoread
 set autowrite
 set browsedir=current
