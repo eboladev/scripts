@@ -1,6 +1,8 @@
 #! /bin/bash
 
 # Create a Qt Creator project file from a lego source/product.
+# You should do a "set_lego_product product_name" or "lego product_name" first,
+# build the # project, then run this script.
 
 set +u
 if [ -z "$LEGO_PRODUCT" ]; then
@@ -8,11 +10,14 @@ if [ -z "$LEGO_PRODUCT" ]; then
     exit 1
 fi
 if [ ! -d $LEGO_OUTPUT/include ]; then
-    echo "Output files not found. Perform an initial 'make' first"
+    echo "Output include files not found. Perform an initial 'make' first"
     exit 1
 fi
 
 PROJNAME=$LEGO_ROOT/$LEGO_PRODUCT
+if [ ! -z "$1" ]; then
+    PROJNAME=$LEGO_ROOT/$1_$LEGO_PRODUCT
+fi
 cd $LEGO_ROOT
 find proprietary opensource thirdparty products/$LEGO_PRODUCT \
     $LEGO_OUTPUT/include -type f -iname '*.cpp' -or -iname '*.h' -or \
