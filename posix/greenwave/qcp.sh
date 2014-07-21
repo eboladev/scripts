@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Create a Qt Creator project file from a lego source/product.
 # You should do a "set_lego_product product_name" or "lego product_name" first,
@@ -20,7 +20,9 @@ if [ ! -z "$1" ]; then
 fi
 cd $LEGO_ROOT
 find proprietary opensource thirdparty products/$LEGO_PRODUCT \
-    $LEGO_OUTPUT/include -type f -iname '*.cpp' -or -iname '*.h' -or \
+    $LEGO_OUTPUT/include \
+    $LEGO_OUTPUT/inadyn-1.99.6 \
+    -type f -iname '*.cpp' -or -iname '*.h' -or -iname '*.c' -or \
     -iname 'Makefile' -or -iname '*.mk' -or -iname '*.sh'-or \
     -iname '*.cfg' -or -iname '.config' -or -iname '*.menu'> $PROJNAME.files
 find proprietary opensource thirdparty $LEGO_OUTPUT/include \
