@@ -5,7 +5,8 @@ TARGETS=\
 	/etc/exports \
 	/home/polster/.minirc.dfl \
 	/home/polster/.bashrc \
-	/usr/local/bin/qcp.sh
+	/usr/local/bin/qcp.sh \
+	/usr/local/bin/gdt
 
 DIRS=\
 	akosthink
@@ -23,6 +24,11 @@ preinstall:
 		cherry*)	;; \
 		*)		echo "Run this on a Greenwave PC"; exit 1;; \
 	esac
+
+/usr/local/bin/gdt: gdt
+	mkdir -p /usr/local/bin
+	cp -f $< $@
+	chmod a+rx $@
 
 /usr/local/bin/qcp.sh: qcp.sh
 	mkdir -p /usr/local/bin
