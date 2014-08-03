@@ -23,6 +23,7 @@ TARGETS= \
 	/Library/LaunchDaemons/com.pipacs.resetmountmyall.plist \
 	/Users/polster/.gitconfig \
 	/Applications/IPythonQt.app/Contents/MacOS/IPythonQt \
+	/Users/polster/.config/git/gitk \
 	# /Applications/Inkscape.app
 
 DIRS = maczok marzipan filemon charming
@@ -36,6 +37,11 @@ preinstall:
 		Darwin)	;; \
 		*)	echo "Run this on a Mac"; exit 1;; \
 	esac
+
+/Users/polster/.config/git/gitk: config-gitk
+	mkdir -p /Users/polster/.config/git
+	cp -f $< $@
+	chown -R polster /Users/polster/.config/git
 
 /Applications/Inkscape.app: Inkscape-Info.plist inkscape_icon.icns Inkscape
 	mkdir -p /Applications/Inkscape.app/Contents/MacOS
