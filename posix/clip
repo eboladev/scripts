@@ -1,0 +1,3 @@
+#!/bin/sh
+# Copy stdin to the primary selection and the clipboard
+tee xclip | xclip -selection c

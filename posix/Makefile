@@ -38,7 +38,8 @@ OTHERS=\
 	~polster/.vim/ftdetect/markdown.vim \
 	~polster/.vim/syntax/markdown.vim \
 	/usr/local/bin/exportitunes \
-	/etc/machine-info
+	/etc/machine-info \
+	/usr/local/bin/clip \
 
 ONHOLD=\
 	crco \
@@ -61,6 +62,10 @@ DIRS = nolove mac berry greenwave
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+/usr/local/bin/clip: clip
+	cp -f $< $@
+	chmod a+rx $@
 
 /etc/machine-info: update-machine-info
 	hostname -s > /etc/machine-info
