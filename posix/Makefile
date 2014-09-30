@@ -53,7 +53,6 @@ ONHOLD=\
 	playsnd \
 	xlogoff \
 	viewmime \
-	watchmail \
 	/usr/local/bin/runrvplayer \
 	/usr/share/mime-info/extra.mime \
 	/etc/cron.hourly/mountall \
