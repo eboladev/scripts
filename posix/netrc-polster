@@ -1,2 +1,3 @@
 machine ftp.millionmoves.com login millionmoves.com password secmillionmoves
 machine ftp.quantisproject.com login quantisproject.com password secquantisproject
+machine github.com login akos@pipacs.com password secgithub
