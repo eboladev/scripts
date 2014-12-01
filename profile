@@ -142,6 +142,7 @@ alias r='fc -e -'
 alias res='eval `resize`'
 alias sys=sudo
 alias x=xemacs
+[ -x /usr/bin/xdg-open ] && alias open=xdg-open
 
 # Web proxies
 if [ -r /etc/HTTP_PROXY ]; then

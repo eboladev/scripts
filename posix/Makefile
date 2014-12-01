@@ -37,7 +37,9 @@ OTHERS=\
 	~polster/.screenrc \
 	~polster/.vim/ftdetect/markdown.vim \
 	~polster/.vim/syntax/markdown.vim \
-	/usr/local/bin/exportitunes
+	/usr/local/bin/exportitunes \
+	/etc/machine-info \
+	/usr/local/bin/clip \
 
 ONHOLD=\
 	crco \
@@ -51,12 +53,11 @@ ONHOLD=\
 	playsnd \
 	xlogoff \
 	viewmime \
-	watchmail \
 	/usr/local/bin/runrvplayer \
 	/usr/share/mime-info/extra.mime \
 	/etc/cron.hourly/mountall \
 	
-DIRS = nolove maemo-vm mac berry
+DIRS = nolove mac berry greenwave
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
@@ -66,6 +67,19 @@ install: preinstall $(OTHERS)
 	sed s/secmaemo/`cat /etc/secmaemo`/g $< | \
 	sed s/secgithub/`cat /etc/secgithub`/g | \
 	sed s/secmillionmoves/`cat /etc/secmillionmoves`/g | \
+
+/usr/local/bin/clip: clip
+	cp -f $< $@
+	chmod a+rx $@
+
+/etc/machine-info: update-machine-info
+	hostname -s > /etc/machine-info
+
+~polster/.netrc: netrc-polster /etc/secmaemo /etc/secmillionmoves /etc/secquantisproject /etc/secgithub
+	rm -f $@
+	sed s/secmaemo/`cat /etc/secmaemo`/g $< | \
+	sed s/secmillionmoves/`cat /etc/secmillionmoves`/g | \
+	sed s/secgithub/`cat /etc/secgithub`/g | \
 	sed s/secquantisproject/`cat /etc/secquantisproject`/g > $@
 	chown polster $@
 	chmod og-rwx $@
@@ -95,7 +109,7 @@ install: preinstall $(OTHERS)
 	-chown -R polster ~polster/.vim
 
 ~polster/.vimrc: dot-vimrc
-	-mkdir -p ~polster/.vim/doc
+	-mkdir -p ~polster/.vim/doc ~polster/backup
 	-touch ~polster/.vim/doc/empty
 	-cp -f $< $@
 	-chown polster $@

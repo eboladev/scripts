@@ -1,0 +1,3 @@
+# Bash initializations for non-login shells
+source /etc/profile
+source /home/polster/.bash_profile

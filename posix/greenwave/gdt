@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set +u
+if [ -z "$LEGO_ROOT" ]; then
+	LEGO_ROOT=~/src/gw/lego
+fi
+$LEGO_ROOT/proprietary/gateway_debug_tool/gateway_debug_tool

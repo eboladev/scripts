@@ -3,7 +3,8 @@ filetype plugin on
 syntax on
 colorscheme blueshift
 helptags $HOME/.vim/doc/
-set backupdir=$HOME/backup
+set backupdir=$HOME/backup,.
+set directory=$HOME/backup,.
 set autoread
 set autowrite
 set browsedir=current
@@ -20,10 +21,10 @@ if has("gui_running")
 endif
 
 "" Indentation
-set shiftwidth=4
 set tabstop=8
-set softtabstop=4
-set expandtab
+set shiftwidth=8
+"" set softtabstop=4
+"" set expandtab
 filetype indent on
 
 "" Searching

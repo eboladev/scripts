@@ -1,0 +1,8 @@
+# Bash initializations for login shells
+
+# Lego build environment
+# export OPTIMIZE_LEVEL=0 # FIXME: Don't set this for target builds
+export LEGO_PARALLEL_JOBS=8
+export LEGO_WORKSPACE=/home/polster/src/gw
+[ -r $LEGO_WORKSPACE/lego/tools/git/lego_shell_setup.sh ] && \
+    source $LEGO_WORKSPACE/lego/tools/git/lego_shell_setup.sh
