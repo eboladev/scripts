@@ -9,7 +9,7 @@ viewerPid=""
 getPicOnce() {
     url="http://196.1.123.77:8181/cgi-bin/viewer/video.jpg?resolution=800x600"
     wget -O /tmp/tmp.jpg "$url" >/dev/null 2>&1
-    mv /tmp/tmp.jpg /tmp/image.jpg
+    convert /tmp/tmp.jpg -filter Gaussian -resize '300%' /tmp/image.jpg
     [ ! -z "$viewerPid" ] && kill $viewerPid
     sudo fbi -d /dev/fb0 -T 1 -noverbose -a -fitwidth /tmp/image.jpg &
     viewerPid=$!
