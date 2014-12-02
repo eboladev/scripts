@@ -40,6 +40,7 @@ OTHERS=\
 	/usr/local/bin/exportitunes \
 	/etc/machine-info \
 	/usr/local/bin/clip \
+	/usr/local/bin/swc \
 
 ONHOLD=\
 	crco \
@@ -61,6 +62,10 @@ DIRS = nolove mac berry greenwave
 
 install: preinstall $(OTHERS)
 	-for d in $(DIRS); do (cd $$d; make install); done
+
+/usr/local/bin/swc: swc
+	cp -f $< $@
+	chmod a+rx $@
 
 ~polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub /etc/secmillionmoves /etc/secquantisproject
 	rm -f $@
