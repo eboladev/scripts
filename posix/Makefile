@@ -40,6 +40,7 @@ OTHERS=\
 	/usr/local/bin/exportitunes \
 	/etc/machine-info \
 	/usr/local/bin/clip \
+	/usr/local/bin/swc \
 
 ONHOLD=\
 	crco \
@@ -53,7 +54,6 @@ ONHOLD=\
 	playsnd \
 	xlogoff \
 	viewmime \
-	watchmail \
 	/usr/local/bin/runrvplayer \
 	/usr/share/mime-info/extra.mime \
 	/etc/cron.hourly/mountall \
@@ -70,10 +70,27 @@ install: preinstall $(OTHERS)
 /etc/machine-info: update-machine-info
 	hostname -s > /etc/machine-info
 
-~polster/.netrc: netrc-polster /etc/secmaemo /etc/secmillionmoves /etc/secquantisproject
+/usr/local/bin/swc: swc
+	cp -f $< $@
+	chmod a+rx $@
+
+~polster/.netrc: netrc-polster /etc/secmaemo /etc/secgithub /etc/secmillionmoves /etc/secquantisproject
 	rm -f $@
 	sed s/secmaemo/`cat /etc/secmaemo`/g $< | \
 	sed s/secmillionmoves/`cat /etc/secmillionmoves`/g | \
+
+/usr/local/bin/clip: clip
+	cp -f $< $@
+	chmod a+rx $@
+
+/etc/machine-info: update-machine-info
+	hostname -s > /etc/machine-info
+
+~polster/.netrc: netrc-polster /etc/secmaemo /etc/secmillionmoves /etc/secquantisproject /etc/secgithub
+	rm -f $@
+	sed s/secmaemo/`cat /etc/secmaemo`/g $< | \
+	sed s/secmillionmoves/`cat /etc/secmillionmoves`/g | \
+	sed s/secgithub/`cat /etc/secgithub`/g | \
 	sed s/secquantisproject/`cat /etc/secquantisproject`/g > $@
 	chown polster $@
 	chmod og-rwx $@

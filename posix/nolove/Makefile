@@ -78,7 +78,6 @@ TARGETS=\
 	/home/polster/.vnc/xstartup \
 	/usr/local/bin/pptview \
 	/home/polster/.hgrc \
-	/home/polster/.netrc \
 	/home/polster/.bazaar/bazaar.conf
 
 install: preinstall $(TARGETS)
@@ -97,11 +96,6 @@ preinstall:
 	mkdir -p /home/polster/.bazaar
 	cp -f $< $@
 	chown -R polster:polster /home/polster/.bazaar
-
-/home/polster/.netrc: netrc-polster
-	cp -f $< $@
-	chmod og-rwx $@
-	chown polster $@
 
 /home/polster/.hgrc: dot-hgrc /etc/secnok /etc/sechom
 	rm -f $@

@@ -197,6 +197,10 @@ fi
 EDITOR=vi export EDITOR					# Default editor
 INFODIR=/usr/local/info:/usr/info:/usr/share/info export INFODIR
 INFOPATH=$INFODIR export INFOPATH			# Location of info files
+<<<<<<< HEAD
+=======
+LESS=-MMeFRX export LESS				# less
+>>>>>>> e1cc9efe23f994e87b9e0a23c36ed94093725cd5
 MINICOM="-c on" export MINICOM				# minicom
 PG='-c' export PG					# pg to clear screen
 XFORCE_INTERNET=1 export XFORCE_INTERNET		# HPterm workaround
